@@ -45,7 +45,7 @@ export function parsePageRanges(input, maxPage) {
       const p = parseInt(seg, 10)
       if (p >= 1 && p <= maxPage) pages.add(p)
     } else {
-      throw new Error(`Invalid page range segment: "${seg}"`)
+      throw new Error(`페이지 범위를 알아볼 수 없습니다: "${seg}"`)
     }
   }
   return [...pages].sort((a, b) => a - b)

@@ -79,7 +79,7 @@ export async function watermarkImage(file, opts, onProgress) {
     quality = 0.92,
   } = opts || {}
 
-  if (mode === 'text' && !text.trim()) throw new Error('Enter the watermark text.')
+  if (mode === 'text' && !text.trim()) throw new Error('워터마크에 넣을 문구를 입력해 주세요.')
   if (mode === 'logo' && !logo) throw new Error('Choose a logo image.')
 
   onProgress?.(0.2, 'Decoding image…')

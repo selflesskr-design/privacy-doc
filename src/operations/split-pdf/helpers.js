@@ -20,7 +20,7 @@ export async function splitPdf(file, opts, onProgress) {
   try {
     src = await PDFDocument.load(await file.arrayBuffer())
   } catch {
-    throw new Error('Could not read this PDF. Encrypted PDFs are not supported.')
+    throw new Error('PDF 파일을 읽을 수 없습니다. 암호가 설정된 PDF는 처리할 수 없습니다.')
   }
   const total = src.getPageCount()
   const base = baseName(file.name)
@@ -35,11 +35,11 @@ export async function splitPdf(file, opts, onProgress) {
   } else {
     // Each comma-separated group becomes its own output file.
     const groups = ranges.split(',').map((s) => s.trim()).filter(Boolean)
-    if (!groups.length) throw new Error('Enter one or more page ranges, e.g. "1-3, 4-6".')
+    if (!groups.length) throw new Error('페이지 범위를 입력해 주세요. 예: 1-3, 4-6')
     for (let g = 0; g < groups.length; g++) {
       onProgress?.(g / groups.length, `Building file ${g + 1} of ${groups.length}…`)
       const pages = parsePageRanges(groups[g], total)
-      if (!pages.length) throw new Error(`Range "${groups[g]}" has no valid pages (document has ${total}).`)
+      if (!pages.length) throw new Error(`"${groups[g]}" 범위에 해당하는 페이지가 없습니다. 이 문서는 ${total}쪽입니다.`)
       const blob = await subsetPdf(src, pages.map((p) => p - 1))
       results.push({ filename: `${base}-${groups[g].replace(/[^0-9-]/g, '_')}.pdf`, blob })
     }

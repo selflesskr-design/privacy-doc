@@ -14,12 +14,12 @@ export function hexToRgb(hex) {
  */
 export async function addWatermark(file, opts, onProgress) {
   const { text = 'CONFIDENTIAL', fontSize = 48, opacity = 0.25, angle = 45, color = '#888888', layout = 'center' } = opts || {}
-  if (!text.trim()) throw new Error('Enter the watermark text.')
+  if (!text.trim()) throw new Error('워터마크에 넣을 문구를 입력해 주세요.')
   let doc
   try {
     doc = await PDFDocument.load(await file.arrayBuffer())
   } catch {
-    throw new Error('Could not read this PDF. Encrypted PDFs are not supported.')
+    throw new Error('PDF 파일을 읽을 수 없습니다. 암호가 설정된 PDF는 처리할 수 없습니다.')
   }
   // Korean watermarks need an embedded font; only Regular 400 is bundled, so a
   // Korean mark is not bold. Loaded on demand — see src/lib/koreanFont.js.

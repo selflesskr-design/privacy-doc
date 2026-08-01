@@ -14,12 +14,12 @@ export async function readFields(file) {
   try {
     doc = await PDFDocument.load(await file.arrayBuffer())
   } catch {
-    throw new Error('Could not read this PDF. Encrypted PDFs are not supported.')
+    throw new Error('PDF 파일을 읽을 수 없습니다. 암호가 설정된 PDF는 처리할 수 없습니다.')
   }
   const form = doc.getForm()
   const fields = form.getFields()
   if (!fields.length) {
-    throw new Error('This PDF has no fillable form fields (AcroForm). Nothing to fill.')
+    throw new Error('이 PDF에는 채울 수 있는 입력란이 없습니다.')
   }
   return fields.map((f) => {
     const name = f.getName()

@@ -5,7 +5,7 @@ import { extractPdfText } from '../../lib/extractText.js'
 export async function pdfToWord(file, onProgress) {
   const pages = await extractPdfText(file, onProgress)
   if (!pages.some((p) => p.trim())) {
-    throw new Error('No text found. This looks like a scanned/image-only PDF — DoxDock does not do OCR.')
+    throw new Error('글자를 찾지 못했습니다. 스캔한 이미지로만 된 PDF로 보입니다. 글자 인식(OCR)은 아직 지원하지 않습니다.')
   }
   onProgress?.(0.9, 'Building .docx…')
 

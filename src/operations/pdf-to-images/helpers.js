@@ -15,7 +15,7 @@ export async function pdfToImages(file, opts, onProgress) {
   const pdf = await loadPdf(data)
   const total = pdf.numPages
   const pages = range.trim() ? parsePageRanges(range, total) : Array.from({ length: total }, (_, i) => i + 1)
-  if (!pages.length) throw new Error('No pages selected in that range.')
+  if (!pages.length) throw new Error('선택한 페이지가 없습니다.')
 
   const base = baseName(file.name)
   const results = []

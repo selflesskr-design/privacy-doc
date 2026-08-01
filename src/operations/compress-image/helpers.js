@@ -8,7 +8,7 @@ const MIME = { jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp' }
  */
 export async function compressImage(file, opts, onProgress) {
   const { quality = 0.7, maxDimension = 0, format = 'keep' } = opts || {}
-  if (!file.type.startsWith('image/')) throw new Error('Please choose an image file.')
+  if (!file.type.startsWith('image/')) throw new Error('이미지 파일을 선택해 주세요.')
 
   const options = {
     initialQuality: quality,

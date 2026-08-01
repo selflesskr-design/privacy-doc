@@ -31,15 +31,15 @@ export async function resizeImage(file, opts, onProgress) {
         targetW = Math.round(src.width * scale)
         targetH = Math.round(src.height * scale)
       } else {
-        throw new Error('Enter a width and/or height.')
+        throw new Error('가로 또는 세로 크기를 입력해 주세요.')
       }
     } else {
-      if (!w || !h) throw new Error('Enter both width and height, or keep aspect ratio.')
+      if (!w || !h) throw new Error('가로와 세로를 모두 입력하거나, 비율 유지를 켜 주세요.')
       targetW = w
       targetH = h
     }
   }
-  if (targetW < 1 || targetH < 1) throw new Error('Resulting size is too small.')
+  if (targetW < 1 || targetH < 1) throw new Error('결과 크기가 너무 작습니다.')
 
   onProgress?.(0.6, 'Resizing…')
   const fmt = format === 'keep' ? formatFromType(file.type) : format

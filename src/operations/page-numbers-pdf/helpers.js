@@ -23,7 +23,7 @@ export async function addPageNumbers(file, opts, onProgress) {
   try {
     doc = await PDFDocument.load(await file.arrayBuffer())
   } catch {
-    throw new Error('Could not read this PDF. Encrypted PDFs are not supported.')
+    throw new Error('PDF 파일을 읽을 수 없습니다. 암호가 설정된 PDF는 처리할 수 없습니다.')
   }
   const font = await doc.embedFont(StandardFonts.Helvetica)
   const pages = doc.getPages()

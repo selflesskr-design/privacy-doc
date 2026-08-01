@@ -11,11 +11,11 @@ export async function rotatePdf(file, opts, onProgress) {
   try {
     doc = await PDFDocument.load(await file.arrayBuffer())
   } catch {
-    throw new Error('Could not read this PDF. Encrypted PDFs are not supported.')
+    throw new Error('PDF 파일을 읽을 수 없습니다. 암호가 설정된 PDF는 처리할 수 없습니다.')
   }
   const total = doc.getPageCount()
   const targets = range.trim() ? parsePageRanges(range, total) : Array.from({ length: total }, (_, i) => i + 1)
-  if (!targets.length) throw new Error('No pages selected in that range.')
+  if (!targets.length) throw new Error('선택한 페이지가 없습니다.')
 
   const set = new Set(targets)
   const pages = doc.getPages()

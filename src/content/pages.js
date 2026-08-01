@@ -198,7 +198,7 @@ const TOOL_PAGES = [
     h1: 'PDF 개인정보 가리기',
     lead:
       'PDF에서 가릴 곳을 정하면, 그 부분을 문서 이미지에 직접 적용해 새 PDF로 저장합니다. 파일은 기기 밖으로 나가지 않습니다.',
-    ready: false,
+    ready: true,
     runHref: '/editor/pdf-redact',
     runLabel: '파일 선택',
     problem: [
@@ -888,12 +888,14 @@ const EDITOR_PAGES = [
     ],
     noindex: true,
     schema: 'WebPage',
+    // The real editor is code-split and mounted by App.jsx; these blocks are
+    // what a crawler or a JS-less visitor sees.
+    editor: 'pdf-redact',
     sections: [
-      { t: 'note', tone: 'warn', text: '기능 준비 중입니다. 준비되면 이 화면에서 바로 가릴 수 있습니다.' },
       {
         t: 'p',
         text:
-          '기존 PDF 편집 도구로도 사각형을 덮을 수 있지만, 그 방법은 원본 글자를 남깁니다. 개인정보를 가리는 것이 목적이라면 이 기능이 준비된 뒤에 써 주세요.',
+          'PDF에서 가릴 곳을 사각형으로 지정하면, 그 부분을 문서 이미지에 직접 적용해 새 PDF로 저장합니다. 파일은 내 브라우저에서만 열립니다.',
       },
       {
         t: 'cards',

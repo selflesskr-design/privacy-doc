@@ -8,7 +8,7 @@ import { renderBlocksToPdf } from '../../lib/pdfLayout.js'
  */
 export async function wordToPdf(file, opts, onProgress) {
   if (!/\.docx$/i.test(file.name)) {
-    throw new Error('Please choose a .docx file. Legacy .doc files are not supported.')
+    throw new Error('.docx 파일을 선택해 주세요. 예전 .doc 형식은 지원하지 않습니다.')
   }
   onProgress?.(0.2, 'Reading document…')
   let html
@@ -16,7 +16,7 @@ export async function wordToPdf(file, opts, onProgress) {
     const result = await mammoth.convertToHtml({ arrayBuffer: await file.arrayBuffer() })
     html = result.value
   } catch {
-    throw new Error('Could not read this .docx. It may be corrupt or password-protected.')
+    throw new Error('.docx 파일을 읽을 수 없습니다. 파일이 손상되었거나 암호가 설정되어 있을 수 있습니다.')
   }
   onProgress?.(0.55, 'Laying out pages…')
   const blocks = htmlToBlocks(html)

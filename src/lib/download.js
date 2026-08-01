@@ -47,7 +47,7 @@ export function loadImage(fileOrBlob) {
     }
     img.onerror = () => {
       URL.revokeObjectURL(url)
-      reject(new Error('Could not decode image. The file may be corrupt or unsupported.'))
+      reject(new Error('이미지를 읽을 수 없습니다. 파일이 손상되었거나 지원하지 않는 형식일 수 있습니다.'))
     }
     img.src = url
   })

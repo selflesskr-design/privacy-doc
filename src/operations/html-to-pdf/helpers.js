@@ -2,7 +2,7 @@ import { htmlToBlocks } from '../../lib/htmlBlocks.js'
 import { renderBlocksToPdf } from '../../lib/pdfLayout.js'
 
 export async function htmlToPdf(html, opts, onProgress) {
-  if (!html.trim()) throw new Error('Enter some HTML, or load an .html file.')
+  if (!html.trim()) throw new Error('HTML 내용을 입력하거나 .html 파일을 선택해 주세요.')
   onProgress?.(0.4, 'Parsing HTML…')
   const blocks = htmlToBlocks(html)
   onProgress?.(0.7, 'Rendering PDF…')

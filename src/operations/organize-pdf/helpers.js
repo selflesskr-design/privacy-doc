@@ -26,7 +26,7 @@ export async function renderThumbnails(file, onProgress, scale = 0.4) {
 
 /** Rebuild a PDF from the original file keeping `order` (array of 0-based indices). */
 export async function buildFromOrder(file, order, onProgress) {
-  if (!order.length) throw new Error('You deleted every page — keep at least one.')
+  if (!order.length) throw new Error('페이지를 모두 지웠습니다. 최소 한 쪽은 남겨 주세요.')
   const src = await PDFDocument.load(await file.arrayBuffer())
   const out = await PDFDocument.create()
   onProgress?.(0.3, 'Assembling pages…')

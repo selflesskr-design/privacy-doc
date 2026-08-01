@@ -94,7 +94,7 @@ export async function prepareImage(file) {
   const dims = await new Promise((res, rej) => {
     const img = new Image()
     img.onload = () => res({ w: img.naturalWidth, h: img.naturalHeight })
-    img.onerror = () => rej(new Error('Could not read that image.'))
+    img.onerror = () => rej(new Error('이미지를 읽을 수 없습니다.'))
     img.src = url
   })
   return { bytes, mime, url, naturalW: dims.w, naturalH: dims.h }

@@ -20,7 +20,7 @@ async function embedImage(pdfDoc, file) {
   try {
     bitmap = await createImageBitmap(new Blob([buf], { type: type || 'image/*' }))
   } catch {
-    throw new Error(`Unsupported image: ${file.name}. Try JPEG, PNG, or WebP.`)
+    throw new Error(`${file.name} 파일은 지원하지 않는 형식입니다. JPEG, PNG, WebP 파일을 사용해 주세요.`)
   }
   const canvas = document.createElement('canvas')
   canvas.width = bitmap.width
@@ -44,7 +44,7 @@ async function embedImage(pdfDoc, file) {
  */
 export async function imagesToPdf(files, opts, onProgress) {
   const { pageSize = 'fit', orientation = 'auto', margin = 0 } = opts || {}
-  if (!files?.length) throw new Error('Add at least one image to begin.')
+  if (!files?.length) throw new Error('사진을 한 장 이상 선택해 주세요.')
 
   const pdfDoc = await PDFDocument.create()
 

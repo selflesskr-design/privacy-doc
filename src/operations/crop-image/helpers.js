@@ -10,7 +10,7 @@ export async function cropImage(file, crop, onProgress) {
   const y = Math.max(0, Math.round(crop.y))
   const w = Math.round(crop.w)
   const h = Math.round(crop.h)
-  if (w < 1 || h < 1) throw new Error('Selection is empty — drag to select a region first.')
+  if (w < 1 || h < 1) throw new Error('선택한 영역이 없습니다. 자를 부분을 드래그해 주세요.')
   onProgress?.(0.4, 'Decoding image…')
   const bitmap = await decode(file)
   const fmt = formatFromType(file.type)

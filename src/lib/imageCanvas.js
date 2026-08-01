@@ -26,7 +26,7 @@ export async function decode(file) {
       }
       img.onerror = () => {
         URL.revokeObjectURL(url)
-        reject(new Error('Could not decode this image. Try JPEG, PNG, or WebP.'))
+        reject(new Error('이미지를 읽을 수 없습니다. JPEG, PNG, WebP 파일을 사용해 주세요.'))
       }
       img.src = url
     })
@@ -42,7 +42,7 @@ export function canvasToBlob(canvas, format = 'jpeg', quality = 0.9) {
   const mime = MIME[format] || 'image/jpeg'
   return new Promise((resolve, reject) => {
     canvas.toBlob(
-      (blob) => (blob ? resolve(blob) : reject(new Error('Encoding failed.'))),
+      (blob) => (blob ? resolve(blob) : reject(new Error('파일을 저장하지 못했습니다.'))),
       mime,
       mime === 'image/png' ? undefined : quality,
     )

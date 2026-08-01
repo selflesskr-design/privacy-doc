@@ -60,7 +60,7 @@ export async function compressPdf(file, opts, onProgress) {
   try {
     blob = mode === 'metadata' ? await stripMetadata(bytes) : await rasterize(bytes, { dpi, quality }, onProgress)
   } catch (e) {
-    throw new Error(`Could not compress this PDF. ${e?.message || ''} Encrypted PDFs are not supported.`)
+    throw new Error(`PDF 용량을 줄이지 못했습니다. 암호가 설정된 PDF는 처리할 수 없습니다.`)
   }
   onProgress?.(1, 'Done')
   return { blob, before, after: blob.size }

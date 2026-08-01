@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState, useCallback } from 'react'
+import { Suspense, lazy, useEffect, useState, useCallback } from 'react'
 import Sidebar from './components/Sidebar.jsx'
 import CommandPalette from './components/CommandPalette.jsx'
 import PrivacyBadge from './components/PrivacyBadge.jsx'
@@ -15,6 +15,13 @@ import { useSeo } from './hooks/useSeo.js'
 import { getOperation } from './registry/registry.js'
 import { emitFileDrop } from './lib/fileDropBus.js'
 import { BRAND, UPSTREAM_NAME, UPSTREAM_AUTHOR, UPSTREAM_URL } from './config/site.js'
+import { COMMON } from './content/strings.js'
+
+// Editor routes mount a real tool instead of prose. Code-split so the PDF
+// libraries stay out of every other page's bundle.
+const EDITORS = {
+  'pdf-redact': lazy(() => import('./editors/PdfRedactEditor.jsx')),
+}
 
 // Path routing. Two kinds of route share one path space:
 //   • content pages  ("/", "/tools/pdf-redact", "/guides/…") — see src/content/pages.js
@@ -256,7 +263,19 @@ export default function App() {
         <main className="min-w-0 flex-1 overflow-y-auto">
           <div className={`mx-auto px-4 py-6 sm:px-6 sm:py-8 ${contentPage?.path === '/tools' ? 'max-w-6xl' : 'max-w-3xl'}`}>
             {contentPage ? (
-              <ContentPage page={contentPage} onNavigate={handleSelect} />
+              <>
+                <ContentPage page={contentPage} onNavigate={handleSelect} />
+                {EDITORS[contentPage.editor] && (
+                  <div className="mt-6">
+                    <Suspense fallback={<Progress message={COMMON.preparing} />}>
+                      {(() => {
+                        const Editor = EDITORS[contentPage.editor]
+                        return <Editor />
+                      })()}
+                    </Suspense>
+                  </div>
+                )}
+              </>
             ) : activeOp ? (
               <>
                 <div className="mb-6">
