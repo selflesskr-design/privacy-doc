@@ -50,6 +50,9 @@ export const ERRORS = {
 /** PDF 개인정보 가리기 */
 export const PDF_REDACT = {
   title: 'PDF 개인정보 가리기',
+  beta: '베타',
+  betaNote:
+    '이 기능은 베타입니다. 저장한 파일을 열어 가린 위치가 맞는지 꼭 확인한 뒤 제출해 주세요.',
   dropLabel: '가릴 PDF를 끌어다 놓거나 눌러서 선택하세요',
   dropHint: '파일은 내 브라우저에서만 열립니다',
 
@@ -75,7 +78,7 @@ export const PDF_REDACT = {
 
   confirmTitle: '저장하기 전에 확인해 주세요',
   confirmBody:
-    '안전하게 저장하면 모든 페이지가 이미지로 변환됩니다. 문서 안의 글자를 검색하거나 복사할 수 없으며, 입력란과 링크도 유지되지 않을 수 있습니다.',
+    '저장하면 문서의 모든 페이지가 이미지로 변환됩니다. 문서 안의 글자를 검색하거나 복사할 수 없고, 링크와 입력란도 유지되지 않을 수 있습니다.',
   confirmOk: '이미지로 변환해 저장',
   confirmCancel: '계속 확인하기',
 
@@ -84,10 +87,17 @@ export const PDF_REDACT = {
   ready: '가림 처리가 끝났습니다. 파일 이름을 정하고 받으세요.',
   fileName: '파일 이름',
 
-  afterNote:
-    '받은 파일을 열어 가린 부분을 드래그해 보세요. 글자가 선택되지 않으면 정상입니다. 원본 파일은 따로 보관해 주세요.',
+  recheckBeforeSubmit: '제출하기 전에 가린 위치와 문서 내용을 다시 확인해 주세요.',
+  keepOriginal: '원본 파일은 변경되지 않습니다. 필요할 수 있으니 별도로 보관해 주세요.',
+  afterNote: '받은 파일을 열어 가린 부분을 드래그해 보세요. 글자가 선택되지 않으면 정상입니다.',
   checkFirst:
     '제출처마다 필요한 정보와 가림 기준이 다를 수 있습니다. 가리기 전에 제출기관의 안내를 먼저 확인하세요.',
+}
+
+/** PDF 편집 — only the notices this service adds on top of the tool. */
+export const EDIT_PDF = {
+  koreanFontWarning:
+    '일부 한글 글꼴은 저장 결과가 다르게 보일 수 있습니다. 저장한 파일을 반드시 확인해 주세요.',
 }
 
 /** 사진 개인정보 가리기 — Phase 3. */

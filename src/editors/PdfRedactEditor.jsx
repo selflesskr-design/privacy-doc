@@ -327,6 +327,13 @@ export default function PdfRedactEditor() {
 
   return (
     <div className="space-y-5">
+      <div className="flex items-center gap-2">
+        <span className="rounded-full bg-brand-100 px-2.5 py-0.5 text-xs font-semibold text-brand-800 dark:bg-brand-900/50 dark:text-brand-200">
+          {PDF_REDACT.beta}
+        </span>
+        <span className="text-xs text-slate-500 dark:text-slate-400">{PDF_REDACT.betaNote}</span>
+      </div>
+
       {!file && (
         <>
           <Dropzone
@@ -516,6 +523,8 @@ export default function PdfRedactEditor() {
               <button type="button" className="btn-primary" onClick={() => downloadBlob(saveJob.result.blob, finalName(), 'application/pdf')}>
                 <Icon name="download" className="h-4 w-4" /> {COMMON.download}
               </button>
+              <Note type="warning">{PDF_REDACT.recheckBeforeSubmit}</Note>
+              <Note type="info">{PDF_REDACT.keepOriginal}</Note>
               <Note type="info">{PDF_REDACT.afterNote}</Note>
             </div>
           )}

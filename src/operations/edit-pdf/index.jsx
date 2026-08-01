@@ -7,6 +7,7 @@ import { useJob } from '../../hooks/useJob.js'
 import { baseName } from '../../lib/format.js'
 import { downloadBlob } from '../../lib/download.js'
 import { openForRender, renderPage, prepareImage, exportEditedPdf, FONT_CSS } from './helpers.js'
+import { EDIT_PDF } from '../../content/strings.js'
 
 const FONT_OPTIONS = ['Helvetica', 'Times', 'Courier']
 
@@ -561,6 +562,10 @@ export default function EditPdf() {
               </button>
             )}
           </div>
+
+          {/* Korean text is drawn with the one bundled weight, so the saved file
+              can differ from the preview. Shown only while the text tool is in use. */}
+          {showText && <Note type="warning">{EDIT_PDF.koreanFontWarning}</Note>}
 
           {/* Page nav */}
           <div className="flex items-center justify-center gap-4 text-sm">
