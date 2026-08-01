@@ -11,6 +11,8 @@
 //   - github.com/selflesskr-design/privacy-doc   (our repository link)
 //   - github.com/mithun-srinivas/DoxDock         (upstream MIT attribution — see NOTICE)
 //   - opensource.org                             (license reference)
+//   - schema.org                                 (JSON-LD @context — an identifier
+//                                                 string, never fetched at runtime)
 //   - Localhost, `self`, or relative URLs; data: and blob: URIs
 //
 // Uses only Node built-ins (no `glob`) so it runs in CI without `npm install`.
@@ -28,6 +30,7 @@ const ALLOWED_HOSTS = [
   'github.com/selflesskr-design/privacy-doc',
   'github.com/mithun-srinivas/DoxDock',
   'opensource.org',
+  'schema.org',
 ]
 
 // Absolute http(s) URLs; captures host+path so we can allowlist our own hosts.

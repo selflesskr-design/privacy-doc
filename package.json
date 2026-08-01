@@ -10,7 +10,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/prerender.mjs",
+    "build": "vite build && node scripts/prerender.mjs && node scripts/check-seo.mjs",
+    "check:seo": "node scripts/check-seo.mjs",
     "preview": "vite preview",
     "check:network": "node scripts/check-external-references.mjs",
     "gen:brand": "node scripts/generate-brand-assets.mjs",

@@ -61,15 +61,10 @@ export default defineConfig({
   },
   build: {
     target: 'es2020',
-    // Split the heavy libraries so the initial load stays small.
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          pdfjs: ['pdfjs-dist'],
-          pdflib: ['pdf-lib'],
-          docx: ['docx', 'mammoth'],
-        },
-      },
-    },
+    // No manualChunks. Forcing pdf-lib into a named chunk made Rollup treat it
+    // as a static dependency of the entry, so every landing page preloaded
+    // ~200 KB of PDF code it never used. Letting Rollup split on the dynamic
+    // import boundaries instead keeps the heavy libraries with the tools that
+    // actually pull them in.
   },
 })

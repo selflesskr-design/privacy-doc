@@ -1,33 +1,36 @@
 #!/usr/bin/env node
 
-// Post-build prerender for SEO. PrivacyDoc is a client-side SPA, so a crawler that
-// does not run JS would otherwise see one empty page. This script takes the built
-// dist/index.html and, for every tool, writes dist/<id>/index.html with:
-//   - a unique <title>, description, canonical, and Open Graph / Twitter tags
-//   - real crawlable content inside #root (an <h1>, the description, a privacy
-//     line, and links to every other tool)
-// React replaces #root on load (createRoot, not hydrate), so this content is only
-// ever seen by crawlers and on first paint. It also regenerates sitemap.xml.
+// Post-build prerender for SEO. PrivacyDoc is a client-side SPA, so a crawler
+// that does not run JS would otherwise see one empty page. For every route this
+// writes dist/<path>/index.html with:
+//   - a unique <title>, description, canonical, robots, OG/Twitter tags
+//   - JSON-LD (breadcrumb + the page's primary schema + FAQPage where real)
+//   - real crawlable content inside #root: the H1, the prose, the internal links
+// React replaces #root on load (createRoot, not hydrate), so this content is
+// only ever seen by crawlers and on first paint. It also writes sitemap.xml.
 //
-// Uses only Node built-ins. Meta is read straight from each operation's meta.js.
+// Two route families share the output tree:
+//   - content pages from src/content/pages.js
+//   - the original 24 tool pages from src/operations/*/meta.js  (URLs unchanged)
+//
+// Uses only Node built-ins.
 
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
+import { renderPageBody, escText, escAttr } from './renderBlocks.mjs'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const dist = path.join(root, 'dist')
 const opsDir = path.join(root, 'src', 'operations')
 
-// Brand/URL come from the same module the app uses, so there is one place to edit.
-const site = await import(pathToFileURL(path.join(root, 'src', 'config', 'site.js')).href)
+const load = (rel) => import(pathToFileURL(path.join(root, ...rel)).href)
+const site = await load(['src', 'config', 'site.js'])
+const { PAGES, sitemapPages, canonicalOf } = await load(['src', 'content', 'pages.js'])
+const { metaFor, structuredDataFor } = await load(['src', 'content', 'structuredData.js'])
+
 const SITE = site.SITE_URL
 const BRAND = site.BRAND
-const DEFAULT_TITLE = site.DEFAULT_TITLE
-const DEFAULT_DESC = site.DEFAULT_DESC
-
-const escText = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-const escAttr = (s) => escText(s).replace(/"/g, '&quot;')
 
 // Load operation metadata (id/name/description/order) straight from meta.js.
 async function loadOps() {
@@ -38,7 +41,13 @@ async function loadOps() {
     if (!existsSync(metaPath)) continue
     const mod = await import(pathToFileURL(metaPath).href)
     const m = mod.default || mod
-    ops.push({ id: m.id || entry.name, name: m.name, description: m.description || '', order: m.order ?? 100 })
+    ops.push({
+      id: m.id || entry.name,
+      name: m.name,
+      description: m.description || '',
+      category: m.category || 'other',
+      order: m.order ?? 100,
+    })
   }
   return ops.sort((a, b) => a.order - b.order || a.name.localeCompare(b.name))
 }
@@ -60,54 +69,95 @@ function injectRoot(html, block) {
   return html.replace(re, `<div id="root">${block}</div>`)
 }
 
-const WRAP = (inner) =>
-  `<main style="max-width:760px;margin:0 auto;padding:2.5rem 1.5rem;font-family:system-ui,-apple-system,sans-serif;line-height:1.6">${inner}</main>`
-
-function toolBlock(op, ops) {
-  const links = ops.map((o) => `<li><a href="/${o.id}">${escText(o.name)}</a></li>`).join('')
-  return WRAP(
-    `<h1>${escText(op.name)}</h1>` +
-      `<p>${escText(op.description)}</p>` +
-      `<p>${escText(BRAND)}는 모든 처리를 사용자의 브라우저 안에서 수행합니다. 파일이 서버로 전송되지 않으며, 가입 없이 오프라인에서도 동작하는 오픈소스입니다.</p>` +
-      `<p><a href="/">← 전체 도구 보기</a></p>` +
-      `<nav aria-label="전체 도구"><h2>전체 도구</h2><ul>${links}</ul></nav>`,
-  )
+function injectJsonLd(html, graphs) {
+  if (!graphs.length) return html
+  const tags = graphs
+    .map(
+      (g) =>
+        `<script type="application/ld+json" data-owner="privacydoc-jsonld">${JSON.stringify(
+          g,
+        ).replace(/</g, '\\u003c')}</script>`,
+    )
+    .join('\n    ')
+  return html.replace('</head>', `    ${tags}\n  </head>`)
 }
 
-function homeBlock(ops) {
-  const links = ops
-    .map((o) => `<li><a href="/${o.id}">${escText(o.name)}</a> — ${escText(o.description)}</li>`)
-    .join('')
-  return WRAP(
-    `<h1>${escText(DEFAULT_TITLE)}</h1>` +
-      `<p>${escText(DEFAULT_DESC)}</p>` +
-      `<nav aria-label="전체 도구"><h2>전체 도구</h2><ul>${links}</ul></nav>`,
-  )
+function applyMeta(html, meta) {
+  let out = html
+  out = out.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escText(meta.title)}</title>`)
+  out = swapTag(out, 'name="description"', `<meta name="description" content="${escAttr(meta.description)}" />`)
+  out = swapTag(out, 'name="robots"', `<meta name="robots" content="${escAttr(meta.robots)}" />`)
+  out = swapTag(out, 'rel="canonical"', `<link rel="canonical" href="${escAttr(meta.canonical)}" />`)
+  out = swapTag(out, 'property="og:title"', `<meta property="og:title" content="${escAttr(meta.ogTitle)}" />`)
+  out = swapTag(out, 'property="og:description"', `<meta property="og:description" content="${escAttr(meta.ogDescription)}" />`)
+  out = swapTag(out, 'property="og:url"', `<meta property="og:url" content="${escAttr(meta.ogUrl)}" />`)
+  out = swapTag(out, 'name="twitter:title"', `<meta name="twitter:title" content="${escAttr(meta.ogTitle)}" />`)
+  out = swapTag(out, 'name="twitter:description"', `<meta name="twitter:description" content="${escAttr(meta.ogDescription)}" />`)
+  return out
 }
 
-function toolPage(template, op, ops) {
-  const title = `${op.name} — ${BRAND}`
-  const description = `${op.description} 모든 처리는 내 브라우저 안에서만 이루어집니다 — 업로드 없음, 가입 없음.`
-  const url = `${SITE}/${op.id}`
-  let html = template
-  html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escText(title)}</title>`)
-  html = swapTag(html, 'name="description"', `<meta name="description" content="${escAttr(description)}" />`)
-  html = swapTag(html, 'rel="canonical"', `<link rel="canonical" href="${escAttr(url)}" />`)
-  html = swapTag(html, 'property="og:title"', `<meta property="og:title" content="${escAttr(title)}" />`)
-  html = swapTag(html, 'property="og:description"', `<meta property="og:description" content="${escAttr(description)}" />`)
-  html = swapTag(html, 'property="og:url"', `<meta property="og:url" content="${escAttr(url)}" />`)
-  html = swapTag(html, 'name="twitter:title"', `<meta name="twitter:title" content="${escAttr(title)}" />`)
-  html = swapTag(html, 'name="twitter:description"', `<meta name="twitter:description" content="${escAttr(description)}" />`)
-  html = injectRoot(html, toolBlock(op, ops))
-  return html
+/** A tool page, described the same way a content page is. */
+function toolAsPage(op, ops) {
+  return {
+    path: `/${op.id}`,
+    title: `${op.name} — ${BRAND}`,
+    description: `${op.description} 모든 처리는 내 브라우저 안에서만 이루어집니다 — 업로드 없음, 가입 없음.`,
+    h1: op.name,
+    schema: 'SoftwareApplication',
+    breadcrumb: [
+      { name: '홈', path: '/' },
+      { name: '전체 도구', path: '/tools' },
+    ],
+    sections: [
+      { t: 'p', text: op.description },
+      {
+        t: 'p',
+        text: `${BRAND}는 모든 처리를 브라우저 안에서 수행합니다. 파일이 서버로 전송되지 않으며, 가입 없이 오프라인에서도 동작하는 오픈소스입니다.`,
+      },
+      {
+        t: 'cards',
+        title: '관련 페이지',
+        items: [
+          { label: '전체 도구', href: '/tools', text: 'PDF·이미지 도구 24종' },
+          { label: 'PDF 개인정보 가리기', href: '/tools/pdf-redact', text: '문서 속 개인정보 가리기' },
+          { label: '보안', href: '/security', text: '파일이 전송되지 않는 근거' },
+          { label: '자주 묻는 질문', href: '/faq', text: '많이 받는 질문' },
+        ],
+      },
+      {
+        t: 'cards',
+        title: '다른 도구',
+        items: ops
+          .filter((o) => o.id !== op.id)
+          .slice(0, 12)
+          .map((o) => ({ label: o.name, href: `/${o.id}`, text: o.description })),
+      },
+    ],
+  }
 }
 
-function sitemap(ops) {
-  const urls = ['/', ...ops.map((o) => `/${o.id}`)]
+function writePage(template, page, ctx) {
+  let html = applyMeta(template, metaFor(page))
+  html = injectJsonLd(html, structuredDataFor(page))
+  html = injectRoot(html, renderPageBody(page, ctx))
+
+  const dir = page.path === '/' ? dist : path.join(dist, page.path.replace(/^\//, ''))
+  mkdirSync(dir, { recursive: true })
+  writeFileSync(path.join(dir, 'index.html'), html)
+}
+
+function sitemap(pages) {
+  const priority = (p) => (p.path === '/' ? '1.0' : p.path.split('/').length <= 2 ? '0.8' : '0.7')
   return (
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
     `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-    urls.map((u) => `  <url><loc>${SITE}${u}</loc></url>`).join('\n') +
+    pages
+      .map(
+        (p) =>
+          `  <url><loc>${canonicalOf(p)}</loc><changefreq>weekly</changefreq>` +
+          `<priority>${priority(p)}</priority></url>`,
+      )
+      .join('\n') +
     `\n</urlset>\n`
   )
 }
@@ -120,17 +170,24 @@ if (!existsSync(indexPath)) {
 
 const template = readFileSync(indexPath, 'utf-8')
 const ops = await loadOps()
+const ctx = { ops }
 
-let count = 0
-for (const op of ops) {
-  const dir = path.join(dist, op.id)
-  mkdirSync(dir, { recursive: true })
-  writeFileSync(path.join(dir, 'index.html'), toolPage(template, op, ops))
-  count++
-}
+// Content routes (home included — it overwrites dist/index.html last).
+for (const page of PAGES) writePage(template, page, ctx)
 
-// Home page: keep the default meta, just inject crawlable content + tool links.
-writeFileSync(indexPath, injectRoot(template, homeBlock(ops)))
-writeFileSync(path.join(dist, 'sitemap.xml'), sitemap(ops))
+// The original 24 tool routes, URLs untouched.
+const toolPages = ops.map((op) => toolAsPage(op, ops))
+for (const page of toolPages) writePage(template, page, ctx)
 
-console.log(`✅ prerendered ${count} tool pages + home + sitemap.xml (${ops.length + 1} URLs)`)
+// Sitemap: indexable, working pages only. Tool pages are included; the editor
+// routes and any `ready: false` landing page are not.
+const urls = [...sitemapPages(), ...toolPages]
+writeFileSync(path.join(dist, 'sitemap.xml'), sitemap(urls))
+
+const skipped = PAGES.filter((p) => p.noindex || p.ready === false)
+console.log(
+  `✅ prerendered ${PAGES.length} content pages + ${toolPages.length} tool pages\n` +
+    `   sitemap.xml: ${urls.length} URLs (excluded ${skipped.length}: ${skipped
+      .map((p) => p.path)
+      .join(', ')})`,
+)

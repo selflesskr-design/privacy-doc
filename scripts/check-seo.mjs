@@ -1,0 +1,125 @@
+#!/usr/bin/env node
+
+// Validates the prerendered output. Runs after prerender in `npm run build`, so
+// an SEO regression fails the build rather than shipping quietly.
+//
+// Checks:
+//   1. every route produced a static HTML file
+//   2. exactly one <h1> per page
+//   3. no duplicate <title> or meta description across indexable pages
+//   4. canonical matches the page's own URL
+//   5. internal links all point at routes that exist
+//   6. every indexable, working page is in sitemap.xml — and nothing else is
+//   7. noindex pages carry robots noindex and stay out of the sitemap
+//   8. the original 24 tool URLs still exist
+
+import { readFileSync, existsSync, readdirSync } from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath, pathToFileURL } from 'node:url'
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+const dist = path.join(root, 'dist')
+const opsDir = path.join(root, 'src', 'operations')
+
+const load = (rel) => import(pathToFileURL(path.join(root, ...rel)).href)
+const { PAGES, sitemapPages, canonicalOf } = await load(['src', 'content', 'pages.js'])
+
+const problems = []
+const fail = (msg) => problems.push(msg)
+
+const opIds = readdirSync(opsDir, { withFileTypes: true })
+  .filter((e) => e.isDirectory() && existsSync(path.join(opsDir, e.name, 'meta.js')))
+  .map((e) => e.name)
+
+const routes = [
+  ...PAGES.map((p) => ({ path: p.path, page: p })),
+  ...opIds.map((id) => ({ path: `/${id}`, page: null })),
+]
+
+const fileFor = (routePath) =>
+  routePath === '/'
+    ? path.join(dist, 'index.html')
+    : path.join(dist, routePath.replace(/^\//, ''), 'index.html')
+
+const titles = new Map()
+const descriptions = new Map()
+const known = new Set(routes.map((r) => r.path))
+
+// ── 1, 2, 3, 4, 5, 7 ────────────────────────────────────────────────────────
+for (const { path: routePath, page } of routes) {
+  const file = fileFor(routePath)
+  if (!existsSync(file)) {
+    fail(`[1] 정적 HTML 없음: ${routePath}`)
+    continue
+  }
+  const html = readFileSync(file, 'utf-8')
+
+  const h1s = html.match(/<h1[\s>]/gi) || []
+  if (h1s.length !== 1) fail(`[2] H1이 ${h1s.length}개 (1개여야 함): ${routePath}`)
+
+  const noindex = /<meta[^>]*name="robots"[^>]*content="[^"]*noindex/i.test(html)
+  if (page?.noindex && !noindex) fail(`[7] noindex 누락: ${routePath}`)
+  if (!page?.noindex && noindex) fail(`[7] 의도치 않은 noindex: ${routePath}`)
+
+  const title = (html.match(/<title>([\s\S]*?)<\/title>/i) || [])[1]?.trim()
+  const desc = (html.match(/<meta[^>]*name="description"[^>]*content="([^"]*)"/i) || [])[1]?.trim()
+  if (!title) fail(`[3] title 없음: ${routePath}`)
+  if (!desc) fail(`[3] description 없음: ${routePath}`)
+
+  if (!noindex) {
+    if (title && titles.has(title)) fail(`[3] title 중복: "${title}" — ${titles.get(title)} / ${routePath}`)
+    else if (title) titles.set(title, routePath)
+    if (desc && descriptions.has(desc)) fail(`[3] description 중복: ${descriptions.get(desc)} / ${routePath}`)
+    else if (desc) descriptions.set(desc, routePath)
+  }
+
+  const canonical = (html.match(/<link[^>]*rel="canonical"[^>]*href="([^"]*)"/i) || [])[1]
+  const expected = page ? canonicalOf(page) : `https://privacy-doc.selfless.kr${routePath}`
+  if (canonical !== expected) fail(`[4] canonical 불일치: ${routePath} → ${canonical} (기대: ${expected})`)
+
+  // Internal links inside the prerendered body must resolve to a real route.
+  const body = (html.match(/<div id="root">([\s\S]*?)<\/div>\s*<script/i) || [])[1] || ''
+  for (const m of body.matchAll(/href="(\/[^"#?]*)"/g)) {
+    const target = m[1].replace(/\/$/, '') || '/'
+    if (!known.has(target)) fail(`[5] 끊어진 내부 링크: ${routePath} → ${m[1]}`)
+  }
+}
+
+// ── 6 ───────────────────────────────────────────────────────────────────────
+const sitemapPath = path.join(dist, 'sitemap.xml')
+if (!existsSync(sitemapPath)) {
+  fail('[6] sitemap.xml 없음')
+} else {
+  const xml = readFileSync(sitemapPath, 'utf-8')
+  const listed = new Set([...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]))
+
+  for (const page of sitemapPages()) {
+    if (!listed.has(canonicalOf(page))) fail(`[6] sitemap 누락: ${page.path}`)
+  }
+  for (const id of opIds) {
+    if (!listed.has(`https://privacy-doc.selfless.kr/${id}`)) fail(`[6] sitemap 누락(도구): /${id}`)
+  }
+  for (const page of PAGES) {
+    if ((page.noindex || page.ready === false) && listed.has(canonicalOf(page))) {
+      fail(`[6] sitemap에 포함되면 안 되는 페이지: ${page.path}`)
+    }
+  }
+}
+
+// ── 8 ───────────────────────────────────────────────────────────────────────
+if (opIds.length < 24) fail(`[8] 기존 도구 수가 24개 미만: ${opIds.length}개`)
+for (const id of opIds) {
+  if (!existsSync(fileFor(`/${id}`))) fail(`[8] 기존 도구 URL 소실: /${id}`)
+}
+
+// ── report ──────────────────────────────────────────────────────────────────
+if (problems.length) {
+  console.error(`\n❌ SEO 검사 실패 (${problems.length}건)`)
+  for (const p of problems) console.error(`  ${p}`)
+  process.exit(1)
+}
+
+console.log(
+  `✅ SEO 검사 통과 — 라우트 ${routes.length}개, 색인 대상 ${titles.size}개, ` +
+    `기존 도구 ${opIds.length}개 URL 보존, title/description 중복 없음`,
+)

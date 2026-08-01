@@ -6,8 +6,9 @@ import ThemeToggle from './components/ThemeToggle.jsx'
 import Note from './components/Note.jsx'
 import Icon from './components/Icon.jsx'
 import Progress from './components/Progress.jsx'
-import Home from './components/Home.jsx'
 import BrandMark from './components/BrandMark.jsx'
+import ContentPage from './content/ContentPage.jsx'
+import { getPage } from './content/pages.js'
 import { useTheme } from './hooks/useTheme.js'
 import { useLocalStorage } from './hooks/useLocalStorage.js'
 import { useSeo } from './hooks/useSeo.js'
@@ -15,50 +16,67 @@ import { getOperation } from './registry/registry.js'
 import { emitFileDrop } from './lib/fileDropBus.js'
 import { BRAND, UPSTREAM_NAME, UPSTREAM_AUTHOR, UPSTREAM_URL } from './config/site.js'
 
-// Path routing for SEO — each tool gets its own crawlable URL ("/merge-pdfs").
-// "/" (or an unknown path) → Home landing page (activeId === null).
+// Path routing. Two kinds of route share one path space:
+//   • content pages  ("/", "/tools/pdf-redact", "/guides/…") — see src/content/pages.js
+//   • tool pages     ("/merge-pdfs") — one per entry in the operation registry
+// Content paths are checked first; the 24 original tool URLs are untouched.
 // Legacy hash links ("/#/merge-pdfs") are redirected to the path form on load.
-function useRouteSelection() {
-  const parse = () => {
-    const raw = decodeURIComponent(window.location.pathname).replace(/^\/+|\/+$/g, '')
-    if (!raw || raw === 'home') return null
-    return getOperation(raw) ? raw : null
-  }
-  const [activeId, setActiveId] = useState(parse)
+function normalizePath(pathname) {
+  const clean = decodeURIComponent(pathname).replace(/\/+$/, '')
+  return clean === '' ? '/' : clean
+}
 
-  const select = useCallback((id) => {
-    setActiveId(id)
-    const target = id ? `/${id}` : '/'
-    if (window.location.pathname !== target) window.history.pushState({}, '', target)
+function resolveRoute(pathname) {
+  const path = normalizePath(pathname)
+  const page = getPage(path)
+  if (page) return { page, opId: null }
+  const id = path.replace(/^\//, '')
+  if (id === 'home') return { page: getPage('/'), opId: null }
+  return getOperation(id) ? { page: null, opId: id } : { page: getPage('/'), opId: null }
+}
+
+function useRouteSelection() {
+  const [route, setRoute] = useState(() => resolveRoute(window.location.pathname))
+
+  const navigate = useCallback((to) => {
+    // `null` keeps the old "go home" call signature used by the sidebar/palette.
+    const target = to == null ? '/' : to.startsWith('/') ? to : `/${to}`
+    setRoute(resolveRoute(target))
+    if (normalizePath(window.location.pathname) !== normalizePath(target)) {
+      window.history.pushState({}, '', target)
+    }
+    window.scrollTo(0, 0)
   }, [])
 
   useEffect(() => {
-    // Redirect old hash-style links ("/#/merge-pdfs") to the path form.
     const legacy = window.location.hash.match(/^#\/?(.*)$/)
     if (legacy) {
       const id = legacy[1] === 'home' ? '' : legacy[1]
-      window.history.replaceState({}, '', (getOperation(id) ? `/${id}` : '/') + window.location.search)
-      setActiveId(getOperation(id) ? id : null)
+      const target = getOperation(id) ? `/${id}` : '/'
+      window.history.replaceState({}, '', target + window.location.search)
+      setRoute(resolveRoute(target))
     }
-    const onPop = () => setActiveId(parse())
+    const onPop = () => setRoute(resolveRoute(window.location.pathname))
     window.addEventListener('popstate', onPop)
     return () => window.removeEventListener('popstate', onPop)
   }, [])
 
-  return [activeId, select]
+  return [route, navigate]
 }
 
 export default function App() {
   const [theme, setTheme] = useTheme()
-  const [activeId, select] = useRouteSelection()
+  const [route, navigate] = useRouteSelection()
   const [paletteOpen, setPaletteOpen] = useState(false)
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [collapsed, setCollapsed] = useLocalStorage('privacydoc:sidebarCollapsed', false)
 
+  const activeId = route.opId
+  const contentPage = route.page
   const activeOp = activeId ? getOperation(activeId) : null
 
-  useSeo(activeOp)
+  useSeo(activeOp, contentPage)
 
   // Global Cmd/Ctrl+K to open the palette.
   useEffect(() => {
@@ -110,7 +128,7 @@ export default function App() {
   }, [])
 
   const handleSelect = (id) => {
-    select(id)
+    navigate(id)
     setMobileNavOpen(false)
   }
 
@@ -234,8 +252,10 @@ export default function App() {
 
         {/* Main */}
         <main className="min-w-0 flex-1 overflow-y-auto">
-          <div className={`mx-auto px-4 py-6 sm:px-6 sm:py-8 ${activeOp ? 'max-w-3xl' : 'max-w-6xl'}`}>
-            {activeOp ? (
+          <div className={`mx-auto px-4 py-6 sm:px-6 sm:py-8 ${contentPage?.path === '/tools' ? 'max-w-6xl' : 'max-w-3xl'}`}>
+            {contentPage ? (
+              <ContentPage page={contentPage} onNavigate={handleSelect} />
+            ) : activeOp ? (
               <>
                 <div className="mb-6">
                   <div className="flex items-center gap-3">
@@ -263,9 +283,7 @@ export default function App() {
                   {Component && <Component key={activeOp.id} />}
                 </Suspense>
               </>
-            ) : (
-              <Home onSelect={handleSelect} onOpenPalette={() => setPaletteOpen(true)} />
-            )}
+            ) : null}
           </div>
 
           <footer className="mx-auto max-w-3xl space-y-2 px-4 pb-10 pt-4 text-xs text-slate-400 sm:px-6">
