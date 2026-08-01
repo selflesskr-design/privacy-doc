@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://privacy-doc.selfless.kr/sitemap.xml
+Sitemap: https://privacy.selfless.kr/sitemap.xml

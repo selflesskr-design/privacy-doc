@@ -7,7 +7,7 @@
 //   - Analytics pings, API calls, or any absolute URL to a foreign host
 //
 // Allowed patterns (not flagged):
-//   - privacy-doc.selfless.kr                    (our own deployment)
+//   - privacy.selfless.kr                    (our own deployment)
 //   - github.com/selflesskr-design/privacy-doc   (our repository link)
 //   - github.com/mithun-srinivas/DoxDock         (upstream MIT attribution — see NOTICE)
 //   - opensource.org                             (license reference)
@@ -26,7 +26,7 @@ const SRC = path.join(root, 'src')
 const EXTENSIONS = new Set(['.js', '.jsx', '.html', '.css'])
 
 const ALLOWED_HOSTS = [
-  'privacy-doc.selfless.kr',
+  'privacy.selfless.kr',
   'github.com/selflesskr-design/privacy-doc',
   'github.com/mithun-srinivas/DoxDock',
   'opensource.org',

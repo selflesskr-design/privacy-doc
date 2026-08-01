@@ -24,6 +24,9 @@ const opsDir = path.join(root, 'src', 'operations')
 const load = (rel) => import(pathToFileURL(path.join(root, ...rel)).href)
 const { PAGES, sitemapPages, canonicalOf, isIndexable } = await load(['src', 'content', 'pages.js'])
 const { metaFor } = await load(['src', 'content', 'structuredData.js'])
+// Read the domain rather than repeating it — a hardcoded copy here would go
+// stale the next time the deployment URL changes.
+const { SITE_URL } = await load(['src', 'config', 'site.js'])
 
 const problems = []
 const fail = (msg) => problems.push(msg)
@@ -78,7 +81,7 @@ for (const { path: routePath, page } of routes) {
   }
 
   const canonical = (html.match(/<link[^>]*rel="canonical"[^>]*href="([^"]*)"/i) || [])[1]
-  const expected = page ? canonicalOf(page) : `https://privacy-doc.selfless.kr${routePath}`
+  const expected = page ? canonicalOf(page) : `${SITE_URL}${routePath}`
   if (canonical !== expected) fail(`[4] canonical 불일치: ${routePath} → ${canonical} (기대: ${expected})`)
 
   // Internal links inside the prerendered body must resolve to a real route.
@@ -101,7 +104,7 @@ if (!existsSync(sitemapPath)) {
     if (!listed.has(canonicalOf(page))) fail(`[6] sitemap 누락: ${page.path}`)
   }
   for (const id of opIds) {
-    if (!listed.has(`https://privacy-doc.selfless.kr/${id}`)) fail(`[6] sitemap 누락(도구): /${id}`)
+    if (!listed.has(`${SITE_URL}/${id}`)) fail(`[6] sitemap 누락(도구): /${id}`)
   }
   for (const page of PAGES) {
     if (!isIndexable(page) && listed.has(canonicalOf(page))) {

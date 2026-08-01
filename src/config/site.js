@@ -1,7 +1,7 @@
 // Single source of truth for brand + deployment URL. Imported by the app
 // (useSeo) and by the build-time prerenderer (scripts/prerender.mjs), so
 // changing the domain here updates canonical/og/sitemap everywhere at once.
-export const SITE_URL = 'https://privacy-doc.selfless.kr'
+export const SITE_URL = 'https://privacy.selfless.kr'
 
 export const BRAND = 'PrivacyDoc'
 export const BRAND_KO = '프라이버시독'
