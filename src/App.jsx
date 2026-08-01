@@ -237,7 +237,10 @@ export default function App() {
             collapsed ? 'lg:w-0 border-r-0' : 'w-72 border-r border-slate-200 dark:border-slate-800'
           }`}
         >
-          <div className="w-72">
+          {/* h-full matters: without a definite height here, Sidebar's own
+              h-full resolves to auto, its nav never becomes scrollable, and the
+              aside's overflow-hidden silently clips the tools below the fold. */}
+          <div className="h-full w-72">
             <Sidebar activeId={activeId} onSelect={handleSelect} onOpenPalette={() => setPaletteOpen(true)} />
           </div>
         </aside>
