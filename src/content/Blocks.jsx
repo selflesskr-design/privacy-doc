@@ -49,9 +49,60 @@ function ToolCategories({ onNavigate }) {
   )
 }
 
+/**
+ * Before/after, drawn inline as SVG. The product is easier to show than to
+ * describe, and an inline drawing costs no extra request and stays sharp.
+ */
+function RedactDemo() {
+  const line = (y, w, fill) => (
+    <rect x="14" y={y} width={w} height="5" rx="2.5" fill={fill} />
+  )
+  const doc = (covered) => (
+    <svg viewBox="0 0 130 92" className="w-full" role="img"
+      aria-label={covered ? '가린 뒤: 주민등록번호가 검게 덮여 있음' : '가리기 전: 주민등록번호가 그대로 보임'}>
+      <rect width="130" height="92" rx="6" fill="#FBF7F2" stroke="#E7DACA" />
+      {line(14, 60, '#D5C3AC')}
+      {line(26, 90, '#E7DACA')}
+      {covered ? (
+        <>
+          <rect x="14" y="38" width="34" height="9" rx="2" fill="#2B221A" />
+          <rect x="52" y="38" width="50" height="9" rx="2" fill="#2B221A" />
+        </>
+      ) : (
+        <>
+          <text x="14" y="46" fontSize="9" fontFamily="monospace" fill="#2B221A">990909-</text>
+          <text x="52" y="46" fontSize="9" fontFamily="monospace" fill="#B85512">1234567</text>
+        </>
+      )}
+      {line(58, 86, '#E7DACA')}
+      {line(70, 66, '#E7DACA')}
+    </svg>
+  )
+  const caption = 'block text-center text-xs font-medium'
+  return (
+    <div className="card p-4">
+      <div className="flex items-center gap-3 sm:gap-4">
+        <div className="min-w-0 flex-1">
+          {doc(false)}
+          <span className={`${caption} mt-2 text-slate-500 dark:text-slate-400`}>가리기 전</span>
+        </div>
+        <span aria-hidden="true" className="text-xl text-slate-300 dark:text-slate-600">→</span>
+        <div className="min-w-0 flex-1">
+          {doc(true)}
+          <span className={`${caption} mt-2 text-brand-700 dark:text-brand-300`}>가린 뒤</span>
+        </div>
+      </div>
+      <p className="mt-3 text-center text-xs text-slate-500 dark:text-slate-400">
+        가린 부분은 복사해도 글자가 나오지 않습니다
+      </p>
+    </div>
+  )
+}
+
 export default function Blocks({ sections, onNavigate }) {
-  const link = (href, children, className) => (
+  const link = (href, children, className, key) => (
     <a
+      key={key}
       href={href}
       className={className}
       onClick={(e) => {
@@ -200,6 +251,28 @@ export default function Blocks({ sections, onNavigate }) {
                 ))}
               </dl>
             )
+
+          case 'actions':
+            return (
+              <div key={i} className="flex flex-wrap gap-3 pt-1">
+                {b.items.map((item, j) =>
+                  link(
+                    item.href,
+                    <>
+                      {item.label}
+                      <Icon name="arrowDown" className="h-4 w-4 -rotate-90" />
+                    </>,
+                    item.primary
+                      ? 'btn-primary inline-flex px-5 py-2.5 text-base'
+                      : 'btn-secondary inline-flex px-5 py-2.5 text-base',
+                    j,
+                  ),
+                )}
+              </div>
+            )
+
+          case 'redactDemo':
+            return <RedactDemo key={i} />
 
           case 'toolCategories':
             return <ToolCategories key={i} onNavigate={onNavigate} />

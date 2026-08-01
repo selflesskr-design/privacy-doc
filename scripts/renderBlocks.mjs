@@ -62,6 +62,11 @@ export function renderBlocks(sections, ctx = {}) {
           return `<dl>${b.items
             .map((i) => `<dt>${escText(i.q)}</dt><dd>${escText(i.a)}</dd>`)
             .join('')}</dl>`
+        case 'actions':
+          return `<p>${b.items.map((i) => a(i.href, i.label)).join(' · ')}</p>`
+        case 'redactDemo':
+          // The visual is decorative; crawlers get the claim it illustrates.
+          return `<p>가리기 전에는 주민등록번호가 그대로 보이지만, 가린 뒤에는 복사해도 글자가 나오지 않습니다.</p>`
         case 'toolCategories':
           return toolCategoriesHtml(ctx.ops || [])
         default:

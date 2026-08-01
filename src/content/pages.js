@@ -74,20 +74,28 @@ const HOME = {
       t: 'p',
       text: `${BRAND}는 파일을 올려받지 않습니다. 가리기도, 합치기도, 용량 줄이기도 모두 사용하는 기기 안에서 끝납니다.`,
     },
+    // The primary action comes before any further reading. Everything above is
+    // two short paragraphs; a visitor who already knows what they want should
+    // not have to scan a grid of equal-weight cards to find the main tool.
+    {
+      t: 'actions',
+      items: [
+        { label: 'PDF 가리기 시작', href: '/editor/pdf-redact', primary: true },
+        { label: '사진 가리기', href: '/tools/image-redact' },
+      ],
+    },
+    { t: 'redactDemo' },
+    { t: 'h2', text: '왜 파일을 올리지 않아도 되나요' },
+    {
+      t: 'p',
+      text:
+        '요즘 브라우저는 PDF를 읽고 다시 저장하는 일을 스스로 할 수 있습니다. 굳이 파일을 어딘가로 보낼 이유가 없습니다.',
+    },
+    { t: 'note', tone: 'warn', text: CHECK_FIRST },
     {
       t: 'cards',
-      title: '자주 쓰는 기능',
+      title: '다른 기능도 있습니다',
       items: [
-        {
-          label: 'PDF 개인정보 가리기',
-          href: '/tools/pdf-redact',
-          text: 'PDF 속 주민등록번호나 계좌번호를 가립니다',
-        },
-        {
-          label: '사진 개인정보 가리기',
-          href: '/tools/image-redact',
-          text: '신분증이나 통장을 찍은 사진의 일부를 가립니다',
-        },
         {
           label: '사진 정보 삭제',
           href: '/tools/remove-photo-metadata',
@@ -99,16 +107,9 @@ const HOME = {
           href: '/tools/compress-pdf',
           text: '첨부 용량 제한에 맞춰 줄입니다',
         },
-        { label: '모든 도구', href: '/tools', text: 'PDF·사진 도구 24가지' },
+        { label: '모든 도구', href: '/tools', text: 'PDF·사진 도구 전체' },
       ],
     },
-    { t: 'h2', text: '왜 파일을 올리지 않아도 되나요' },
-    {
-      t: 'p',
-      text:
-        '요즘 브라우저는 PDF를 읽고 다시 저장하는 일을 스스로 할 수 있습니다. 굳이 파일을 어딘가로 보낼 이유가 없습니다.',
-    },
-    { t: 'note', tone: 'warn', text: CHECK_FIRST },
     {
       t: 'cards',
       title: '더 알아보기',
