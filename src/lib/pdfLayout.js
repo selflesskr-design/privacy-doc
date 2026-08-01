@@ -123,6 +123,10 @@ export async function renderBlocksToPdf(blocks, opts = {}) {
     }
   }
 
+  // These converters intentionally stay on the standard PDF fonts, which cannot
+  // encode Hangul. Rather than embed a Korean face here, surface the limit
+  // clearly — see docs/smoke-test-plan.md.
+  try {
   for (const block of blocks) {
     if (block.type === 'hr') {
       ensureSpace(16)
@@ -236,6 +240,15 @@ export async function renderBlocksToPdf(blocks, opts = {}) {
       drawLines(lines, size, margin)
       y -= size * 0.5
     }
+  }
+  } catch (err) {
+    if (/WinAnsi cannot encode/.test(err?.message || '')) {
+      throw new Error(
+        '이 변환 도구는 아직 한글을 지원하지 않습니다. 한글이 포함되지 않은 문서만 변환할 수 있습니다. ' +
+          '한글 문서에 텍스트를 넣어야 한다면 "Edit PDF"를 이용해 주세요.',
+      )
+    }
+    throw err
   }
 
   const bytes = await doc.save()

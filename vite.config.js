@@ -15,6 +15,20 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
         // Never fall back to the network for navigations — offline-first.
         navigateFallback: 'index.html',
+        // The Korean PDF font (2.6 MB) is deliberately NOT precached: most users
+        // never add Korean text to a PDF. It is cached on first use instead, so
+        // it costs nothing up front but still works offline afterwards.
+        runtimeCaching: [
+          {
+            urlPattern: /\/fonts\/.*\.ttf$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'privacydoc-pdf-fonts',
+              expiration: { maxEntries: 4 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+        ],
       },
       includeAssets: ['favicon.svg', 'apple-touch-icon-180.png'],
       manifest: {
@@ -31,8 +45,9 @@ export default defineConfig({
         icons: [
           { src: 'pwa-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'pwa-512.png', sizes: '512x512', type: 'image/png' },
+          // Separate file: Android crops maskable icons, so the symbol is inset.
           {
-            src: 'pwa-512.png',
+            src: 'pwa-512-maskable.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',

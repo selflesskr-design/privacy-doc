@@ -7,6 +7,7 @@ import Note from './components/Note.jsx'
 import Icon from './components/Icon.jsx'
 import Progress from './components/Progress.jsx'
 import Home from './components/Home.jsx'
+import BrandMark from './components/BrandMark.jsx'
 import { useTheme } from './hooks/useTheme.js'
 import { useLocalStorage } from './hooks/useLocalStorage.js'
 import { useSeo } from './hooks/useSeo.js'
@@ -172,10 +173,7 @@ export default function App() {
           <Icon name="panelLeft" className="h-5 w-5" />
         </button>
         <a href="/" className="flex items-center gap-2" onClick={(e) => { e.preventDefault(); handleSelect(null) }}>
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-white">
-            <Icon name="layers" className="h-5 w-5" />
-          </span>
-          <span className="text-lg font-bold tracking-tight">{BRAND}</span>
+          <BrandMark />
         </a>
         <div className="ml-2 hidden md:block">
           <PrivacyBadge />

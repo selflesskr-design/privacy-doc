@@ -1,4 +1,5 @@
 import { PDFDocument, StandardFonts, degrees, rgb } from 'pdf-lib'
+import { hasHangul } from '../../lib/koreanFont.js'
 
 export function hexToRgb(hex) {
   const m = /^#?([0-9a-f]{6})$/i.exec(hex || '')
@@ -20,7 +21,16 @@ export async function addWatermark(file, opts, onProgress) {
   } catch {
     throw new Error('Could not read this PDF. Encrypted PDFs are not supported.')
   }
-  const font = await doc.embedFont(StandardFonts.HelveticaBold)
+  // Korean watermarks need an embedded font; only Regular 400 is bundled, so a
+  // Korean mark is not bold. Loaded on demand — see src/lib/koreanFont.js.
+  let font
+  if (hasHangul(text)) {
+    onProgress?.(0, '한글 폰트를 준비하는 중…')
+    const { embedKoreanFont } = await import('../../lib/koreanFont.js')
+    font = await embedKoreanFont(doc)
+  } else {
+    font = await doc.embedFont(StandardFonts.HelveticaBold)
+  }
   const col = hexToRgb(color)
   const pages = doc.getPages()
 

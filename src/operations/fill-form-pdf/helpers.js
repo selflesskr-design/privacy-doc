@@ -6,6 +6,7 @@ import {
   PDFRadioGroup,
   PDFOptionList,
 } from 'pdf-lib'
+import { hasHangul } from '../../lib/koreanFont.js'
 
 /** Read the interactive form fields of a PDF into plain descriptors. */
 export async function readFields(file) {
@@ -49,6 +50,14 @@ export async function fillForm(file, values, flatten, onProgress) {
       /* skip fields that reject a value */
     }
   }
+  // Field appearances are regenerated with a font on save/flatten, and the
+  // default one cannot encode Hangul — supply Pretendard when any value is Korean.
+  if (Object.values(values).some((f) => hasHangul(f?.value))) {
+    onProgress?.(0.7, '한글 폰트를 준비하는 중…')
+    const { embedKoreanFont } = await import('../../lib/koreanFont.js')
+    form.updateFieldAppearances(await embedKoreanFont(doc))
+  }
+
   if (flatten) {
     onProgress?.(0.8, 'Flattening…')
     form.flatten()

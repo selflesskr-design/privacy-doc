@@ -1,5 +1,6 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 import { loadPdf } from '../../lib/pdfjs.js'
+import { hasHangul } from '../../lib/koreanFont.js'
 
 // Font family -> pdf-lib StandardFonts, by [regular, bold, italic, boldItalic].
 export const FONT_FAMILIES = {
@@ -114,6 +115,17 @@ export async function exportEditedPdf(origBytes, annotations, onProgress) {
     return fontCache.get(name)
   }
 
+  // Korean text needs an embedded font — the standard PDF fonts cannot encode
+  // Hangul. Loaded on demand so a document with no Korean text never pays for
+  // it, and so a font failure can never break the non-text annotations.
+  const needsKorean = annotations.some((a) => a.type === 'text' && hasHangul(a.text))
+  let koreanFont = null
+  if (needsKorean) {
+    onProgress?.(0.25, '한글 폰트를 준비하는 중…')
+    const { embedKoreanFont } = await import('../../lib/koreanFont.js')
+    koreanFont = await embedKoreanFont(doc)
+  }
+
   const list = [...annotations].sort((a, b) => a.page - b.page)
   for (let i = 0; i < list.length; i++) {
     const a = list[i]
@@ -125,7 +137,8 @@ export async function exportEditedPdf(origBytes, annotations, onProgress) {
     if (a.type === 'text') {
       const size = a.fontSize
       const color = hexToRgb(a.color)
-      const font = await getFont(standardFontFor(a))
+      // Korean falls back to Pretendard Regular; bold/italic do not apply to it.
+      const font = hasHangul(a.text) ? koreanFont : await getFont(standardFontFor(a))
       const lines = String(a.text || '').split('\n')
       lines.forEach((line, li) => {
         page.drawText(line, {
