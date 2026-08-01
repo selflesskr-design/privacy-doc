@@ -3,7 +3,7 @@ import { useLocalStorage } from './useLocalStorage.js'
 
 // Theme: 'light' | 'dark' | 'system'. Persisted locally (non-sensitive UI state).
 export function useTheme() {
-  const [theme, setTheme] = useLocalStorage('doxdock:theme', 'system')
+  const [theme, setTheme] = useLocalStorage('privacydoc:theme', 'system')
 
   useEffect(() => {
     const root = document.documentElement

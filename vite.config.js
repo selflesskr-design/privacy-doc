@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
-// DoxDock is a 100% client-side static app. No dev/prod proxy, no external hosts.
+// PrivacyDoc is a 100% client-side static app. No dev/prod proxy, no external hosts.
 // The service worker precaches every asset so the app runs fully offline.
 export default defineConfig({
   plugins: [
@@ -18,10 +18,11 @@ export default defineConfig({
       },
       includeAssets: ['favicon.svg', 'apple-touch-icon-180.png'],
       manifest: {
-        name: 'DoxDock — Local Document & Image Tools',
-        short_name: 'DoxDock',
+        name: 'PrivacyDoc — 개인정보 안전 문서 도구',
+        short_name: 'PrivacyDoc',
         description:
-          'Offline-first document & image utilities. Nothing you upload ever leaves your machine.',
+          'PDF·이미지 속 개인정보를 브라우저 안에서 안전하게 가립니다. 파일이 서버로 전송되지 않습니다.',
+        lang: 'ko',
         theme_color: '#0b1018',
         background_color: '#0b1018',
         display: 'standalone',

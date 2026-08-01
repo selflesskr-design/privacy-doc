@@ -6,7 +6,7 @@ import { formatBytes } from '../lib/format.js'
 
 // Grid of produced files with per-item download, optional image previews, and a
 // "Download all (.zip)" action. Object URLs for previews are revoked on unmount.
-export default function ResultGallery({ results, zipName = 'doxdock-output.zip', preview = true }) {
+export default function ResultGallery({ results, zipName = 'privacydoc-output.zip', preview = true }) {
   const [zipping, setZipping] = useState(false)
 
   const previews = useMemo(

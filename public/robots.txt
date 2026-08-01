@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://doxdock.vercel.app/sitemap.xml
+Sitemap: https://privacy-doc.selfless.kr/sitemap.xml

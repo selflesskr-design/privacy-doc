@@ -1,13 +1,11 @@
 import { useEffect } from 'react'
+import { SITE_URL, BRAND, DEFAULT_TITLE, DEFAULT_DESC } from '../config/site.js'
 
 // Keeps the document's SEO/social tags in sync with the active tool as the user
 // navigates client-side. The tags themselves already exist in index.html (and in
 // the prerendered per-tool pages) — this just updates them in place so a
 // JS-rendering crawler and social-share scrapers see the right title/description.
-const SITE = 'https://doxdock.vercel.app'
-const DEFAULT_TITLE = 'DoxDock — Private PDF & Image Tools, 100% in Your Browser'
-const DEFAULT_DESC =
-  'Free, open-source PDF & image tools that run 100% in your browser — merge, split, compress, convert, edit, and sign. No uploads, no sign-up, fully private and offline.'
+const SITE = SITE_URL
 
 function setAttr(selector, attr, value) {
   const el = document.head.querySelector(selector)
@@ -16,9 +14,9 @@ function setAttr(selector, attr, value) {
 
 export function useSeo(op) {
   useEffect(() => {
-    const title = op ? `${op.name} — DoxDock` : DEFAULT_TITLE
+    const title = op ? `${op.name} — ${BRAND}` : DEFAULT_TITLE
     const description = op
-      ? `${op.description} Runs 100% in your browser — no uploads, no sign-up, fully private.`
+      ? `${op.description} 모든 처리는 내 브라우저 안에서만 이루어집니다 — 업로드 없음, 가입 없음.`
       : DEFAULT_DESC
     const url = op ? `${SITE}/${op.id}` : `${SITE}/`
 

@@ -1,165 +1,145 @@
-# DoxDock
+# PrivacyDoc (프라이버시독)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-10b981?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/mithun-srinivas/DoxDock?style=for-the-badge&logo=github&logoColor=white&color=f59e0b)](https://github.com/mithun-srinivas/DoxDock/stargazers)
-[![Created by Mithun S](https://img.shields.io/badge/Created%20by-Mithun%20S-4f46e5?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mithun-srinivas)
-[![Supported by OSCode Community](https://img.shields.io/badge/Supported%20by-OSCode%20Community-00C9FF?style=for-the-badge&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAE5klEQVRIDbVWXWwUVRQ%2B996Z7dp2qQWxUQilFgr1QQuxohKIBNw21ZholUoMmqjwogaJJvXFSK0xEH8SHpTgQ9NgfKk%2BWEnQNMqTmvrzoIkhyBpiiJggEdMW2u7uzD1%2BZ2Z3dmZpscb07Ozs%2FTn3%2B84959xzV9G3TIspejHBBXuhBIpIEav%2FvtuFEpBAK6UJjw46C9y68%2B96sAGQhpRPVCiChlMOGSJ0bfBcE2JuAjgEOPJJk%2FnzL%2Frpazs%2Bxr%2F%2BaGfzmNHpGrOmg%2B7u4Y5OvmE55dmy0kwWplzlQzVPFrHrKFWY5dEPaeSwOfuzRwyLISFCjfiLqLW9uPMF9cAu%2F7oMgRpRCnTir6sJoMMmpSl3Wr%2B1n7%2F7HG5goIn%2FyWOZxXotXQ4%2BxJuy6sX3qK3Vl%2B1VSzWBZqsdbXPjpv9J%2F9yZEE9SCF84QZnyThJAzuq1dHCE2jo8xCgp1VnERtPU32bgee%2FcGaK0WAvkAF33PKE3bU0uL%2FX4t5x67Vl%2FYkKCn5QkgSIxcfiQf%2FqHwPY8POOQg%2FRPd2Zp4F114y3gkkRNimTTqW946HUynlLoVSSpil7ulB45AiKohD72yTe1S2b3D%2BpMPW%2FYWgN08VdCYA1SwHx81Mn9QjqBWenIKXVInRjmmcloNRIVW6KunbSu05%2B0avtD3j3d5TBU1ob6PDPlHD8GkLiUlGASnK%2BuTPJXn3liTuh8cb9seEuvxTljbWszanCI9r3prmoT4qTLoZkfHzOXp%2BHnSEoE0LUp4vM5e%2FF8NBc0mNP1%2FsrVpUGPiw1N9PRL3jsfOa3rlBzlisBK9%2BIffOFsnLeyTbTU1ATNXKmskKNDJl3n1uBgiTCC7pOdJlp7m%2FfMYNXBgpVqZspOXJKsK0uFIBjBTGxShhQXC75fSW%2FxHYBBs%2FpW65aIg7XywkGUkhWTGAHmtMYTm4Wbmacn%2BMLvIa%2BQRzbMTlKMuLQKCI6O2xiDA9jSJl3XiCEpC6GgJDDrk6PA1Yqlqlp2LRmcju9PKlsdA6q7nhqb4qGJkNh6pFasUS2tGAJmmSHIp0%2BOmhMfOMVJq4GorJ5xvhi1x94Wd8UEhtvm9XRzCyERyxIBKbbE2rH39cmUFLVAGC32inn9ylPel8epxqCA89inxf4%2BvnwpPI%2FQCyqhHD93x4O4LQAVSUQgBUc4tj3MK7CJMkFwo4hP65ea9o0M0zxft280mUaMIWp4gwZeRz2xK5vz23upGA6XKCoEMuCTarqJ9r4q68qCNth4R6%2Ffsl4VLfnaNrfabF9gQmgqLhxrELe9A4zl82ZRgKhwPd2%2F2%2FY8lpKN4zGIrjYOb%2BkiXBIIABLX1bw56zgupiGoAA5Tsftx1bObC9omK1VyB%2BIQsUz1v2%2B7d7k4V7Jdq1e10YZ7bQEzgd1o3L6ZW9qNBEi%2BtO0R%2FfIRxDCcL29efqsJBAP3Vl3GHhjy9x3k2lrUFe7u85c0kA8s0ZdQZRqcbB86OOf03KHiG8NebV0yaQUdYmjPgaARvcQvkqfKpTvuSt3ZbXWBu%2FbwsuXBvSNqYWSpfplvre4%2FbLOPkkrFcz%2FCCpTn%2BuuoQABzkRgp%2FF0hVUguR1jIYsK6ypcya%2BPnJo6OdrJ4lyfhfD%2BMVVCEAseX5%2FCLy5mCIydRQW8OP0fa15qLlOZrVBPPpfe%2FCOYCrB5bdIJ%2FANB%2B4OK%2FhNbJAAAAAElFTkSuQmCC&logoColor=white)](https://github.com/OSCode-Community)
+**브라우저 안에서만 동작하는 개인정보 안전 문서 도구. 열어본 파일은 내 기기 밖으로 나가지 않습니다.**
 
-**Offline-first document & image tools that run 100% in your browser. Nothing you open ever leaves your machine.**
+PDF와 이미지에 담긴 개인정보를 안전하게 가리고, 문서를 합치고, 용량을 줄입니다.
+모든 처리는 **사용자의 브라우저 안에서** 이루어집니다. 서버 없음, 가입 없음, 추적 없음, 네트워크 요청 없음.
 
-DoxDock is a collection of ~20 everyday PDF and image utilities — merge, split, compress, convert, watermark, extract text, and more — built on one hard rule: **your files never get uploaded anywhere.** Every operation runs client-side, on your device, using your browser's own CPU. No servers, no accounts, no analytics, no network.
+계약서·급여명세서·등본·진단서처럼 남에게 맡기기 꺼려지는 파일을 다룰 때,
+정체를 알 수 없는 온라인 변환 사이트에 업로드하지 않고 처리하기 위해 만들었습니다.
 
-It exists for the moment you have a sensitive PDF — a contract, a payslip, a medical scan — and just need to _do one thing_ to it without handing it to a random online converter. Read the [ideology letter](https://doxdock.vercel.app/ideology.html) for the why.
-
-> **Runs entirely in your browser — no uploads, no network.**
-
-<img width="1718" height="987" alt="image" src="https://github.com/user-attachments/assets/f32b9470-5630-4292-88be-cab4e48815af" />
+> ⚖️ 이 프로젝트는 MIT 라이선스로 공개된 오픈소스 **[DoxDock](https://github.com/mithun-srinivas/DoxDock)** (Copyright © 2026 Mithun Srinivas)의 파생 저작물입니다.
+> 자세한 내용은 [LICENSE](LICENSE)와 [NOTICE](NOTICE)를 참고하세요.
 
 ---
 
-## Why it's "provably local" — and how to verify
+## 왜 "증명 가능한 로컬 처리"인가
 
-Most "free online PDF tools" upload your file to a server you know nothing about. DoxDock is the opposite, and it's built so you don't have to take our word for it:
+대부분의 "무료 온라인 PDF 도구"는 파일을 알 수 없는 서버로 업로드합니다.
+PrivacyDoc은 그 반대이며, **말로만 약속하지 않고 기술적으로 증명**합니다.
 
-1. **A strict Content-Security-Policy forbids network access.** `index.html` ships a CSP with `connect-src 'self'` — the browser will _refuse_ any outbound `fetch`/`XHR`/`WebSocket` to any host but its own origin. If a future change tried to phone home, the browser would block it.
-2. **Everything is bundled locally.** Fonts (system stack), icons (inline SVG), the pdf.js worker, and all WebAssembly are served from the app itself. There are no CDN links, no external fonts, no trackers.
-3. **It's an installable PWA that works offline.** After the first load, a service worker caches everything. Pull your network cable / turn off Wi-Fi — every tool still works.
+1. **엄격한 CSP가 네트워크 접근 자체를 금지합니다.** [index.html](index.html)의 `connect-src 'self'` 설정 때문에, 브라우저가 자기 오리진 외부로 나가는 모든 `fetch`/`XHR`/`WebSocket`을 **거부**합니다. 나중에 누군가 외부 전송 코드를 넣더라도 브라우저가 막습니다.
+2. **모든 자산이 로컬 번들입니다.** 폰트, 아이콘(인라인 SVG), pdf.js 워커, WebAssembly까지 전부 앱 자체에서 제공됩니다. CDN 링크도, 외부 폰트도, 트래커도 없습니다.
+3. **오프라인으로 동작하는 PWA입니다.** 첫 로드 이후 서비스워커가 모든 것을 캐시합니다. 인터넷을 끊어도 모든 도구가 그대로 동작합니다.
+4. **CI가 매 변경마다 검사합니다.** [scripts/check-external-references.mjs](scripts/check-external-references.mjs)가 소스 내 외부 URL 참조를 정적 분석해 발견 시 빌드를 실패시킵니다.
 
-### Verify it yourself (30 seconds)
+### 직접 확인하는 방법 (30초)
 
-- Open DevTools → **Network** tab, then use any tool. You'll see requests only to your own origin (in dev, `localhost`) — never an external domain.
-- Or: load the app once, go **fully offline** (airplane mode / disconnect), and reload. Everything keeps working.
-- Or: read the source. It's MIT-licensed and small. `connect-src 'self'` is in [`index.html`](index.html); the pdf.js worker is bundled in [`src/lib/pdfjs.js`](src/lib/pdfjs.js).
+- 개발자도구 → **네트워크** 탭을 열고 아무 도구나 사용해 보세요. 자기 오리진 요청 외에는 아무것도 발생하지 않습니다.
+- 또는 앱을 한 번 연 뒤 **완전히 오프라인**(비행기 모드)으로 전환하고 새로고침해 보세요. 모든 기능이 그대로 동작합니다.
+- 또는 소스를 직접 읽어보세요. MIT 라이선스이고 규모가 작습니다. `connect-src 'self'`는 [index.html](index.html)에, pdf.js 워커 번들 설정은 [src/lib/pdfjs.js](src/lib/pdfjs.js)에 있습니다.
 
-We persist only **non-sensitive UI state** (your theme and last-used tool) in `localStorage`. File contents are never written to storage and never transmitted.
+`localStorage`에는 **민감하지 않은 UI 상태**(테마, 사이드바 접힘)만 저장합니다. 파일 내용은 저장되지도, 전송되지도 않습니다.
 
 ---
 
-## Run with Docker
-
-The quickest way to self-host. DoxDock ships as a static site, so the container just serves the built files with nginx — it makes **no outbound calls** and can run completely offline / air-gapped.
-
-**With Docker:**
+## 시작하기
 
 ```bash
-# build the image (--load puts it in your local image store; needed when the
-# active buildx builder uses the docker-container driver)
-docker build --load -t doxdock .
+npm install
 
-# run it (serves on http://localhost:8791)
-docker run --rm -p 8791:80 doxdock
+# 개발 서버 (http://localhost:5173)
+npm run dev
+
+# 프로덕션 빌드 -> dist/
+npm run build
+
+# 빌드 결과 미리보기
+npm run preview
+
+# 외부 네트워크 참조 정적 검사
+node scripts/check-external-references.mjs
 ```
 
-**With Docker Compose:**
+요구 사항: Node 18+. 백엔드도, 환경 변수도, 띄워야 할 서비스도 없는 정적 사이트입니다.
+
+## Docker로 실행
 
 ```bash
 docker compose up --build
-# then open http://localhost:8791
+# http://localhost:8791
 ```
 
-The image is a multi-stage build (Node builds the site, nginx serves it), so the final image is tiny and contains only static assets — no Node runtime, no source. The app is published on host port **8791** (chosen to avoid clashing with common dev servers); to use a different port, change the left-hand number, e.g. `-p 3000:80` (or edit `docker-compose.yml`).
-
-> Self-hosting keeps the "provably local" guarantee intact: the container serves files and nothing else. You can disconnect it from the internet entirely and every tool still works.
+멀티스테이지 빌드(Node가 빌드하고 nginx가 서빙)라 최종 이미지에는 정적 파일만 들어갑니다.
+컨테이너를 인터넷에서 완전히 분리해도 모든 기능이 동작합니다.
 
 ---
 
-## Quick start
+## 제공 도구
 
-```bash
-# install
-npm install
-
-# dev server (http://localhost:5173)
-npm run dev
-
-# production build -> dist/
-npm run build
-
-# preview the production build
-npm run preview
-```
-
-Requirements: Node 18+. No backend, no environment variables, no services to run — it's a static site.
-
-### Verify the offline build
-
-```bash
-npm run build
-npm run preview
-# open the URL, then disconnect your network and use the app.
-# In DevTools → Network, confirm zero requests leave your origin.
-```
-
----
-
-## Supported operations
-
-Operations whose client-side result has inherent limits are labelled honestly in the UI **and** here.
+클라이언트 처리 특성상 한계가 있는 도구는 UI와 아래 표에 그 한계를 그대로 밝힙니다.
 
 ### PDF
 
-| Tool | What it does | Caveats |
+| 도구 | 기능 | 주의 사항 |
 |---|---|---|
-| Images → PDF | Combine images into one PDF, ordered, with page-size/orientation options | — |
-| PDF → Images | Export each page as PNG or JPEG (ZIP download) | — |
-| Merge PDFs | Combine multiple PDFs, drag to reorder | Encrypted PDFs unsupported |
-| Split PDF | Extract page ranges or explode into single pages | Encrypted PDFs unsupported |
-| Rotate PDF | Rotate all or selected pages by 90/180/270° | — |
-| Organize PDF | Reorder / delete pages via thumbnails | — |
-| Edit PDF | Overlay text, drawings, highlights, shapes, images, and white-out; flatten on export | Adds content on top; does not re-flow existing text |
-| Compress PDF | Re-encode page images + strip metadata; before/after size | **Results vary.** "Re-encode pages" rasterizes (text becomes non-selectable); text-only PDFs barely compress — use "strip metadata" for those. |
-| Watermark PDF | Text stamp, centered or tiled, with opacity/angle | — |
-| Add Page Numbers | Stamp page numbers with position/format options | — |
-| Extract Text | Output plain text or Markdown | Text-based PDFs only; **no OCR** for scans |
-| PDF → Word | Extract text into an editable `.docx` | **Text only** — complex layout, tables, and images are not preserved; no OCR |
-| Word → PDF | Convert `.docx` to PDF | **Approximate layout** — headings/lists/bold kept; exact fonts, images, columns, tables not reproduced |
-| Fill PDF Form | Fill AcroForm fields and optionally flatten | Only PDFs with real form fields |
+| Edit PDF | 텍스트·그림·형광펜·도형·이미지·화이트아웃을 덧씌우고 내보낼 때 굽기 | 기존 내용 위에 덧그리는 방식. **개인정보 보호 목적에는 적합하지 않음** |
+| Images → PDF | 여러 이미지를 순서대로 한 PDF로 결합 | — |
+| PDF → Images | 각 페이지를 PNG/JPEG로 내보내기 (ZIP 다운로드) | — |
+| Merge PDFs | 여러 PDF 합치기, 드래그로 순서 변경 | 암호화된 PDF 미지원 |
+| Split PDF | 페이지 범위 추출 또는 낱장 분리 | 암호화된 PDF 미지원 |
+| Rotate PDF | 전체 또는 선택 페이지를 90/180/270° 회전 | — |
+| Organize PDF | 썸네일로 페이지 순서 변경·삭제 | — |
+| Compress PDF | 페이지 재인코딩 + 메타데이터 제거, 전후 용량 비교 | 문서에 따라 결과 편차가 큼. 재인코딩 시 텍스트 선택 불가 |
+| Watermark PDF | 텍스트 워터마크(중앙/타일), 투명도·각도 조절 | **한글 텍스트 미지원** (아래 참고) |
+| Add Page Numbers | 위치·형식을 지정해 페이지 번호 삽입 | — |
+| Extract Text | 일반 텍스트 또는 마크다운으로 추출 | 텍스트 기반 PDF만 가능, **OCR 없음** |
+| PDF → Word | PDF 텍스트를 편집 가능한 `.docx`로 추출 | **텍스트만** 추출. 표·이미지·다단 레이아웃 미보존 |
+| Word → PDF | `.docx`를 PDF로 변환 | **근사 레이아웃**. **한글 텍스트 미지원** |
+| Fill PDF Form | AcroForm 필드 채우기 및 병합 | 실제 폼 필드가 있는 PDF만 |
 
-### Image
+### 이미지
 
-| Tool | What it does | Caveats |
+| 도구 | 기능 | 주의 사항 |
 |---|---|---|
-| Compress Image | Quality slider, before/after size | PNG is lossless — convert to JPEG/WebP for big savings |
-| Resize Image | By dimensions or percentage, keep aspect ratio | — |
+| Compress Image | 품질 슬라이더, 전후 용량 비교 | PNG는 무손실 — 큰 절감은 JPEG/WebP 변환 필요 |
+| Resize Image | 픽셀 또는 퍼센트로 크기 조절 | — |
 | Convert Image Format | PNG ↔ JPEG ↔ WebP | — |
-| Crop Image | Interactive drag-to-crop | — |
-| Strip Image Metadata | Remove EXIF/GPS by re-encoding | — |
-| Rotate / Flip Image | 90° steps + horizontal/vertical flip | — |
+| Crop Image | 드래그로 영역 선택 후 자르기 | — |
+| Strip Image Metadata | 재인코딩으로 EXIF·GPS 제거 | — |
+| Rotate / Flip Image | 90° 단위 회전 및 좌우·상하 반전 | — |
+| Watermark Image | 텍스트 또는 로고 오버레이 | — |
+| Invert Image Colors | 색상 반전 | — |
 
-### Convert
+### 변환
 
-| Tool | What it does | Caveats |
+| 도구 | 기능 | 주의 사항 |
 |---|---|---|
-| Markdown → PDF | Render Markdown text or `.md` file to PDF | Common Markdown subset |
-| HTML → PDF | Render HTML markup or `.html` file to PDF | **Approximate layout** — CSS/images not reproduced |
+| Markdown → PDF | 마크다운을 PDF로 렌더링 | **한글 텍스트 미지원** |
+| HTML → PDF | HTML을 PDF로 렌더링 | **근사 레이아웃**. **한글 텍스트 미지원** |
+
+> **한글 관련 알려진 제한**
+> PDF에 텍스트를 그리는 기능은 pdf-lib의 표준 폰트(WinAnsi 인코딩)를 사용하므로 현재 한글을 출력할 수 없습니다.
+> 한글 폰트 임베딩 작업이 완료되기 전까지는 위 표에 표시된 도구에서 한글 입력 시 오류가 발생합니다.
 
 ---
 
-## Tech stack
+## 기술 스택
 
-- **React + plain JavaScript (JSX)** + **Vite**
-- **Tailwind CSS** (the "Aurora" theme — deep slate with a mint→sky glow, light + dark)
-- **vite-plugin-pwa** for the offline/installable service worker
-- Client-side libraries, all bundled locally (no CDN): `pdf-lib`, `pdfjs-dist` (worker bundled), `jspdf`, `docx`, `mammoth`, `browser-image-compression`, `fflate` (zip). Plus the browser **Canvas** and **Web Crypto** APIs.
+- **React 18 + JSX** + **Vite 5**
+- **Tailwind CSS 3** (라이트/다크 테마)
+- **vite-plugin-pwa** — 오프라인 서비스워커
+- 전부 로컬 번들되는 클라이언트 라이브러리: `pdf-lib`, `pdfjs-dist`(워커 번들), `jspdf`, `docx`, `mammoth`, `browser-image-compression`, `fflate`. 여기에 브라우저 **Canvas** API.
 
-No dependency makes network calls at runtime. Heavy work (pdf.js rendering, image compression) runs in web workers to keep the UI responsive.
+런타임에 네트워크 호출을 하는 의존성은 없습니다. 무거운 작업(pdf.js 렌더링, 이미지 압축)은 웹 워커에서 처리합니다.
 
-## Architecture
+## 아키텍처
 
-DoxDock uses a **plugin/registry** architecture. Each operation is a self-contained folder under `src/operations/<id>/` with metadata, a component, and pure helpers. A central registry auto-discovers them via `import.meta.glob` and lists them in a searchable, categorized sidebar with a Cmd/Ctrl+K command palette. Adding a tool = drop in one folder. See [CONTRIBUTING.md](CONTRIBUTING.md).
+플러그인/레지스트리 구조입니다. 각 도구는 `src/operations/<id>/` 아래의 독립 폴더이며,
+`meta.js`(메타데이터) + `index.jsx`(UI) + `helpers.js`(순수 로직)로 구성됩니다.
+[src/registry/registry.js](src/registry/registry.js)가 `import.meta.glob`으로 자동 발견하므로,
+도구 추가는 폴더 하나를 넣는 것으로 끝납니다. 중앙 switch문이 없습니다.
 
-## Contributing
+브랜드명과 배포 도메인은 [src/config/site.js](src/config/site.js) 한 곳에서 관리합니다.
 
-PRs welcome — especially new operations. See [CONTRIBUTING.md](CONTRIBUTING.md) for a step-by-step guide. The one rule that can never break: **no runtime network requests.**
+---
 
-## Supported by
+## 라이선스
 
-<a href="https://github.com/OSCode-Community">
-  <img src="https://avatars.githubusercontent.com/u/104100526?s=200&v=4" alt="OSCode Community" width="72" height="72" />
-</a>
+[MIT](LICENSE)
 
-Proudly supported by the **[OSCode Community](https://github.com/OSCode-Community)** — an open-source developer community. If DoxDock is useful to you, a ⭐ on the repo helps others find it.
+- 원저작물: **DoxDock** — Copyright © 2026 Mithun Srinivas — https://github.com/mithun-srinivas/DoxDock
+- 수정 부분: Copyright © 2026 selflesskr
 
-## License
-
-[MIT](LICENSE) © 2026 Mithun Srinivas
+MIT 라이선스에 따라 원저작권 고지와 허가 고지를 [LICENSE](LICENSE) 파일에 원문 그대로 보존하고 있습니다.
+파생 사실과 변경 내역은 [NOTICE](NOTICE)에 정리되어 있습니다.

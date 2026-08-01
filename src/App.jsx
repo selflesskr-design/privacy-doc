@@ -7,12 +7,12 @@ import Note from './components/Note.jsx'
 import Icon from './components/Icon.jsx'
 import Progress from './components/Progress.jsx'
 import Home from './components/Home.jsx'
-import OSCodeNavBadge from './components/OSCodeNavBadge.jsx'
 import { useTheme } from './hooks/useTheme.js'
 import { useLocalStorage } from './hooks/useLocalStorage.js'
 import { useSeo } from './hooks/useSeo.js'
 import { getOperation } from './registry/registry.js'
 import { emitFileDrop } from './lib/fileDropBus.js'
+import { BRAND, UPSTREAM_NAME, UPSTREAM_AUTHOR, UPSTREAM_URL } from './config/site.js'
 
 // Path routing for SEO — each tool gets its own crawlable URL ("/merge-pdfs").
 // "/" (or an unknown path) → Home landing page (activeId === null).
@@ -53,7 +53,7 @@ export default function App() {
   const [paletteOpen, setPaletteOpen] = useState(false)
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
-  const [collapsed, setCollapsed] = useLocalStorage('doxdock:sidebarCollapsed', false)
+  const [collapsed, setCollapsed] = useLocalStorage('privacydoc:sidebarCollapsed', false)
 
   const activeOp = activeId ? getOperation(activeId) : null
 
@@ -175,29 +175,28 @@ export default function App() {
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-white">
             <Icon name="layers" className="h-5 w-5" />
           </span>
-          <span className="text-lg font-bold tracking-tight">DoxDock</span>
+          <span className="text-lg font-bold tracking-tight">{BRAND}</span>
         </a>
         <div className="ml-2 hidden md:block">
           <PrivacyBadge />
         </div>
         <div className="ml-auto flex items-center gap-2">
-          <OSCodeNavBadge />
           <a
             href="ideology.html"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-ghost gap-1.5 px-2.5"
-            title="Why DoxDock exists — a letter to our users"
+            title={`${UPSTREAM_NAME} 원저자가 남긴 편지 — 왜 파일을 업로드하지 않는가`}
           >
             <Icon name="shieldCheck" className="h-4 w-4 text-brand-500" />
             <span className="hidden sm:inline">Ideology</span>
           </a>
           <a
-            href="https://github.com/mithun-srinivas/DoxDock"
+            href="https://github.com/selflesskr-design/privacy-doc"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-ghost hidden px-2 sm:inline-flex"
-            title="Open source (MIT) — view or self-host"
+            title="오픈소스 (MIT) — 소스 보기 / 직접 호스팅"
             aria-label="GitHub"
           >
             <Icon name="github" className="h-5 w-5" />
@@ -273,31 +272,31 @@ export default function App() {
 
           <footer className="mx-auto max-w-3xl space-y-2 px-4 pb-10 pt-4 text-xs text-slate-400 sm:px-6">
             <p>
-              DoxDock processes everything on your device. No file you open is ever uploaded — the
-              app makes zero network requests at runtime. Open source under the MIT license.
+              {BRAND}는 모든 처리를 사용자의 기기 안에서 수행합니다. 열어본 파일은 어디에도 업로드되지
+              않으며, 앱은 실행 중 어떤 네트워크 요청도 보내지 않습니다. MIT 라이선스 오픈소스입니다.
+            </p>
+            {/* MIT 의무 사항: 원저작권 고지 유지. LICENSE / NOTICE 파일도 함께 배포됩니다. */}
+            <p>
+              이 서비스는 MIT 라이선스로 공개된{' '}
+              <a
+                href={UPSTREAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-slate-500 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-300"
+              >
+                {UPSTREAM_NAME}
+              </a>
+              를 기반으로 만들어졌습니다. Copyright (c) 2026 {UPSTREAM_AUTHOR}.
             </p>
             <p className="flex items-center gap-3">
-              <span className="flex items-center gap-1.5">
-                Supported by
-                <a
-                  href="https://github.com/OSCode-Community"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 font-medium text-slate-500 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-300"
-                >
-                  <img src="/oscode.png" alt="" className="h-4 w-4 rounded-sm" />
-                  OSCode Community
-                </a>
-              </span>
-              <span className="text-slate-300 dark:text-slate-700">&bull;</span>
               <a
-                href="https://github.com/mithun-srinivas/DoxDock"
+                href="https://github.com/selflesskr-design/privacy-doc"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 font-medium text-slate-500 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-300"
               >
                 <Icon name="github" className="h-3.5 w-3.5" />
-                Star us on GitHub
+                GitHub에서 소스 보기
               </a>
             </p>
           </footer>

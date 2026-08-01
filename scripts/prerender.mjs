@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// Post-build prerender for SEO. DoxDock is a client-side SPA, so a crawler that
+// Post-build prerender for SEO. PrivacyDoc is a client-side SPA, so a crawler that
 // does not run JS would otherwise see one empty page. This script takes the built
 // dist/index.html and, for every tool, writes dist/<id>/index.html with:
 //   - a unique <title>, description, canonical, and Open Graph / Twitter tags
@@ -19,9 +19,12 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const dist = path.join(root, 'dist')
 const opsDir = path.join(root, 'src', 'operations')
 
-const SITE = 'https://doxdock.vercel.app'
-const DEFAULT_DESC =
-  'Free, open-source PDF & image tools that run 100% in your browser — merge, split, compress, convert, edit, and sign. No uploads, no sign-up, fully private and offline.'
+// Brand/URL come from the same module the app uses, so there is one place to edit.
+const site = await import(pathToFileURL(path.join(root, 'src', 'config', 'site.js')).href)
+const SITE = site.SITE_URL
+const BRAND = site.BRAND
+const DEFAULT_TITLE = site.DEFAULT_TITLE
+const DEFAULT_DESC = site.DEFAULT_DESC
 
 const escText = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 const escAttr = (s) => escText(s).replace(/"/g, '&quot;')
@@ -65,9 +68,9 @@ function toolBlock(op, ops) {
   return WRAP(
     `<h1>${escText(op.name)}</h1>` +
       `<p>${escText(op.description)}</p>` +
-      `<p>DoxDock runs 100% in your browser. Your files are never uploaded to any server — no sign-up, works offline, and it is open source.</p>` +
-      `<p><a href="/">← All DoxDock tools</a></p>` +
-      `<nav aria-label="All tools"><h2>All tools</h2><ul>${links}</ul></nav>`,
+      `<p>${escText(BRAND)}는 모든 처리를 사용자의 브라우저 안에서 수행합니다. 파일이 서버로 전송되지 않으며, 가입 없이 오프라인에서도 동작하는 오픈소스입니다.</p>` +
+      `<p><a href="/">← 전체 도구 보기</a></p>` +
+      `<nav aria-label="전체 도구"><h2>전체 도구</h2><ul>${links}</ul></nav>`,
   )
 }
 
@@ -76,15 +79,15 @@ function homeBlock(ops) {
     .map((o) => `<li><a href="/${o.id}">${escText(o.name)}</a> — ${escText(o.description)}</li>`)
     .join('')
   return WRAP(
-    `<h1>DoxDock — Private PDF &amp; Image Tools</h1>` +
+    `<h1>${escText(DEFAULT_TITLE)}</h1>` +
       `<p>${escText(DEFAULT_DESC)}</p>` +
-      `<nav aria-label="All tools"><h2>All tools</h2><ul>${links}</ul></nav>`,
+      `<nav aria-label="전체 도구"><h2>전체 도구</h2><ul>${links}</ul></nav>`,
   )
 }
 
 function toolPage(template, op, ops) {
-  const title = `${op.name} — DoxDock`
-  const description = `${op.description} Runs 100% in your browser — no uploads, no sign-up, fully private.`
+  const title = `${op.name} — ${BRAND}`
+  const description = `${op.description} 모든 처리는 내 브라우저 안에서만 이루어집니다 — 업로드 없음, 가입 없음.`
   const url = `${SITE}/${op.id}`
   let html = template
   html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escText(title)}</title>`)

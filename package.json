@@ -1,9 +1,13 @@
 {
-  "name": "doxdock",
-  "version": "1.4.0",
-  "description": "Offline-first, 100% client-side document & image utilities. Nothing you upload ever leaves your machine.",
+  "name": "privacy-doc",
+  "version": "0.1.0",
+  "description": "PrivacyDoc — 브라우저에서만 동작하는 개인정보 안전 문서 도구. 파일이 서버로 전송되지 않습니다. Derived from DoxDock (MIT) by Mithun Srinivas.",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/selflesskr-design/privacy-doc.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build && node scripts/prerender.mjs",
