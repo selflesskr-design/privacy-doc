@@ -8,16 +8,12 @@ export default function SizeCompare({ before, after }) {
   return (
     <div className="flex flex-wrap items-center gap-x-6 gap-y-2 rounded-lg bg-slate-50 p-4 dark:bg-slate-800/60">
       <div>
-        <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
-          Before
-        </p>
+        <p className="text-xs tracking-wide text-slate-500 dark:text-slate-400">처리 전</p>
         <p className="text-lg font-semibold tabular-nums">{formatBytes(before)}</p>
       </div>
       <div className="text-slate-400">→</div>
       <div>
-        <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
-          After
-        </p>
+        <p className="text-xs tracking-wide text-slate-500 dark:text-slate-400">처리 후</p>
         <p className="text-lg font-semibold tabular-nums">{formatBytes(after)}</p>
       </div>
       <div
@@ -28,7 +24,7 @@ export default function SizeCompare({ before, after }) {
             : 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300')
         }
       >
-        {smaller ? `${change}% smaller` : change === 0 ? 'No change' : `${-change}% larger`}
+        {smaller ? `${change}% 줄었습니다` : change === 0 ? '변화 없음' : `${-change}% 늘었습니다`}
       </div>
     </div>
   )

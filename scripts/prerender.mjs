@@ -101,7 +101,7 @@ function toolAsPage(op, ops) {
   return {
     path: `/${op.id}`,
     title: `${op.name} — ${BRAND}`,
-    description: `${op.description} 모든 처리는 내 브라우저 안에서만 이루어집니다 — 업로드 없음, 가입 없음.`,
+    description: `${op.description} 파일은 내 브라우저에서 직접 처리됩니다. 무료이고 가입이 필요 없습니다.`,
     h1: op.name,
     schema: 'SoftwareApplication',
     breadcrumb: [
@@ -112,15 +112,15 @@ function toolAsPage(op, ops) {
       { t: 'p', text: op.description },
       {
         t: 'p',
-        text: `${BRAND}는 모든 처리를 브라우저 안에서 수행합니다. 파일이 서버로 전송되지 않으며, 가입 없이 오프라인에서도 동작하는 오픈소스입니다.`,
+        text: `${BRAND}는 파일을 내 브라우저에서 직접 처리합니다. 파일이 밖으로 나가지 않고, 가입 없이 인터넷 없이도 쓸 수 있는 오픈소스입니다.`,
       },
       {
         t: 'cards',
         title: '관련 페이지',
         items: [
-          { label: '전체 도구', href: '/tools', text: 'PDF·이미지 도구 24종' },
+          { label: '모든 도구', href: '/tools', text: 'PDF·사진 도구 24가지' },
           { label: 'PDF 개인정보 가리기', href: '/tools/pdf-redact', text: '문서 속 개인정보 가리기' },
-          { label: '보안', href: '/security', text: '파일이 전송되지 않는 근거' },
+          { label: '보안', href: '/security', text: '직접 확인하는 방법' },
           { label: '자주 묻는 질문', href: '/faq', text: '많이 받는 질문' },
         ],
       },

@@ -1,7 +1,7 @@
 export default {
   id: 'rotate-flip-image',
-  name: 'Rotate / Flip Image',
-  description: 'Rotate by 90° steps and flip horizontally or vertically.',
+  name: '사진 회전·뒤집기',
+  description: '90도씩 돌리고, 좌우나 위아래로 뒤집습니다.',
   category: 'image',
   icon: 'flip',
   order: 24,

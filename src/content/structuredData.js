@@ -1,5 +1,5 @@
 import { SITE_URL, BRAND, DEFAULT_DESC } from '../config/site.js'
-import { canonicalOf } from './pages.js'
+import { canonicalOf, isIndexable } from './pages.js'
 
 // JSON-LD builders. Plain objects with no DOM access, so the React runtime and
 // the Node prerenderer emit byte-identical structured data.
@@ -86,9 +86,20 @@ function primaryLd(page) {
 
 /** All JSON-LD graphs for a page, ready to be stringified into script tags. */
 export function structuredDataFor(page) {
-  if (page.noindex) return []
+  if (!isIndexable(page)) return []
   const graphs = [primaryLd(page), breadcrumbLd(page), faqLd(page)].filter(Boolean)
   return graphs.map((g) => ({ '@context': 'https://schema.org', ...g }))
+}
+
+/**
+ * `noindex, nofollow` hides the editor entirely. A tool page whose feature is
+ * still being built uses `noindex, follow` instead: it stays out of results
+ * until it works, but its links still pass through to the pages that do.
+ */
+function robotsFor(page) {
+  if (page.noindex) return 'noindex, nofollow'
+  if (page.ready === false) return 'noindex, follow'
+  return 'index, follow'
 }
 
 /** The full set of head values for a page, used by useSeo and the prerenderer. */
@@ -97,7 +108,7 @@ export function metaFor(page) {
     title: page.title,
     description: page.description || DEFAULT_DESC,
     canonical: canonicalOf(page),
-    robots: page.noindex ? 'noindex, nofollow' : 'index, follow',
+    robots: robotsFor(page),
     ogTitle: page.ogTitle || page.title,
     ogDescription: page.ogDescription || page.description || DEFAULT_DESC,
     ogImage: OG_IMAGE,

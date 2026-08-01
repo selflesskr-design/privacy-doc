@@ -37,8 +37,8 @@ export default defineConfig({
         description:
           'PDF·이미지 속 개인정보를 브라우저 안에서 안전하게 가립니다. 파일이 서버로 전송되지 않습니다.',
         lang: 'ko',
-        theme_color: '#0b1018',
-        background_color: '#0b1018',
+        theme_color: '#FBF7F2',
+        background_color: '#FBF7F2',
         display: 'standalone',
         start_url: '.',
         scope: '.',

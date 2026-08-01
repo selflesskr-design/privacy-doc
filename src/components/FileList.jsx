@@ -22,14 +22,14 @@ export default function FileList({
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
-          {files.length} file{files.length === 1 ? '' : 's'} selected
+          파일 {files.length}개
         </p>
         <p className="text-sm text-slate-500 dark:text-slate-400">
-          Total: {totalFileSize(files)}
+          모두 {totalFileSize(files)}
         </p>
         {onClear && (
           <button type="button" onClick={onClear} className="btn-ghost px-2 py-1 text-xs">
-            Clear all
+            모두 지우기
           </button>
         )}
       </div>
@@ -49,7 +49,7 @@ export default function FileList({
             className="card flex items-center gap-3 p-3"
           >
             {onMove && (
-              <span className="cursor-grab text-slate-400" title="Drag to reorder">
+              <span className="cursor-grab text-slate-400" title="끌어서 순서 바꾸기">
                 <Icon name="grip" className="h-5 w-5" />
               </span>
             )}

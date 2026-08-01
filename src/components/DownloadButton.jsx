@@ -14,7 +14,7 @@ export default function DownloadButton({ result, label, className = '' }) {
       className={'btn-primary ' + className}
     >
       <Icon name="download" className="h-4 w-4" />
-      {label || `Download ${filename}`}
+      {label || `${filename} 받기`}
       {blob?.size != null && (
         <span className="opacity-80">({formatBytes(blob.size)})</span>
       )}

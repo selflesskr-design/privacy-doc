@@ -38,7 +38,7 @@ export function useSeo(op, page) {
         ? {
             path: `/${op.id}`,
             title: `${op.name} — ${BRAND}`,
-            description: `${op.description} 모든 처리는 내 브라우저 안에서만 이루어집니다 — 업로드 없음, 가입 없음.`,
+            description: `${op.description} 파일은 내 브라우저에서 직접 처리됩니다. 무료이고 가입이 필요 없습니다.`,
             h1: op.name,
             schema: 'SoftwareApplication',
             breadcrumb: [

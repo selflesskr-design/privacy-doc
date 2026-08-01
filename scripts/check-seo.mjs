@@ -22,7 +22,8 @@ const dist = path.join(root, 'dist')
 const opsDir = path.join(root, 'src', 'operations')
 
 const load = (rel) => import(pathToFileURL(path.join(root, ...rel)).href)
-const { PAGES, sitemapPages, canonicalOf } = await load(['src', 'content', 'pages.js'])
+const { PAGES, sitemapPages, canonicalOf, isIndexable } = await load(['src', 'content', 'pages.js'])
+const { metaFor } = await load(['src', 'content', 'structuredData.js'])
 
 const problems = []
 const fail = (msg) => problems.push(msg)
@@ -57,16 +58,19 @@ for (const { path: routePath, page } of routes) {
   const h1s = html.match(/<h1[\s>]/gi) || []
   if (h1s.length !== 1) fail(`[2] H1이 ${h1s.length}개 (1개여야 함): ${routePath}`)
 
-  const noindex = /<meta[^>]*name="robots"[^>]*content="[^"]*noindex/i.test(html)
-  if (page?.noindex && !noindex) fail(`[7] noindex 누락: ${routePath}`)
-  if (!page?.noindex && noindex) fail(`[7] 의도치 않은 noindex: ${routePath}`)
+  const robots = (html.match(/<meta[^>]*name="robots"[^>]*content="([^"]*)"/i) || [])[1]
+  const expectedRobots = page ? metaFor(page).robots : 'index, follow'
+  if (robots !== expectedRobots) {
+    fail(`[7] robots 불일치: ${routePath} → "${robots}" (기대: "${expectedRobots}")`)
+  }
+  const indexable = page ? isIndexable(page) : true
 
   const title = (html.match(/<title>([\s\S]*?)<\/title>/i) || [])[1]?.trim()
   const desc = (html.match(/<meta[^>]*name="description"[^>]*content="([^"]*)"/i) || [])[1]?.trim()
   if (!title) fail(`[3] title 없음: ${routePath}`)
   if (!desc) fail(`[3] description 없음: ${routePath}`)
 
-  if (!noindex) {
+  if (indexable) {
     if (title && titles.has(title)) fail(`[3] title 중복: "${title}" — ${titles.get(title)} / ${routePath}`)
     else if (title) titles.set(title, routePath)
     if (desc && descriptions.has(desc)) fail(`[3] description 중복: ${descriptions.get(desc)} / ${routePath}`)
@@ -100,7 +104,7 @@ if (!existsSync(sitemapPath)) {
     if (!listed.has(`https://privacy-doc.selfless.kr/${id}`)) fail(`[6] sitemap 누락(도구): /${id}`)
   }
   for (const page of PAGES) {
-    if ((page.noindex || page.ready === false) && listed.has(canonicalOf(page))) {
+    if (!isIndexable(page) && listed.has(canonicalOf(page))) {
       fail(`[6] sitemap에 포함되면 안 되는 페이지: ${page.path}`)
     }
   }
@@ -119,7 +123,15 @@ if (problems.length) {
   process.exit(1)
 }
 
+const noindexFollow = PAGES.filter((p) => !p.noindex && p.ready === false)
+const noindexNofollow = PAGES.filter((p) => p.noindex)
+
 console.log(
-  `✅ SEO 검사 통과 — 라우트 ${routes.length}개, 색인 대상 ${titles.size}개, ` +
-    `기존 도구 ${opIds.length}개 URL 보존, title/description 중복 없음`,
+  `✅ SEO 검사 통과\n` +
+    `   전체 라우트      ${routes.length}개\n` +
+    `   index 허용       ${titles.size}개\n` +
+    `   sitemap 포함     ${sitemapPages().length + opIds.length}개\n` +
+    `   noindex, follow  ${noindexFollow.length}개 (${noindexFollow.map((p) => p.path).join(', ')})\n` +
+    `   noindex, nofollow ${noindexNofollow.length}개 (${noindexNofollow.map((p) => p.path).join(', ')})\n` +
+    `   기존 도구 URL    ${opIds.length}개 보존, title/description 중복 없음`,
 )

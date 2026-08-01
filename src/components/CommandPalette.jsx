@@ -67,7 +67,7 @@ export default function CommandPalette({ open, onClose, onSelect }) {
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
-        aria-label="Command palette"
+        aria-label="도구 바로가기"
       >
         <div className="flex items-center gap-2 border-b border-slate-200 px-4 dark:border-slate-700">
           <Icon name="search" className="h-4 w-4 text-slate-400" />
@@ -77,13 +77,13 @@ export default function CommandPalette({ open, onClose, onSelect }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={onKeyDown}
-            placeholder="Jump to a tool…"
+            placeholder="도구 이름을 입력하세요"
             className="w-full bg-transparent py-3.5 text-sm text-slate-900 outline-none ring-0 placeholder:text-slate-400 focus:outline-none focus:ring-0 focus-visible:ring-0 dark:text-slate-100"
           />
         </div>
         <ul className="max-h-80 overflow-y-auto p-2">
           {results.length === 0 && (
-            <li className="px-3 py-6 text-center text-sm text-slate-500">No matching tools.</li>
+            <li className="px-3 py-6 text-center text-sm text-slate-500">해당하는 도구가 없습니다.</li>
           )}
           {results.map((op, i) => (
             <li key={op.id}>

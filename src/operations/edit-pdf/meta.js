@@ -1,10 +1,12 @@
 export default {
   id: 'edit-pdf',
-  name: 'Edit PDF',
-  description: 'Add text, drawings, highlights, shapes, images, and white-out to a PDF.',
+  name: 'PDF 편집',
+  description: 'PDF 위에 글자, 그림, 형광펜, 도형, 이미지를 얹습니다.',
   category: 'pdf',
   icon: 'pencil',
   order: 0,
   // The "Good to know" note is rendered at the bottom of the tool itself (see
   // index.jsx), not at the top via the shared header.
+  notes:
+    '이 기능은 화면에 보이는 대로 꾸미는 편집 도구입니다. 사각형으로 덮어도 아래의 원본 글자는 그대로 남습니다. 개인정보를 가려야 한다면 "PDF 개인정보 가리기"를 써 주세요.',
 }

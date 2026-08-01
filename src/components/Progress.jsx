@@ -2,7 +2,7 @@ import Icon from './Icon.jsx'
 
 // Determinate or indeterminate progress indicator for long-running jobs.
 // Pass a value 0..1 for determinate; omit for a spinner + message.
-export default function Progress({ value, message = 'Working…' }) {
+export default function Progress({ value, message = '처리하고 있습니다…' }) {
   const pct = value != null ? Math.round(Math.min(1, Math.max(0, value)) * 100) : null
   return (
     <div

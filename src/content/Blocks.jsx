@@ -134,7 +134,7 @@ export default function Blocks({ sections, onNavigate }) {
                 type="button"
                 disabled
                 className="btn-primary cursor-not-allowed opacity-50"
-                title="준비 중입니다"
+                title="아직 준비 중인 기능입니다"
               >
                 {b.label} (준비 중)
               </button>

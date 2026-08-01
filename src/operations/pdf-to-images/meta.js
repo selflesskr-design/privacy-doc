@@ -1,7 +1,7 @@
 export default {
   id: 'pdf-to-images',
-  name: 'PDF → Images',
-  description: 'Export each page of a PDF as a PNG or JPEG image.',
+  name: 'PDF를 사진으로',
+  description: 'PDF의 각 쪽을 PNG나 JPEG 사진으로 저장합니다.',
   category: 'pdf',
   icon: 'image',
   order: 2,

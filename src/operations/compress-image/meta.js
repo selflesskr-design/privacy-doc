@@ -1,7 +1,7 @@
 export default {
   id: 'compress-image',
-  name: 'Compress Image',
-  description: 'Reduce image file size with a quality slider. See before/after.',
+  name: '사진 용량 줄이기',
+  description: '품질을 조절해 사진 크기를 줄이고 전후를 비교합니다.',
   category: 'image',
   icon: 'compress',
   order: 20,

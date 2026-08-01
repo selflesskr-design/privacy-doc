@@ -33,10 +33,12 @@ export default function BrandMark() {
   return (
     <>
       <BrandSymbol />
-      {/* "Doc" uses the logo's orange directly, not the Tailwind `brand` scale —
-          that scale is still DoxDock's mint green. See docs/brand-assets.md. */}
+      {/* The logo orange (#EE8130) is only 2.6:1 on ivory, so the wordmark uses
+          the darker brand-600 in light mode and the lighter brand-400 in dark.
+          The symbol itself keeps the pure logo colour — it sits on its own cream
+          field, not on the page background. */}
       <span className="text-lg font-bold tracking-tight">
-        Privacy<span style={{ color: PALETTE.accent }}>Doc</span>
+        Privacy<span className="text-brand-600 dark:text-brand-400">Doc</span>
       </span>
     </>
   )

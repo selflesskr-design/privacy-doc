@@ -17,7 +17,7 @@ export default function Sidebar({ activeId, onSelect, onOpenPalette }) {
           className="flex w-full items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-500 hover:border-brand-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400"
         >
           <Icon name="search" className="h-4 w-4" />
-          <span>Search tools…</span>
+          <span>도구 검색…</span>
           <kbd className="ml-auto hidden rounded border border-slate-300 px-1.5 py-0.5 text-[10px] font-medium text-slate-400 dark:border-slate-600 sm:inline">
             ⌘K
           </kbd>
@@ -28,14 +28,14 @@ export default function Sidebar({ activeId, onSelect, onOpenPalette }) {
         <input
           id="sidebar-filter"
           type="search"
-          placeholder="Filter…"
+          placeholder="도구 이름으로 찾기"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="field-input mt-2"
         />
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-2 pb-4" aria-label="Operations">
+      <nav className="flex-1 overflow-y-auto px-2 pb-4" aria-label="도구 목록">
         {!query && (
           <button
             type="button"
@@ -49,11 +49,11 @@ export default function Sidebar({ activeId, onSelect, onOpenPalette }) {
             )}
           >
             <Icon name="home" className={cx('h-4 w-4 flex-shrink-0', activeId == null ? 'text-brand-600 dark:text-brand-300' : 'text-slate-400')} />
-            <span>Home</span>
+            <span>홈</span>
           </button>
         )}
         {groups.length === 0 && (
-          <p className="px-3 py-4 text-sm text-slate-500">No tools match “{query}”.</p>
+          <p className="px-3 py-4 text-sm text-slate-500">“{query}”에 해당하는 도구가 없습니다.</p>
         )}
         {groups.map((group, gi) => (
           <div

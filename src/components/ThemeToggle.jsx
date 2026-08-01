@@ -2,9 +2,9 @@ import Icon from './Icon.jsx'
 import { cx } from '../lib/format.js'
 
 const OPTIONS = [
-  { value: 'light', icon: 'sun', label: 'Light' },
-  { value: 'dark', icon: 'moon', label: 'Dark' },
-  { value: 'system', icon: 'monitor', label: 'System' },
+  { value: 'light', icon: 'sun', label: '밝게' },
+  { value: 'dark', icon: 'moon', label: '어둡게' },
+  { value: 'system', icon: 'monitor', label: '기기 설정' },
 ]
 
 export default function ThemeToggle({ theme, setTheme }) {
@@ -12,7 +12,7 @@ export default function ThemeToggle({ theme, setTheme }) {
     <div
       className="flex items-center rounded-lg border border-slate-200 p-0.5 dark:border-slate-700"
       role="radiogroup"
-      aria-label="Color theme"
+      aria-label="화면 테마"
     >
       {OPTIONS.map((o) => (
         <button

@@ -1,7 +1,7 @@
 export default {
   id: 'rotate-pdf',
-  name: 'Rotate PDF',
-  description: 'Rotate every page or selected pages by 90°, 180°, or 270°.',
+  name: 'PDF 회전',
+  description: '전체 또는 고른 쪽을 90도, 180도, 270도로 돌립니다.',
   category: 'pdf',
   icon: 'rotate',
   order: 5,

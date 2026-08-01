@@ -34,12 +34,12 @@ export default function ResultGallery({ results, zipName = 'privacydoc-output.zi
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
-          {results.length} file{results.length === 1 ? '' : 's'} ready
+          파일 {results.length}개가 준비됐습니다
         </p>
         {results.length > 1 && (
           <button type="button" className="btn-primary" onClick={downloadAll} disabled={zipping}>
             <Icon name={zipping ? 'spinner' : 'download'} className="h-4 w-4" />
-            {zipping ? 'Zipping…' : 'Download all (.zip)'}
+            {zipping ? '묶는 중…' : '전체 받기 (.zip)'}
           </button>
         )}
       </div>

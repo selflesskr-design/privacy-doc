@@ -151,7 +151,7 @@ export default function App() {
         </header>
         <main className="min-w-0 flex-1 overflow-y-auto">
           <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6">
-            <Suspense fallback={<Progress message="Loading tool…" />}>
+            <Suspense fallback={<Progress message="도구를 불러오는 중…" />}>
               {Component && <Component key={activeOp.id} />}
             </Suspense>
           </div>
@@ -166,7 +166,7 @@ export default function App() {
         <div className="pointer-events-none fixed inset-0 z-50 flex flex-col items-center justify-center gap-3 bg-brand-900/40 backdrop-blur-sm">
           <div className="flex flex-col items-center gap-3 rounded-2xl border-2 border-dashed border-brand-400 bg-white/90 px-12 py-10 shadow-2xl dark:bg-slate-900/90">
             <Icon name="upload" className="h-10 w-10 text-brand-500" />
-            <p className="text-lg font-semibold text-brand-700 dark:text-brand-300">Drop your file anywhere</p>
+            <p className="text-lg font-semibold text-brand-700 dark:text-brand-300">파일을 어디에나 놓으세요</p>
           </div>
         </div>
       )}
@@ -175,7 +175,7 @@ export default function App() {
         <button
           type="button"
           className="btn-ghost -ml-2 px-2 lg:hidden"
-          aria-label="Toggle navigation"
+          aria-label="메뉴 열기"
           onClick={() => setMobileNavOpen((o) => !o)}
         >
           <Icon name={mobileNavOpen ? 'x' : 'grid'} className="h-5 w-5" />
@@ -183,9 +183,9 @@ export default function App() {
         <button
           type="button"
           className="btn-ghost -ml-2 hidden px-2 lg:inline-flex"
-          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          aria-label={collapsed ? '메뉴 펼치기' : '메뉴 접기'}
           aria-pressed={collapsed}
-          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          title={collapsed ? '메뉴 펼치기' : '메뉴 접기'}
           onClick={() => setCollapsed((c) => !c)}
         >
           <Icon name="panelLeft" className="h-5 w-5" />
@@ -198,14 +198,16 @@ export default function App() {
         </div>
         <div className="ml-auto flex items-center gap-2">
           <a
-            href="ideology.html"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/security"
             className="btn-ghost gap-1.5 px-2.5"
-            title={`${UPSTREAM_NAME} 원저자가 남긴 편지 — 왜 파일을 업로드하지 않는가`}
+            title="파일이 밖으로 나가지 않는다는 것을 직접 확인하는 방법"
+            onClick={(e) => {
+              e.preventDefault()
+              handleSelect('/security')
+            }}
           >
             <Icon name="shieldCheck" className="h-4 w-4 text-brand-500" />
-            <span className="hidden sm:inline">Ideology</span>
+            <span className="hidden sm:inline">보안</span>
           </a>
           <a
             href="https://github.com/selflesskr-design/privacy-doc"
@@ -272,14 +274,14 @@ export default function App() {
                   </div>
                   {activeOp.notes && (
                     <div className="mt-4">
-                      <Note type="warning" title="Good to know">
+                      <Note type="warning" title="알아두실 점">
                         {activeOp.notes}
                       </Note>
                     </div>
                   )}
                 </div>
 
-                <Suspense fallback={<Progress message="Loading tool…" />}>
+                <Suspense fallback={<Progress message="도구를 불러오는 중…" />}>
                   {Component && <Component key={activeOp.id} />}
                 </Suspense>
               </>
@@ -288,8 +290,8 @@ export default function App() {
 
           <footer className="mx-auto max-w-3xl space-y-2 px-4 pb-10 pt-4 text-xs text-slate-400 sm:px-6">
             <p>
-              {BRAND}는 모든 처리를 사용자의 기기 안에서 수행합니다. 열어본 파일은 어디에도 업로드되지
-              않으며, 앱은 실행 중 어떤 네트워크 요청도 보내지 않습니다. MIT 라이선스 오픈소스입니다.
+              {BRAND}는 파일을 내 브라우저에서 직접 처리합니다. 고른 파일은 밖으로 나가지 않고, 사용 중에
+              외부로 나가는 통신도 없습니다. MIT 라이선스 오픈소스입니다.
             </p>
             {/* MIT 의무 사항: 원저작권 고지 유지. LICENSE / NOTICE 파일도 함께 배포됩니다. */}
             <p>

@@ -6,9 +6,9 @@ export const SITE_URL = 'https://privacy-doc.selfless.kr'
 export const BRAND = 'PrivacyDoc'
 export const BRAND_KO = '프라이버시독'
 
-export const DEFAULT_TITLE = 'PrivacyDoc — 브라우저에서 끝내는 개인정보 안전 문서 도구'
+export const DEFAULT_TITLE = 'PrivacyDoc — PDF·사진 개인정보 가리기'
 export const DEFAULT_DESC =
-  'PDF·이미지 속 개인정보를 안전하게 가리고, 합치고, 용량을 줄입니다. 모든 처리는 내 브라우저 안에서만 이루어지며 파일이 서버로 전송되지 않습니다. 무료, 가입 없음, 오프라인 사용 가능.'
+  'PDF와 사진 속 개인정보를 가리고, 사진 정보를 지우고, PDF를 합치거나 용량을 줄입니다. 파일은 내 브라우저에서 직접 처리됩니다. 무료이고 가입이 필요 없습니다.'
 
 // Upstream attribution (MIT). See LICENSE and NOTICE.
 export const UPSTREAM_NAME = 'DoxDock'

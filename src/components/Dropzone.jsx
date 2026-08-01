@@ -10,7 +10,7 @@ export default function Dropzone({
   onFiles,
   accept,
   multiple = true,
-  label = 'Drop files here or click to browse',
+  label = '파일을 끌어다 놓거나 눌러서 선택하세요',
   hint,
   className,
 }) {
