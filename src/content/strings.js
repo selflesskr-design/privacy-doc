@@ -76,11 +76,10 @@ export const PDF_REDACT = {
   save: '안전하게 저장',
   saveNothing: '가릴 영역을 먼저 지정해 주세요',
 
-  confirmTitle: '저장하기 전에 확인해 주세요',
-  confirmBody:
-    '저장하면 문서의 모든 페이지가 이미지로 변환됩니다. 문서 안의 글자를 검색하거나 복사할 수 없고, 링크와 입력란도 유지되지 않을 수 있습니다.',
-  confirmOk: '이미지로 변환해 저장',
-  confirmCancel: '계속 확인하기',
+  // States the effect, not the mechanism. PDF goes in, PDF comes out — how the
+  // pages are rebuilt belongs on /how-it-works, not in the editor.
+  saveNote:
+    '원본 파일은 그대로 두고, 가려진 새 PDF를 만듭니다. 새 PDF에서는 글자 검색과 복사가 되지 않습니다.',
 
   converting: (n, total) => `${total}쪽 중 ${n}쪽 변환 중…`,
   building: '새 PDF를 만드는 중…',

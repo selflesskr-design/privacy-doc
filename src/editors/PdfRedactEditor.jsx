@@ -123,7 +123,6 @@ export default function PdfRedactEditor() {
   const [draft, setDraft] = useState(null)
 
   const [quality, setQuality] = useState('high')
-  const [confirmOpen, setConfirmOpen] = useState(false)
   const [outName, setOutName] = useState('')
 
   const canvasRef = useRef(null)
@@ -292,7 +291,6 @@ export default function PdfRedactEditor() {
   }
 
   const doSave = () => {
-    setConfirmOpen(false)
     const byPage = {}
     for (const a of areas) (byPage[a.page] ||= []).push(a)
     saveJob.run((setProgress) =>
@@ -494,11 +492,15 @@ export default function PdfRedactEditor() {
               <span className="block text-xs text-slate-500">{PDF_REDACT.qualityHint}</span>
             </label>
 
+            <p className="text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+              {PDF_REDACT.saveNote}
+            </p>
+
             <div className="flex flex-wrap items-center gap-3">
               <button
                 type="button"
                 className="btn-primary"
-                onClick={() => setConfirmOpen(true)}
+                onClick={doSave}
                 disabled={saveJob.running || areas.length === 0}
                 title={areas.length === 0 ? PDF_REDACT.saveNothing : undefined}
               >
@@ -531,23 +533,6 @@ export default function PdfRedactEditor() {
         </>
       )}
 
-      {/* Confirmation before the conversion */}
-      {confirmOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4" role="dialog" aria-modal="true" aria-labelledby="redact-confirm-title">
-          <div className="card w-full max-w-md space-y-4 p-5">
-            <h2 id="redact-confirm-title" className="text-lg font-bold">{PDF_REDACT.confirmTitle}</h2>
-            <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">{PDF_REDACT.confirmBody}</p>
-            <div className="flex flex-wrap justify-end gap-2">
-              <button type="button" className="btn-secondary" onClick={() => setConfirmOpen(false)}>
-                {PDF_REDACT.confirmCancel}
-              </button>
-              <button type="button" className="btn-primary" onClick={doSave}>
-                {PDF_REDACT.confirmOk}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
