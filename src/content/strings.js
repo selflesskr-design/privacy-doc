@@ -168,6 +168,28 @@ export const IMAGES_TO_PDF = {
   ready: 'PDF가 만들어졌습니다. 이 기기 안에서만 처리했습니다.',
 }
 
+/** PDF 나누기. */
+export const SPLIT_PDF = {
+  dropLabel: '나눌 PDF를 끌어다 놓거나 눌러서 선택하세요',
+  pages: (n) => `${n}쪽`,
+
+  mode: '어떻게 나눌까요',
+  // "Explode" was the upstream word for it. Say what comes out instead.
+  explode: '한 쪽씩 낱개로 — 19쪽이면 파일 19개',
+  explodeWith: (n) => `한 쪽씩 낱개로 — ${n}쪽이면 파일 ${n}개`,
+  ranges: '원하는 쪽만 뽑아내기 — 구간마다 파일 하나',
+
+  rangesLabel: '뽑아낼 쪽',
+  rangesPlaceholder: '예: 1-3, 4-6, 7',
+  rangesHint: '쉼표로 나눈 구간마다 파일이 하나씩 나옵니다',
+  rangeEmpty: (part, total) => `"${part}"에 해당하는 쪽이 없습니다. 이 문서는 ${total}쪽입니다.`,
+
+  split: '나누기',
+  extracting: (n, total) => `${total}쪽 중 ${n}쪽 꺼내는 중…`,
+  building: (n, total) => `${total}개 중 ${n}번째 파일 만드는 중…`,
+  failed: '나누지 못했습니다',
+}
+
 /** PDF 합치기. */
 export const MERGE_PDFS = {
   dropLabel: '합칠 PDF를 끌어다 놓거나 눌러서 선택하세요',

@@ -1,4 +1,5 @@
 import { PDFDocument } from 'pdf-lib'
+import { SPLIT_PDF, COMMON } from '../../content/strings.js'
 import { baseName, parsePageRanges } from '../../lib/format.js'
 
 async function subsetPdf(srcDoc, pageIndices) {
@@ -28,7 +29,7 @@ export async function splitPdf(file, opts, onProgress) {
 
   if (mode === 'explode') {
     for (let i = 0; i < total; i++) {
-      onProgress?.(i / total, `Extracting page ${i + 1} of ${total}…`)
+      onProgress?.(i / total, SPLIT_PDF.extracting(i + 1, total))
       const blob = await subsetPdf(src, [i])
       results.push({ filename: `${base}-p${String(i + 1).padStart(3, '0')}.pdf`, blob })
     }
@@ -37,13 +38,13 @@ export async function splitPdf(file, opts, onProgress) {
     const groups = ranges.split(',').map((s) => s.trim()).filter(Boolean)
     if (!groups.length) throw new Error('페이지 범위를 입력해 주세요. 예: 1-3, 4-6')
     for (let g = 0; g < groups.length; g++) {
-      onProgress?.(g / groups.length, `Building file ${g + 1} of ${groups.length}…`)
+      onProgress?.(g / groups.length, SPLIT_PDF.building(g + 1, groups.length))
       const pages = parsePageRanges(groups[g], total)
       if (!pages.length) throw new Error(`"${groups[g]}" 범위에 해당하는 페이지가 없습니다. 이 문서는 ${total}쪽입니다.`)
       const blob = await subsetPdf(src, pages.map((p) => p - 1))
       results.push({ filename: `${base}-${groups[g].replace(/[^0-9-]/g, '_')}.pdf`, blob })
     }
   }
-  onProgress?.(1, 'Done')
+  onProgress?.(1, COMMON.done)
   return results
 }

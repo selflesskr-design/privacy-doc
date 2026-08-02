@@ -8,6 +8,7 @@ import { useJob } from '../../hooks/useJob.js'
 import { formatBytes, baseName, parsePageRanges } from '../../lib/format.js'
 import { splitPdf } from './helpers.js'
 import { usePdfPageCount } from '../../hooks/usePdfPageCount.js'
+import { SPLIT_PDF as T, COMMON } from '../../content/strings.js'
 
 export default function SplitPdf() {
   const [file, setFile] = useState(null)
@@ -25,7 +26,7 @@ export default function SplitPdf() {
     for (const g of groups) {
       try {
         const pages = parsePageRanges(g, pageCount)
-        if (!pages.length) return `"${g}" has no valid pages (document has ${pageCount}).`
+        if (!pages.length) return T.rangeEmpty(g, pageCount)
       } catch (err) {
         return err.message
       }
@@ -37,43 +38,53 @@ export default function SplitPdf() {
     setFile(files[0])
     reset()
   }
+  // Changing how it splits makes the finished list describe a split nobody
+  // asked for any more.
+  const chooseMode = (next) => {
+    setMode(next)
+    reset()
+  }
+  const editRanges = (next) => {
+    setRanges(next)
+    reset()
+  }
   const go = () => run((p) => splitPdf(file, { mode, ranges }, p))
 
   return (
     <div className="space-y-6">
-      <Dropzone onFiles={pick} accept="application/pdf,.pdf" multiple={false} label="Drop a PDF here or click to browse" icon="fileText" />
+      <Dropzone onFiles={pick} accept="application/pdf,.pdf" multiple={false} label={T.dropLabel} icon="fileText" />
 
       {file && (
         <>
           <div className="card flex items-center gap-3 p-3">
             <Icon name="fileText" className="h-5 w-5 text-brand-600" />
             <span className="min-w-0 flex-1 truncate text-sm font-medium">{file.name}</span>
-           <span className="text-xs text-slate-400">{formatBytes(file.size)}{pageCount != null && ` · ${pageCount} page${pageCount === 1 ? '' : 's'}`}</span>
+           <span className="text-xs text-slate-400">{formatBytes(file.size)}{pageCount != null && ` · ${T.pages(pageCount)}`}</span>
           </div>
 
           <div className="card space-y-4 p-4">
             <fieldset className="space-y-2">
-              <legend className="field-label mb-1">Mode</legend>
+              <legend className="field-label mb-1">{T.mode}</legend>
               <label className="flex items-center gap-2 text-sm">
-                <input type="radio" name="mode" checked={mode === 'explode'} onChange={() => setMode('explode')} />
-                Explode — one PDF per page
+                <input type="radio" name="mode" checked={mode === 'explode'} onChange={() => chooseMode('explode')} />
+                {pageCount != null ? T.explodeWith(pageCount) : T.explode}
               </label>
               <label className="flex items-center gap-2 text-sm">
-                <input type="radio" name="mode" checked={mode === 'ranges'} onChange={() => setMode('ranges')} />
-                Page ranges — one PDF per range
+                <input type="radio" name="mode" checked={mode === 'ranges'} onChange={() => chooseMode('ranges')} />
+                {T.ranges}
               </label>
             </fieldset>
             {mode === 'ranges' && (
               <label className="block space-y-1">
-                <span className="field-label">Ranges (comma-separated groups)</span>
+                <span className="field-label">{T.rangesLabel}</span>
                 <input
                   className="field-input"
-                  placeholder="e.g. 1-3, 4-6, 7"
+                  placeholder={T.rangesPlaceholder}
                   value={ranges}
-                  onChange={(e) => setRanges(e.target.value)}
+                  onChange={(e) => editRanges(e.target.value)}
                   aria-invalid={!!rangeError}
                 />
-                <span className="text-xs text-slate-500">Each group becomes a separate output file.</span>
+                <span className="text-xs text-slate-500">{T.rangesHint}</span>
                 {rangeError && <span className="block text-xs text-red-600 dark:text-red-400">{rangeError}</span>}
               </label>
             )}
@@ -92,7 +103,7 @@ export default function SplitPdf() {
       )}
 
       {running && progress && <Progress value={progress.value} message={progress.message} />}
-      {error && <Note type="error" title="Split failed">{error}</Note>}
+      {error && <Note type="error" title={T.failed}>{error}</Note>}
       {result && !running && <ResultGallery results={result} preview={false} zipName={`${baseName(file?.name || 'split')}-split.zip`} />}
     </div>
   )
