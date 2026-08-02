@@ -5,6 +5,7 @@ export default {
   category: 'pdf',
   icon: 'compress',
   order: 7,
+  // Names the two choices exactly as the select shows them.
   notes:
-    '문서에 따라 줄어드는 정도가 크게 다릅니다. "쪽 다시 저장"은 스캔한 서류에 잘 맞지만 글자 선택이 되지 않습니다. 글자만 있는 PDF는 이미 작아서 거의 줄지 않으니 "문서 정보 정리"를 골라 주세요.',
+    '스캔한 서류는 "쪽을 사진으로 바꾸기"가 잘 듣습니다. 글자 위주 문서는 오히려 커질 수 있으니 "문서 정보만 지우기"를 고르세요.',
 }

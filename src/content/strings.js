@@ -169,6 +169,32 @@ export const IMAGES_TO_PDF = {
   ready: 'PDF가 만들어졌습니다. 이 기기 안에서만 처리했습니다.',
 }
 
+/** PDF 용량 줄이기. */
+export const COMPRESS_PDF = {
+  dropLabel: '용량을 줄일 PDF를 끌어다 놓거나 눌러서 선택하세요',
+
+  method: '어떻게 줄일까요',
+  // "쪽 다시 저장"과 "Re-encode pages"는 둘 다 무슨 일이 벌어지는지 말해주지
+  // 않는다. 쪽이 사진이 된다는 것과, 그래서 글자를 못 고른다는 것이 핵심이다.
+  rasterize: '쪽을 사진으로 바꾸기 — 많이 줄지만 글자 선택이 안 됩니다',
+  metadata: '문서 정보만 지우기 — 글자는 그대로, 조금만 줄어듭니다',
+
+  resolution: '해상도',
+  dpi72: '72dpi — 가장 작게',
+  dpi96: '96dpi',
+  dpi120: '120dpi — 무난하게',
+  dpi150: '150dpi',
+  dpi200: '200dpi — 또렷하게',
+  quality: (pct) => `사진 화질: ${pct}%`,
+
+  compressing: (n, total) => `${total}쪽 중 ${n}쪽 줄이는 중…`,
+  saving: '새 PDF를 만드는 중…',
+  compress: 'PDF 용량 줄이기',
+  failed: '용량을 줄이지 못했습니다',
+  noGain: '오히려 커졌습니다',
+  noGainTry: '글자 위주 문서에서 자주 그렇습니다. "문서 정보만 지우기"를 고르거나 해상도를 낮춰 보세요.',
+}
+
 /** PDF 쪽 정리. */
 export const ORGANIZE_PDF = {
   dropLabel: '정리할 PDF를 끌어다 놓거나 눌러서 선택하세요',

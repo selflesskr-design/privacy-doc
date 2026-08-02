@@ -1,4 +1,5 @@
 import { PDFDocument } from 'pdf-lib'
+import { COMPRESS_PDF, COMMON } from '../../content/strings.js'
 import { loadPdf } from '../../lib/pdfjs.js'
 
 /** Lossless: strip document metadata and re-save with object streams. */
@@ -24,7 +25,7 @@ async function rasterize(bytes, { dpi = 120, quality = 0.7 }, onProgress) {
   const scale = dpi / 72
   const out = await PDFDocument.create()
   for (let i = 1; i <= pdf.numPages; i++) {
-    onProgress?.((i - 1) / pdf.numPages, `Compressing page ${i} of ${pdf.numPages}…`)
+    onProgress?.((i - 1) / pdf.numPages, COMPRESS_PDF.compressing(i, pdf.numPages))
     const page = await pdf.getPage(i)
     const viewport = page.getViewport({ scale })
     const canvas = document.createElement('canvas')
@@ -42,7 +43,7 @@ async function rasterize(bytes, { dpi = 120, quality = 0.7 }, onProgress) {
     p.drawImage(img, { x: 0, y: 0, width: pt.width, height: pt.height })
     page.cleanup?.()
   }
-  onProgress?.(0.95, 'Saving…')
+  onProgress?.(0.95, COMPRESS_PDF.saving)
   const outBytes = await out.save()
   return new Blob([outBytes], { type: 'application/pdf' })
 }
@@ -62,6 +63,6 @@ export async function compressPdf(file, opts, onProgress) {
   } catch (e) {
     throw new Error(`PDF 용량을 줄이지 못했습니다. 암호가 설정된 PDF는 처리할 수 없습니다.`)
   }
-  onProgress?.(1, 'Done')
+  onProgress?.(1, COMMON.done)
   return { blob, before, after: blob.size }
 }
