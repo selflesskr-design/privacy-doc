@@ -188,7 +188,8 @@ export const ROTATE_PDF = {
 
   rotating: (n) => `${n}쪽 돌리는 중…`,
   saving: '새 PDF를 만드는 중…',
-  rotate: '돌린 PDF 만들기',
+  // 합치기 · 나누기와 같은 꼴. 이 도구들은 동사가 자연스럽다.
+  rotate: 'PDF 돌리기',
   failed: '돌리지 못했습니다',
 }
 
