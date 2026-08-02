@@ -1,4 +1,5 @@
 import { PDFDocument, StandardFonts, degrees, rgb } from 'pdf-lib'
+import { WATERMARK_PDF } from '../../content/strings.js'
 import { hasHangul } from '../../lib/koreanFont.js'
 
 export function hexToRgb(hex) {
@@ -25,7 +26,7 @@ export async function addWatermark(file, opts, onProgress) {
   // Korean mark is not bold. Loaded on demand — see src/lib/koreanFont.js.
   let font
   if (hasHangul(text)) {
-    onProgress?.(0, '한글 폰트를 준비하는 중…')
+    onProgress?.(0, WATERMARK_PDF.koreanFont)
     const { embedKoreanFont } = await import('../../lib/koreanFont.js')
     font = await embedKoreanFont(doc)
   } else {
@@ -35,7 +36,7 @@ export async function addWatermark(file, opts, onProgress) {
   const pages = doc.getPages()
 
   for (let i = 0; i < pages.length; i++) {
-    onProgress?.(i / pages.length, `Stamping page ${i + 1}…`)
+    onProgress?.(i / pages.length, WATERMARK_PDF.stamping(i + 1, pages.length))
     const page = pages[i]
     const { width, height } = page.getSize()
     const textW = font.widthOfTextAtSize(text, fontSize)
@@ -56,7 +57,7 @@ export async function addWatermark(file, opts, onProgress) {
       }
     }
   }
-  onProgress?.(1, 'Saving…')
+  onProgress?.(1, WATERMARK_PDF.saving)
   const bytes = await doc.save()
   return new Blob([bytes], { type: 'application/pdf' })
 }

@@ -169,6 +169,33 @@ export const IMAGES_TO_PDF = {
   ready: 'PDF가 만들어졌습니다. 이 기기 안에서만 처리했습니다.',
 }
 
+/** PDF 워터마크. */
+export const WATERMARK_PDF = {
+  dropLabel: '워터마크를 넣을 PDF를 끌어다 놓거나 눌러서 선택하세요',
+  defaultText: '대외비',
+
+  text: '넣을 문구',
+  layout: '배치',
+  center: '가운데 한 번',
+  tile: '바둑판으로 반복',
+  color: '색',
+  // All three describe the watermark text, not the page — say so, or "진하기"
+  // reads as if the document itself were being darkened.
+  fontSize: (pt) => `문구 크기: ${pt}pt`,
+  opacity: (pct) => `문구 진하기: ${pct}%`,
+  angle: (deg) => `문구 기울기: ${deg}°`,
+
+  preview: '미리보기',
+  previewNote: '첫 쪽에 넣어본 모습입니다',
+  previewLoading: '미리보기를 만드는 중…',
+
+  koreanFont: '한글 글꼴을 준비하는 중…',
+  stamping: (n, total) => `${total}쪽 중 ${n}쪽 넣는 중…`,
+  saving: '새 PDF를 만드는 중…',
+  apply: '워터마크 넣기',
+  failed: '워터마크를 넣지 못했습니다',
+}
+
 /** PDF 용량 줄이기. */
 export const COMPRESS_PDF = {
   dropLabel: '용량을 줄일 PDF를 끌어다 놓거나 눌러서 선택하세요',

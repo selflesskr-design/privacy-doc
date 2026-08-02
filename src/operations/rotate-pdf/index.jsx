@@ -101,7 +101,7 @@ export default function RotatePdf() {
             <div className="flex h-52 items-center justify-center overflow-hidden rounded-lg bg-slate-100 dark:bg-slate-800">
               {thumbnail ? (
                 <img
-                  src={thumbnail}
+                  src={thumbnail.url}
                   alt=""
                   className="max-h-full max-w-full shadow-sm transition-transform duration-200"
                   style={{ transform: `rotate(${Number(angle)}deg)` }}
