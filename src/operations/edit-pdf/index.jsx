@@ -7,7 +7,7 @@ import { useJob } from '../../hooks/useJob.js'
 import { baseName } from '../../lib/format.js'
 import { downloadBlob } from '../../lib/download.js'
 import { openForRender, renderPage, prepareImage, exportEditedPdf, FONT_CSS } from './helpers.js'
-import { EDIT_PDF } from '../../content/strings.js'
+import { EDIT_PDF, COMMON } from '../../content/strings.js'
 
 const FONT_OPTIONS = ['Helvetica', 'Times', 'Courier']
 
@@ -531,12 +531,12 @@ export default function EditPdf() {
             )}
 
             <div className="mx-1 h-6 w-px bg-slate-200 dark:bg-slate-700" />
-            <button type="button" className="btn-ghost h-9 px-2" onClick={undo} disabled={!historyRef.current.length} title={EDIT_PDF.undo}>
-              <Icon name="undo" className="h-4 w-4" /> {EDIT_PDF.undo}
+            <button type="button" className="btn-ghost h-9 px-2" onClick={undo} disabled={!historyRef.current.length} title={COMMON.undo}>
+              <Icon name="undo" className="h-4 w-4" /> {COMMON.undo}
             </button>
             {selectedId && (
               <button type="button" className="btn-ghost h-9 px-2 text-red-600" onClick={() => { commit((p) => p.filter((a) => a.id !== selectedId)); setSelectedId(null) }}>
-                <Icon name="trash" className="h-4 w-4" /> {EDIT_PDF.remove}
+                <Icon name="trash" className="h-4 w-4" /> {COMMON.delete}
               </button>
             )}
           </div>
@@ -547,11 +547,11 @@ export default function EditPdf() {
           {/* Page nav */}
           <div className="flex items-center justify-center gap-4 text-sm">
             <button type="button" className="btn-secondary px-3 py-1" disabled={pageIndex === 0} onClick={() => { setPageIndex((i) => Math.max(0, i - 1)); setSelectedId(null) }}>
-              <Icon name="arrowUp" className="h-4 w-4 -rotate-90" /> {EDIT_PDF.prev}
+              <Icon name="arrowUp" className="h-4 w-4 -rotate-90" /> {COMMON.prevPage}
             </button>
             <span className="tabular-nums text-slate-500">{EDIT_PDF.pageOf(pageIndex + 1, numPages)}</span>
             <button type="button" className="btn-secondary px-3 py-1" disabled={pageIndex >= numPages - 1} onClick={() => { setPageIndex((i) => Math.min(numPages - 1, i + 1)); setSelectedId(null) }}>
-              {EDIT_PDF.next} <Icon name="arrowDown" className="h-4 w-4 -rotate-90" />
+              {COMMON.nextPage} <Icon name="arrowDown" className="h-4 w-4 -rotate-90" />
             </button>
           </div>
 
@@ -653,7 +653,7 @@ export default function EditPdf() {
               <Icon name="download" className="h-4 w-4" /> {EDIT_PDF.save}
             </button>
             <button type="button" className="btn-ghost" onClick={() => { setFile(null); setPdfjsDoc(null); setDims(null) }}>
-              {EDIT_PDF.otherFile}
+              {COMMON.pickAnother}
             </button>
           </div>
 

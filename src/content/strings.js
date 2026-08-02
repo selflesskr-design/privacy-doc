@@ -127,21 +127,16 @@ export const EDIT_PDF = {
   size: '크기',
   bold: '굵게',
   italic: '기울임',
-  undo: '되돌리기',
-  remove: '삭제',
 
-  prev: '이전',
-  next: '다음',
   pageOf: (n, total) => `${total}쪽 중 ${n}쪽`,
 
   // Same reasoning as PDF_REDACT.save — the button builds the file, the one
   // below it is what writes it to disk.
   save: '편집한 PDF 만들기',
-  otherFile: '다른 파일 선택',
   saveFailed: '저장하지 못했습니다',
   ready: '편집한 PDF가 만들어졌습니다. 이름을 정하고 받으세요.',
   fileName: '파일 이름',
-  download: (name) => `${name} 내려받기`,
+  download: (name) => `${name} 받기`,
 
   tip: '도구를 고른 뒤 문서 위를 누르거나 끌어 보세요. 선택 도구로 옮기고, 크기를 바꾸고, 지울 수 있습니다.',
 
@@ -165,8 +160,7 @@ export const IMAGES_TO_PDF = {
   auto: '자동 (사진마다)',
   portrait: '세로',
   landscape: '가로',
-  // pt is what the PDF itself uses; 72pt = 1inch.
-  margin: '여백 (pt · 28pt ≈ 1cm)',
+  margin: '여백 (mm)',
 
   create: 'PDF 만들기',
   adding: (n, total) => `${total}장 중 ${n}장 넣는 중…`,

@@ -1,11 +1,12 @@
 import { PDFDocument } from 'pdf-lib'
 import { IMAGES_TO_PDF } from '../../content/strings.js'
 
-// Page sizes in PDF points (1pt = 1/72 inch).
+// Page sizes in PDF points (1pt = 1/72 inch). Letter and Legal are US sizes
+// nobody hands in here, so the list is the ISO sizes Korea actually uses.
 export const PAGE_SIZES = {
-  A4: [595.28, 841.89],
-  Letter: [612, 792],
-  Legal: [612, 1008],
+  A4: [595.28, 841.89], // 210 x 297 mm
+  A5: [419.53, 595.28], // 148 x 210 mm
+  B5: [498.9, 708.66], // 176 x 250 mm
 }
 
 // pdf-lib can only embed JPEG and PNG directly. Anything else (WebP, GIF, BMP)
@@ -39,7 +40,7 @@ async function embedImage(pdfDoc, file) {
 /**
  * Combine images into one PDF.
  * @param {File[]} files
- * @param {{pageSize:'fit'|'A4'|'Letter'|'Legal', orientation:'auto'|'portrait'|'landscape', margin:number}} opts
+ * @param {{pageSize:'fit'|'A4'|'A5'|'B5', orientation:'auto'|'portrait'|'landscape', margin:number}} opts
  * @param {(value:number, message:string)=>void} onProgress
  * @returns {Promise<Blob>}
  */

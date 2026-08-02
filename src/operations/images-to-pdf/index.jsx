@@ -10,6 +10,9 @@ import { dedupeFiles, skippedNotice } from '../../lib/dedupeFiles.js'
 import { imagesToPdf } from './helpers.js'
 import { IMAGES_TO_PDF as T } from '../../content/strings.js'
 
+// The margin field is in millimetres; PDF pages are measured in points.
+const MM_TO_PT = 72 / 25.4
+
 export default function ImagesToPdf() {
   const [files, setFiles] = useState([])
   const [notice, setNotice] = useState('')
@@ -46,7 +49,7 @@ export default function ImagesToPdf() {
 
   const generate = () =>
     run((onProgress) =>
-      imagesToPdf(files, { pageSize, orientation, margin: Number(margin) }, onProgress).then(
+      imagesToPdf(files, { pageSize, orientation, margin: Number(margin) * MM_TO_PT }, onProgress).then(
         (blob) => ({ blob, filename: 'images.pdf' }),
       ),
     )
@@ -88,9 +91,9 @@ export default function ImagesToPdf() {
                   onChange={setOption(setPageSize)}
                 >
                   <option value="fit">{T.fitToImage}</option>
-                  <option value="A4">A4</option>
-                  <option value="Letter">Letter</option>
-                  <option value="Legal">Legal</option>
+                  <option value="A4">A4 (210×297mm)</option>
+                  <option value="A5">A5 (148×210mm)</option>
+                  <option value="B5">B5 (176×250mm)</option>
                 </select>
               </label>
               <label className="space-y-1">
@@ -111,7 +114,7 @@ export default function ImagesToPdf() {
                 <input
                   type="number"
                   min="0"
-                  max="144"
+                  max="50"
                   className="field-input"
                   value={margin}
                   onChange={setOption(setMargin)}
