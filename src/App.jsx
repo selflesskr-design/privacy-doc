@@ -112,13 +112,15 @@ export default function App() {
       if (dragCounter <= 0) { dragCounter = 0; setIsDragging(false) }
     }
     const onDrop = (e) => {
+      // A dropzone (or a reorder target) that already took this drop called
+      // preventDefault on the way up. Clear the overlay either way.
+      const handled = e.defaultPrevented
       e.preventDefault()
-      e.stopPropagation()
       dragCounter = 0
       setIsDragging(false)
+      if (handled) return
       const files = Array.from(e.dataTransfer?.files || [])
-      if (!files.length) return
-      emitFileDrop(files)
+      if (files.length) emitFileDrop(files)
     }
 
     window.addEventListener('dragenter', onDragEnter)

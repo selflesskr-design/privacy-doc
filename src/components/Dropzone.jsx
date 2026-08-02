@@ -28,10 +28,10 @@ export default function Dropzone({
 
   const onDrop = useCallback(
     (e) => {
+      // preventDefault also marks the drop handled, which is how the window
+      // listener knows not to deliver these files a second time. The event has
+      // to keep bubbling: that listener is what clears the drag overlay.
       e.preventDefault()
-      // Without this the drop also reaches the window listener, which hands the
-      // same files back through the bus and adds them a second time.
-      e.stopPropagation()
       setDragging(false)
       handleFiles(e.dataTransfer.files)
     },
