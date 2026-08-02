@@ -29,8 +29,8 @@ export default function CompressPdf() {
   // Only a smaller file counts as a result worth handing over.
   const shrank = result && result.after < result.before
   const go = () =>
-    run((p) =>
-      compressPdf(file, { mode, dpi: Number(dpi), quality: Number(quality) }, p).then((r) => ({
+    run((p, signal) =>
+      compressPdf(file, { mode, dpi: Number(dpi), quality: Number(quality) }, p, signal).then((r) => ({
         ...r,
         blob: r.blob,
         filename: `${baseName(file.name)}-compressed.pdf`,

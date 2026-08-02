@@ -39,7 +39,7 @@ export const COMMON = {
 export const ERRORS = {
   encryptedPdf: '암호가 설정된 PDF는 처리할 수 없습니다. 암호를 먼저 해제한 뒤 다시 시도해 주세요.',
   unreadablePdf: 'PDF 파일을 읽을 수 없습니다. 파일이 손상되었거나 지원하지 않는 형식일 수 있습니다.',
-  unreadableImage: '이미지를 읽을 수 없습니다. JPEG, PNG, WebP 파일을 사용해 주세요.',
+  unreadableImage: '사진을 읽을 수 없습니다. JPEG, PNG, WebP 파일을 사용해 주세요.',
   tooLarge: '파일 용량이 너무 큽니다.',
   noPagesSelected: '선택한 페이지가 없습니다.',
   noFileSelected: '파일을 먼저 선택해 주세요.',
@@ -375,7 +375,7 @@ export const COMPRESS_IMAGE = {
   // PNG is not offered as an output: it stores photos losslessly, so it makes
   // them bigger, ignores the quality slider, and takes a long time to encode a
   // large one. Changing format for its own sake is 사진 형식 바꾸기.
-  pngNote: 'PNG 사진은 화질을 낮춰도 거의 줄지 않습니다. JPEG이나 WebP로 저장하면 크게 줄어듭니다.',
+  pngNote: 'PNG 사진은 화질을 낮춰도 거의 줄지 않습니다. JPEG나 WebP로 저장하면 크게 줄어듭니다.',
 
   compressing: (pct) => `줄이는 중… ${pct}%`,
   compress: '용량 줄이기',
@@ -490,7 +490,9 @@ export const STRIP_METADATA = {
   // the tags out loud.
   checking: '사진에 무엇이 들어 있는지 확인하는 중…',
   found: '이 사진에 들어 있는 정보',
-  foundNone: '이 사진에는 위치나 기기 정보가 없습니다. 지울 것이 없습니다.',
+  foundNone:
+    '확인 가능한 위치·기기 정보는 찾지 못했습니다. 표시되지 않는 정보가 남아 있을 수 있으므로 아래 버튼으로 사진 정보를 정리할 수 있습니다.',
+  foundOther: '사진 안에 추가 정보가 있습니다. 다시 저장하면 함께 지워집니다.',
   gpsLabel: '촬영 위치',
   gpsValue: (lat, lon) => `${lat.toFixed(6)}, ${lon.toFixed(6)}`,
   gpsWarn: '이 좌표는 사진을 찍은 자리입니다. 집에서 찍었다면 집 주소가 됩니다.',

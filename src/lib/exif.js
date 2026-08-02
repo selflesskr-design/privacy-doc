@@ -23,27 +23,94 @@ const GPS = {
   LON: 4,
 }
 
-/** Locate the TIFF header inside the APP1 segment of a JPEG. */
-function findTiff(view) {
-  if (view.byteLength < 4 || view.getUint16(0) !== 0xffd8) return null
-  let offset = 2
-  while (offset + 4 <= view.byteLength) {
-    const marker = view.getUint16(offset)
-    if ((marker & 0xff00) !== 0xff00) return null
-    const size = view.getUint16(offset + 2)
-    if (marker === 0xffda) return null // image data; no EXIF before it
-    if (marker === 0xffe1) {
-      const start = offset + 4
-      if (start + 6 > view.byteLength || view.getUint32(start) !== 0x45786966) return null
-      const tiff = start + 6
-      if (tiff + 8 > view.byteLength) return null
-      const endian = view.getUint16(tiff)
-      if (endian !== 0x4949 && endian !== 0x4d4d) return null
-      return { tiff, little: endian === 0x4949 }
+function ascii(view, start, length) {
+  if (start < 0 || start + length > view.byteLength) return ''
+  let out = ''
+  for (let i = 0; i < length; i++) out += String.fromCharCode(view.getUint8(start + i))
+  return out
+}
+
+function tiffAt(view, tiff) {
+  if (tiff < 0 || tiff + 8 > view.byteLength) return null
+  const endian = view.getUint16(tiff)
+  if (endian !== 0x4949 && endian !== 0x4d4d) return null
+  return { tiff, little: endian === 0x4949 }
+}
+
+/** Locate metadata and, when present, a TIFF/EXIF header in JPEG, PNG or WebP. */
+function findMetadata(view) {
+  if (view.byteLength < 4) return { metadataDetected: false }
+
+  // JPEG can contain more than one APP1 segment. XMP commonly comes before
+  // EXIF, so a non-EXIF APP1 must be skipped rather than ending the search.
+  if (view.getUint16(0) === 0xffd8) {
+    let metadataDetected = false
+    let offset = 2
+    while (offset + 4 <= view.byteLength) {
+      const marker = view.getUint16(offset)
+      if ((marker & 0xff00) !== 0xff00) break
+      if (marker === 0xffda || marker === 0xffd9) break
+      const size = view.getUint16(offset + 2)
+      if (size < 2 || offset + 2 + size > view.byteLength) break
+      if (marker === 0xffe1) {
+        metadataDetected = true
+        const start = offset + 4
+        if (ascii(view, start, 6) === 'Exif\0\0') {
+          const head = tiffAt(view, start + 6)
+          if (head) return { ...head, metadataDetected: true }
+        }
+      }
+      offset += 2 + size
     }
-    offset += 2 + size
+    return { metadataDetected }
   }
-  return null
+
+  // PNG stores EXIF in an eXIf chunk. Text and ICC chunks are also metadata
+  // worth removing even though this small inspector does not display them.
+  if (
+    view.byteLength >= 8 &&
+    view.getUint32(0) === 0x89504e47 &&
+    view.getUint32(4) === 0x0d0a1a0a
+  ) {
+    let metadataDetected = false
+    let offset = 8
+    while (offset + 12 <= view.byteLength) {
+      const size = view.getUint32(offset)
+      const type = ascii(view, offset + 4, 4)
+      const data = offset + 8
+      if (data + size + 4 > view.byteLength) break
+      if (['eXIf', 'iTXt', 'tEXt', 'zTXt', 'iCCP'].includes(type)) metadataDetected = true
+      if (type === 'eXIf') {
+        const head = tiffAt(view, data)
+        if (head) return { ...head, metadataDetected: true }
+      }
+      offset = data + size + 4
+    }
+    return { metadataDetected }
+  }
+
+  // WebP uses RIFF chunks. EXIF payloads may start with either the TIFF header
+  // itself or the six-byte Exif marker used by JPEG.
+  if (ascii(view, 0, 4) === 'RIFF' && ascii(view, 8, 4) === 'WEBP') {
+    let metadataDetected = false
+    let offset = 12
+    while (offset + 8 <= view.byteLength) {
+      const type = ascii(view, offset, 4)
+      const size = view.getUint32(offset + 4, true)
+      const data = offset + 8
+      if (data + size > view.byteLength) break
+      if (type === 'EXIF' || type === 'XMP ' || type === 'ICCP') metadataDetected = true
+      if (type === 'EXIF') {
+        const start = ascii(view, data, 6) === 'Exif\0\0' ? data + 6 : data
+        const head = tiffAt(view, start)
+        if (head) return { ...head, metadataDetected: true }
+      }
+      offset = data + size + (size % 2)
+    }
+    return { metadataDetected }
+  }
+
+  return { metadataDetected: false }
 }
 
 /** Read one IFD into a map of tag -> { type, count, valueOffset }. */
@@ -100,51 +167,67 @@ function readDegrees(view, tiff, little, field) {
 /**
  * @param {ArrayBuffer} buffer
  * @returns {{orientation:number, gps:{lat:number, lon:number}|null,
- *            taken:string|null, camera:string|null, software:string|null}}
+ *            taken:string|null, camera:string|null, software:string|null,
+ *            metadataDetected:boolean}}
  */
 export function readExif(buffer) {
-  const empty = { orientation: 1, gps: null, taken: null, camera: null, software: null }
+  const empty = {
+    orientation: 1,
+    gps: null,
+    taken: null,
+    camera: null,
+    software: null,
+    metadataDetected: false,
+  }
   const view = new DataView(buffer)
-  const head = findTiff(view)
+  const located = findMetadata(view)
+  const head = located.tiff == null ? null : located
+  empty.metadataDetected = located.metadataDetected
   if (!head) return empty
   const { tiff, little } = head
 
-  const ifd0 = readIfd(view, tiff, little, view.getUint32(tiff + 4, little))
-  const result = { ...empty }
+  try {
+    const ifd0 = readIfd(view, tiff, little, view.getUint32(tiff + 4, little))
+    const result = { ...empty }
 
-  const orientation = ifd0[TAG.ORIENTATION]
-  if (orientation) {
-    const v = view.getUint16(orientation.entry + 8, little)
-    if (v >= 1 && v <= 8) result.orientation = v
-  }
+    const orientation = ifd0[TAG.ORIENTATION]
+    if (orientation) {
+      const v = view.getUint16(orientation.entry + 8, little)
+      if (v >= 1 && v <= 8) result.orientation = v
+    }
 
-  const make = readString(view, tiff, little, ifd0[TAG.MAKE])
-  const model = readString(view, tiff, little, ifd0[TAG.MODEL])
-  result.camera = [make, model].filter(Boolean).join(' ') || null
-  result.software = readString(view, tiff, little, ifd0[TAG.SOFTWARE])
+    const make = readString(view, tiff, little, ifd0[TAG.MAKE])
+    const model = readString(view, tiff, little, ifd0[TAG.MODEL])
+    result.camera = [make, model].filter(Boolean).join(' ') || null
+    result.software = readString(view, tiff, little, ifd0[TAG.SOFTWARE])
 
-  const exifPointer = ifd0[TAG.EXIF_IFD]
-  if (exifPointer) {
-    const exif = readIfd(view, tiff, little, view.getUint32(exifPointer.entry + 8, little))
-    result.taken = readString(view, tiff, little, exif[TAG.DATE_ORIGINAL])
-  }
+    const exifPointer = ifd0[TAG.EXIF_IFD]
+    if (exifPointer) {
+      const exif = readIfd(view, tiff, little, view.getUint32(exifPointer.entry + 8, little))
+      result.taken = readString(view, tiff, little, exif[TAG.DATE_ORIGINAL])
+    }
 
-  const gpsPointer = ifd0[TAG.GPS_IFD]
-  if (gpsPointer) {
-    const gps = readIfd(view, tiff, little, view.getUint32(gpsPointer.entry + 8, little))
-    const lat = readDegrees(view, tiff, little, gps[GPS.LAT])
-    const lon = readDegrees(view, tiff, little, gps[GPS.LON])
-    const latRef = readString(view, tiff, little, gps[GPS.LAT_REF])
-    const lonRef = readString(view, tiff, little, gps[GPS.LON_REF])
-    if (lat != null && lon != null) {
-      result.gps = {
-        lat: latRef === 'S' ? -lat : lat,
-        lon: lonRef === 'W' ? -lon : lon,
+    const gpsPointer = ifd0[TAG.GPS_IFD]
+    if (gpsPointer) {
+      const gps = readIfd(view, tiff, little, view.getUint32(gpsPointer.entry + 8, little))
+      const lat = readDegrees(view, tiff, little, gps[GPS.LAT])
+      const lon = readDegrees(view, tiff, little, gps[GPS.LON])
+      const latRef = readString(view, tiff, little, gps[GPS.LAT_REF])
+      const lonRef = readString(view, tiff, little, gps[GPS.LON_REF])
+      if (lat != null && lon != null) {
+        result.gps = {
+          lat: latRef === 'S' ? -lat : lat,
+          lon: lonRef === 'W' ? -lon : lon,
+        }
       }
     }
-  }
 
-  return result
+    return result
+  } catch {
+    // A malformed offset must not turn a local inspection into an unhandled
+    // error. We can still offer to rewrite the pixels and remove the metadata.
+    return empty
+  }
 }
 
 /** Kept for the export paths, which only need to know how to turn the pixels. */

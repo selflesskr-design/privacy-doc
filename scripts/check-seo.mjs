@@ -25,7 +25,7 @@ const { PAGES, sitemapPages, canonicalOf, isIndexable } = await load(['src', 'co
 const { metaFor } = await load(['src', 'content', 'structuredData.js'])
 // Read the domain rather than repeating it — a hardcoded copy here would go
 // stale the next time the deployment URL changes.
-const { SITE_URL } = await load(['src', 'config', 'site.js'])
+const { SITE_URL, TOOL_LANDING_PATHS } = await load(['src', 'config', 'site.js'])
 
 const problems = []
 const fail = (msg) => problems.push(msg)
@@ -61,11 +61,13 @@ for (const { path: routePath, page } of routes) {
   if (h1s.length !== 1) fail(`[2] H1이 ${h1s.length}개 (1개여야 함): ${routePath}`)
 
   const robots = (html.match(/<meta[^>]*name="robots"[^>]*content="([^"]*)"/i) || [])[1]
-  const expectedRobots = page ? metaFor(page).robots : 'index, follow'
+  const opId = page ? null : routePath.replace(/^\//, '')
+  const landingPath = opId ? TOOL_LANDING_PATHS[opId] : null
+  const expectedRobots = page ? metaFor(page).robots : landingPath ? 'noindex, follow' : 'index, follow'
   if (robots !== expectedRobots) {
     fail(`[7] robots 불일치: ${routePath} → "${robots}" (기대: "${expectedRobots}")`)
   }
-  const indexable = page ? isIndexable(page) : true
+  const indexable = page ? isIndexable(page) : !landingPath
 
   const title = (html.match(/<title>([\s\S]*?)<\/title>/i) || [])[1]?.trim()
   const desc = (html.match(/<meta[^>]*name="description"[^>]*content="([^"]*)"/i) || [])[1]?.trim()
@@ -80,7 +82,7 @@ for (const { path: routePath, page } of routes) {
   }
 
   const canonical = (html.match(/<link[^>]*rel="canonical"[^>]*href="([^"]*)"/i) || [])[1]
-  const expected = page ? canonicalOf(page) : `${SITE_URL}${routePath}`
+  const expected = page ? canonicalOf(page) : `${SITE_URL}${landingPath || routePath}`
   if (canonical !== expected) fail(`[4] canonical 불일치: ${routePath} → ${canonical} (기대: ${expected})`)
 
   // Internal links inside the prerendered body must resolve to a real route.
@@ -103,7 +105,12 @@ if (!existsSync(sitemapPath)) {
     if (!listed.has(canonicalOf(page))) fail(`[6] sitemap 누락: ${page.path}`)
   }
   for (const id of opIds) {
-    if (!listed.has(`${SITE_URL}/${id}`)) fail(`[6] sitemap 누락(도구): /${id}`)
+    const url = `${SITE_URL}/${id}`
+    if (TOOL_LANDING_PATHS[id]) {
+      if (listed.has(url)) fail(`[6] 대표 설명 페이지가 있는 도구가 sitemap에 포함됨: /${id}`)
+    } else if (!listed.has(url)) {
+      fail(`[6] sitemap 누락(도구): /${id}`)
+    }
   }
   for (const page of PAGES) {
     if (!isIndexable(page) && listed.has(canonicalOf(page))) {
@@ -121,13 +128,17 @@ if (problems.length) {
 
 const noindexFollow = PAGES.filter((p) => !p.noindex && p.ready === false)
 const noindexNofollow = PAGES.filter((p) => p.noindex)
+const aliasIds = opIds.filter((id) => TOOL_LANDING_PATHS[id])
 
 console.log(
   `✅ SEO 검사 통과\n` +
     `   전체 라우트      ${routes.length}개\n` +
     `   index 허용       ${titles.size}개\n` +
-    `   sitemap 포함     ${sitemapPages().length + opIds.length}개\n` +
-    `   noindex, follow  ${noindexFollow.length}개 (${noindexFollow.map((p) => p.path).join(', ')})\n` +
+    `   sitemap 포함     ${sitemapPages().length + opIds.length - aliasIds.length}개\n` +
+    `   noindex, follow  ${noindexFollow.length + aliasIds.length}개 (${[
+      ...noindexFollow.map((p) => p.path),
+      ...aliasIds.map((id) => `/${id}`),
+    ].join(', ')})\n` +
     `   noindex, nofollow ${noindexNofollow.length}개 (${noindexNofollow.map((p) => p.path).join(', ')})\n` +
     `   도구 ${opIds.length}개, title/description 중복 없음`,
 )

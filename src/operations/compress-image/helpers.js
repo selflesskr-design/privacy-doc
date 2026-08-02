@@ -7,7 +7,7 @@ const MIME = { jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp' }
  * @param {File} file
  * @param {{quality:number, maxDimension:number, format:'keep'|'jpeg'|'png'|'webp'}} opts
  */
-export async function compressImage(file, opts, onProgress) {
+export async function compressImage(file, opts, onProgress, signal) {
   const { quality = 0.7, maxDimension = 0, format = 'keep' } = opts || {}
   if (!file.type.startsWith('image/')) throw new Error('이미지 파일을 선택해 주세요.')
 
@@ -16,6 +16,7 @@ export async function compressImage(file, opts, onProgress) {
     useWebWorker: true, // heavy work off the main thread; worker is bundled (no network)
     maxSizeMB: Number.POSITIVE_INFINITY, // let quality/dimension drive the result
     onProgress: (p) => onProgress?.(p / 100, COMPRESS_IMAGE.compressing(Math.round(p))),
+    signal,
   }
   if (maxDimension) options.maxWidthOrHeight = Number(maxDimension)
   if (format !== 'keep') options.fileType = MIME[format]

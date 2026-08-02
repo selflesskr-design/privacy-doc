@@ -22,7 +22,7 @@ export default function Sidebar({ activeId, activePath, onSelect }) {
     <div className="flex h-full flex-col">
       <div className="p-3">
         <label className="sr-only" htmlFor="sidebar-filter">
-          Filter tools
+          도구 검색
         </label>
         <input
           id="sidebar-filter"

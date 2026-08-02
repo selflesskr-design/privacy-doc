@@ -40,7 +40,7 @@ export default function PdfToImages() {
   }
 
   const convert = () =>
-    run((onProgress) => pdfToImages(file, { format, scale: Number(scale), range }, onProgress))
+    run((onProgress, signal) => pdfToImages(file, { format, scale: Number(scale), range }, onProgress, signal))
 
   return (
     <div className="space-y-6">

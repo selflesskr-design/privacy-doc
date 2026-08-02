@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
-// PrivacyDoc is a 100% client-side static app. No dev/prod proxy, no external hosts.
+// Privacy is a 100% client-side static app. No dev/prod proxy, no external hosts.
 // The service worker precaches every asset so the app runs fully offline.
 export default defineConfig({
   plugins: [
@@ -11,7 +11,13 @@ export default defineConfig({
       registerType: 'autoUpdate',
       // Precache everything the app needs, including the pdf.js worker and wasm.
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff,woff2,wasm}'],
+        // pdf.js loads CMaps and its bundled standard fonts on demand. They
+        // still have to be precached: otherwise a PDF that needs one of them
+        // can fail the first time it is opened while offline.
+        globPatterns: [
+          '**/*.{js,css,html,svg,png,ico,woff,woff2,wasm}',
+          'pdfjs/**/*.{bcmap,pfb,ttf}',
+        ],
         maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
         // Never fall back to the network for navigations — offline-first.
         navigateFallback: 'index.html',
@@ -32,10 +38,10 @@ export default defineConfig({
       },
       includeAssets: ['favicon.svg', 'apple-touch-icon-180.png'],
       manifest: {
-        name: 'PrivacyDoc — 개인정보 안전 문서 도구',
-        short_name: 'PrivacyDoc',
+        name: 'Privacy — 개인정보 안전 문서 도구',
+        short_name: 'Privacy',
         description:
-          'PDF·이미지 속 개인정보를 브라우저 안에서 안전하게 가립니다. 파일이 서버로 전송되지 않습니다.',
+          'PDF·사진 속 개인정보를 브라우저 안에서 안전하게 가립니다. 파일이 서버로 전송되지 않습니다.',
         lang: 'ko',
         theme_color: '#FBF7F2',
         background_color: '#FBF7F2',

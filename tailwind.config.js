@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        // PrivacyDoc palette, taken from the logo: orange accent on an ivory
+        // Privacy palette, taken from the logo: orange accent on an ivory
         // ground with dark-brown type. See src/config/brand.js and
         // docs/brand-assets.md.
         //

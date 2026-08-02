@@ -10,7 +10,7 @@ export const escAttr = (s) => escText(s).replace(/"/g, '&quot;')
 
 const a = (href, label) => `<a href="${escAttr(href)}">${escText(label)}</a>`
 
-function toolCategoriesHtml(ops) {
+function toolCategoriesHtml(ops, toolLandingPaths = {}) {
   const groups = [
     { id: 'pdf', label: 'PDF 도구' },
     { id: 'image', label: '이미지 도구' },
@@ -21,7 +21,7 @@ function toolCategoriesHtml(ops) {
       const items = ops.filter((o) => o.category === g.id)
       if (!items.length) return ''
       const list = items
-        .map((o) => `<li>${a(`/${o.id}`, o.name)} — ${escText(o.description)}</li>`)
+        .map((o) => `<li>${a(toolLandingPaths[o.id] || `/${o.id}`, o.name)} — ${escText(o.description)}</li>`)
         .join('')
       return `<section><h2>${escText(g.label)}</h2><ul>${list}</ul></section>`
     })
@@ -68,7 +68,7 @@ export function renderBlocks(sections, ctx = {}) {
           // The visual is decorative; crawlers get the claim it illustrates.
           return `<p>가리기 전에는 주민등록번호가 그대로 보이지만, 가린 뒤에는 복사해도 글자가 나오지 않습니다.</p>`
         case 'toolCategories':
-          return toolCategoriesHtml(ctx.ops || [])
+          return toolCategoriesHtml(ctx.ops || [], ctx.toolLandingPaths)
         default:
           return ''
       }

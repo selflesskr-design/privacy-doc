@@ -46,8 +46,8 @@ export const operations = Object.entries(metaModules)
 // isn't listed here still shows up under its raw category name.
 export const CATEGORY_ORDER = [
   { id: 'pdf', label: 'PDF', icon: 'fileText' },
-  { id: 'image', label: 'Image', icon: 'image' },
-  { id: 'other', label: 'Convert', icon: 'tools' },
+  { id: 'image', label: '사진', icon: 'image' },
+  { id: 'other', label: '변환', icon: 'tools' },
 ]
 
 export function getOperation(id) {

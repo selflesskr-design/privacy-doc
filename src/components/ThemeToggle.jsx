@@ -20,10 +20,11 @@ export default function ThemeToggle({ theme, setTheme }) {
           type="button"
           role="radio"
           aria-checked={theme === o.value}
+          aria-label={o.label}
           title={o.label}
           onClick={() => setTheme(o.value)}
           className={cx(
-            'rounded-md p-1.5 transition-colors',
+            'flex h-11 w-11 items-center justify-center rounded-md p-0 transition-colors',
             theme === o.value
               ? 'bg-brand-600 text-white'
               : 'text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800',

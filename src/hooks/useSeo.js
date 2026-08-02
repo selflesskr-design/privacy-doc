@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { SITE_URL, BRAND } from '../config/site.js'
+import { SITE_URL, BRAND, TOOL_LANDING_PATHS } from '../config/site.js'
 import { getPage } from '../content/pages.js'
 import { metaFor, structuredDataFor } from '../content/structuredData.js'
 
@@ -12,7 +12,7 @@ function setAttr(selector, attr, value) {
   if (el) el.setAttribute(attr, value)
 }
 
-const LD_ID = 'privacydoc-jsonld'
+const LD_ID = 'privacy-jsonld'
 
 function setStructuredData(graphs) {
   document.head.querySelectorAll(`script[data-owner="${LD_ID}"]`).forEach((el) => el.remove())
@@ -36,7 +36,9 @@ export function useSeo(op, page) {
       page ||
       (op
         ? {
-            path: `/${op.id}`,
+             path: `/${op.id}`,
+             canonicalPath: TOOL_LANDING_PATHS[op.id],
+             searchAlias: Boolean(TOOL_LANDING_PATHS[op.id]),
             title: `${op.name} — ${BRAND}`,
             description: `${op.description} 파일은 내 브라우저에서 직접 처리됩니다. 무료이고 가입이 필요 없습니다.`,
             h1: op.name,

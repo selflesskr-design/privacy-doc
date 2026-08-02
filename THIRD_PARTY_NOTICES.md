@@ -1,6 +1,6 @@
 # 제3자 자산 및 라이선스 고지 (Third-Party Notices)
 
-PrivacyDoc은 다음 제3자 저작물을 포함하거나 사용합니다.
+Privacy는 다음 제3자 저작물을 포함하거나 사용합니다.
 각 항목의 라이선스 조건을 준수하며, 라이선스 원문을 저장소에 함께 포함합니다.
 
 ---
@@ -15,7 +15,7 @@ PrivacyDoc은 다음 제3자 저작물을 포함하거나 사용합니다.
 | 라이선스 원문 | [LICENSE](LICENSE) — 원문 그대로 보존 |
 | 출처 | https://github.com/mithun-srinivas/DoxDock |
 | 기준 버전 | v1.4.0 (commit `27ed9f3`) |
-| 사용 위치 | 저장소 전체. PrivacyDoc은 DoxDock의 파생 저작물입니다 |
+| 사용 위치 | 저장소 전체. Privacy는 DoxDock의 파생 저작물입니다 |
 | 비고 | 파생 관계와 변경 내역은 [NOTICE](NOTICE) 참조 |
 
 ---
@@ -48,7 +48,7 @@ PrivacyDoc은 다음 제3자 저작물을 포함하거나 사용합니다.
 - 폰트 파일을 **수정하지 않고** 원본 그대로 포함합니다.
 - OFL 원문(`Pretendard-OFL.txt`)을 폰트 파일과 같은 위치에 함께 배포합니다.
 - 예약 폰트 이름 *Pretendard*를 변경하거나 단독으로 판매하지 않습니다.
-- OFL은 소프트웨어 본체의 라이선스에 영향을 주지 않습니다. PrivacyDoc 소스 코드는 MIT를 유지합니다.
+- OFL은 소프트웨어 본체의 라이선스에 영향을 주지 않습니다. Privacy 소스 코드는 MIT를 유지합니다.
 
 > **PDF 출력물에 대하여**
 > 한글 텍스트를 포함한 PDF를 내보내면 사용된 글리프만 **서브셋**으로 PDF에 임베딩됩니다
@@ -83,7 +83,7 @@ PrivacyDoc은 다음 제3자 저작물을 포함하거나 사용합니다.
 
 | 항목 | 내용 |
 |---|---|
-| PrivacyDoc 로고 및 파생 아이콘 | Copyright (c) 2026 selflesskr. 서비스 브랜드 자산이며 MIT 적용 대상이 아닙니다 |
+| Privacy 로고 및 파생 아이콘 | Copyright (c) 2026 selflesskr. 서비스 브랜드 자산이며 MIT 적용 대상이 아닙니다 |
 | 원본 파일 | `brand/logo-source.png` |
 
 DoxDock 및 OSCode Community의 브랜드 자산(`oscode.png`, 원본 `og.png`, 원본 파비콘·PWA 아이콘)은

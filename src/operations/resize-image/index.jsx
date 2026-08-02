@@ -50,7 +50,7 @@ export default function ResizeImage() {
     set(e.target.type === 'checkbox' ? e.target.checked : e.target.value)
     reset()
   }
-  const go = () => run((p) => resizeImage(file, { mode, width, height, percent: Number(percent), keepAspect, format }, p))
+  const go = () => run((p, signal) => resizeImage(file, { mode, width, height, percent: Number(percent), keepAspect, format }, p, signal))
 
   return (
     <div className="space-y-6">

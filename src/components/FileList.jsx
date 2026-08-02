@@ -70,7 +70,7 @@ export default function FileList({
                   type="button"
                   disabled={i === 0}
                   onClick={() => onMove(i, i - 1)}
-                  aria-label={`Move ${file.name} up`}
+                  aria-label={`${file.name} 위로 이동`}
                   className="rounded p-0.5 text-slate-400 hover:text-brand-600 disabled:opacity-30"
                 >
                   <Icon name="arrowUp" className="h-4 w-4" />
@@ -79,7 +79,7 @@ export default function FileList({
                   type="button"
                   disabled={i === files.length - 1}
                   onClick={() => onMove(i, i + 1)}
-                  aria-label={`Move ${file.name} down`}
+                  aria-label={`${file.name} 아래로 이동`}
                   className="rounded p-0.5 text-slate-400 hover:text-brand-600 disabled:opacity-30"
                 >
                   <Icon name="arrowDown" className="h-4 w-4" />
@@ -90,7 +90,7 @@ export default function FileList({
               <button
                 type="button"
                 onClick={() => onRemove(i)}
-                aria-label={`Remove ${file.name}`}
+                aria-label={`${file.name} 삭제`}
                 className="rounded-lg p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/30"
               >
                 <Icon name="x" className="h-4 w-4" />

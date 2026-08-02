@@ -98,6 +98,7 @@ export function structuredDataFor(page) {
  */
 function robotsFor(page) {
   if (page.noindex) return 'noindex, nofollow'
+  if (page.searchAlias) return 'noindex, follow'
   if (page.ready === false) return 'noindex, follow'
   return 'index, follow'
 }

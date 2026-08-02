@@ -6,7 +6,7 @@ import { formatBytes } from '../lib/format.js'
 
 // Grid of produced files with per-item download, optional image previews, and a
 // "Download all (.zip)" action. Object URLs for previews are revoked on unmount.
-export default function ResultGallery({ results, zipName = 'privacydoc-output.zip', preview = true }) {
+export default function ResultGallery({ results, zipName = 'privacy-output.zip', preview = true }) {
   const [zipping, setZipping] = useState(false)
 
   const previews = useMemo(
@@ -39,7 +39,7 @@ export default function ResultGallery({ results, zipName = 'privacydoc-output.zi
         {results.length > 1 && (
           <button type="button" className="btn-primary" onClick={downloadAll} disabled={zipping}>
             <Icon name={zipping ? 'spinner' : 'download'} className="h-4 w-4" />
-            {zipping ? '묶는 중…' : '전체 받기 (.zip)'}
+            {zipping ? '묶는 중…' : '전체 파일 받기(.zip)'}
           </button>
         )}
       </div>
@@ -50,7 +50,7 @@ export default function ResultGallery({ results, zipName = 'privacydoc-output.zi
               type="button"
               onClick={() => downloadBlob(r.blob, r.filename, r.blob.type)}
               className="block w-full text-left"
-              title={`Download ${r.filename}`}
+              title={`${r.filename} 받기`}
             >
               <div className="flex aspect-[3/4] items-center justify-center bg-slate-100 dark:bg-slate-800">
                 {previews[i] ? (

@@ -752,7 +752,7 @@ export function getPage(path) {
 
 /** Pages search engines may index. Not-yet-built tools are held back. */
 export function isIndexable(page) {
-  return !page.noindex && page.ready !== false
+  return !page.noindex && !page.searchAlias && page.ready !== false
 }
 
 /** Pages that belong in sitemap.xml — the indexable ones. */
@@ -761,5 +761,6 @@ export function sitemapPages() {
 }
 
 export function canonicalOf(page) {
-  return page.path === '/' ? `${SITE_URL}/` : `${SITE_URL}${page.path}`
+  const path = page.canonicalPath || page.path
+  return path === '/' ? `${SITE_URL}/` : `${SITE_URL}${path}`
 }

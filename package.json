@@ -1,7 +1,7 @@
 {
   "name": "privacy-doc",
   "version": "0.1.0",
-  "description": "PrivacyDoc — 브라우저에서만 동작하는 개인정보 안전 문서 도구. 파일이 서버로 전송되지 않습니다. Derived from DoxDock (MIT) by Mithun Srinivas.",
+  "description": "Privacy — 브라우저에서만 동작하는 개인정보 안전 문서 도구. 파일이 서버로 전송되지 않습니다. Derived from DoxDock (MIT) by Mithun Srinivas.",
   "type": "module",
   "license": "MIT",
   "repository": {

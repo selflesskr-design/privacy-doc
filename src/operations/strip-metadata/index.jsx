@@ -29,6 +29,7 @@ export default function StripMetadata() {
     exif.camera && [T.cameraLabel, exif.camera],
     exif.software && [T.softwareLabel, exif.software],
   ].filter(Boolean)
+  const hasNamedFindings = findings?.length > 0
   const go = () => run((p) => stripMetadata(file, {}, p))
 
   return (
@@ -42,7 +43,7 @@ export default function StripMetadata() {
             <span className="min-w-0 flex-1 truncate text-sm font-medium">{file.name}</span>
             <span className="text-xs text-slate-400">{formatBytes(file.size)}</span>
           </div>
-          {findings && (findings.length ? (
+          {findings && (hasNamedFindings ? (
             <div className="card space-y-3 p-4">
               <span className="field-label">{T.found}</span>
               <dl className="space-y-1.5 text-sm">
@@ -55,11 +56,13 @@ export default function StripMetadata() {
               </dl>
               {exif.gps && <Note type="warning">{T.gpsWarn}</Note>}
             </div>
+          ) : exif.metadataDetected ? (
+            <Note type="warning">{T.foundOther}</Note>
           ) : (
             <Note type="info">{T.foundNone}</Note>
           ))}
 
-          {!result && findings?.length > 0 && (
+          {!result && exif && (
             <button type="button" className="btn-primary" onClick={go} disabled={running}>
               <Icon name="lock" className="h-4 w-4" />
               {T.strip}

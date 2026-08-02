@@ -32,7 +32,7 @@ export async function decode(file) {
       }
       img.onerror = () => {
         URL.revokeObjectURL(url)
-        reject(new Error('이미지를 읽을 수 없습니다. JPEG, PNG, WebP 파일을 사용해 주세요.'))
+        reject(new Error('사진을 읽을 수 없습니다. JPEG, PNG, WebP 파일을 사용해 주세요.'))
       }
       img.src = url
     })

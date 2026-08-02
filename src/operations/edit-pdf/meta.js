@@ -1,7 +1,7 @@
 export default {
   id: 'edit-pdf',
   name: 'PDF 편집',
-  description: 'PDF 위에 글자, 그림, 형광펜, 도형, 이미지를 얹습니다.',
+  description: 'PDF 위에 글자·그림 파일·형광펜·도형을 추가합니다.',
   category: 'pdf',
   icon: 'pencil',
   order: 6,

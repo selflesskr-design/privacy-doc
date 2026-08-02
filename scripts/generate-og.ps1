@@ -14,6 +14,7 @@ Add-Type -AssemblyName System.Drawing
 
 $root = Split-Path -Parent $PSScriptRoot
 $out = Join-Path $root 'public\og.png'
+$logoOut = Join-Path $root 'brand\logo-source.png'
 $badgePath = Join-Path $root 'public\pwa-512.png'
 $fontPath = Join-Path $root 'public\fonts\Pretendard-Regular.ttf'
 
@@ -52,11 +53,9 @@ $accentBrush = New-Object System.Drawing.SolidBrush($accent)
 $subtleBrush = New-Object System.Drawing.SolidBrush($subtle)
 $fmt = [System.Drawing.StringFormat]::GenericTypographic
 
-# "Privacy" in ink, "Doc" in accent, laid out by measured width.
+# Current service name.
 $titleY = 178.0
 $g.DrawString('Privacy', $titleFont, $inkBrush, $textX, $titleY, $fmt)
-$privacyW = $g.MeasureString('Privacy', $titleFont, 2000, $fmt).Width
-$g.DrawString('Doc', $titleFont, $accentBrush, $textX + $privacyW, $titleY, $fmt)
 
 $g.DrawString('브라우저에서 끝내는', $leadFont, $inkBrush, $textX, 296.0, $fmt)
 $g.DrawString('개인정보 안전 문서 도구', $leadFont, $inkBrush, $textX, 348.0, $fmt)
@@ -68,5 +67,24 @@ $g.DrawString('파일이 서버로 전송되지 않습니다', $subFont, $subtle
 
 $bmp.Save($out, [System.Drawing.Imaging.ImageFormat]::Png)
 
+# Square brand reference using the same generated mark and current name.
+$logoSize = 1254
+$logoBmp = New-Object System.Drawing.Bitmap($logoSize, $logoSize)
+$logoG = [System.Drawing.Graphics]::FromImage($logoBmp)
+$logoG.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
+$logoG.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
+$logoG.TextRenderingHint = [System.Drawing.Text.TextRenderingHint]::AntiAliasGridFit
+$logoG.Clear($cream)
+$logoG.DrawImage($badge, 327, 110, 600, 600)
+$logoTitleFont = New-Object System.Drawing.Font($family, 150, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
+$logoTitleWidth = $logoG.MeasureString('Privacy', $logoTitleFont, 2000, $fmt).Width
+$logoG.DrawString('Privacy', $logoTitleFont, $inkBrush, ($logoSize - $logoTitleWidth) / 2, 790, $fmt)
+$logoLeadFont = New-Object System.Drawing.Font($family, 42, [System.Drawing.FontStyle]::Regular, [System.Drawing.GraphicsUnit]::Pixel)
+$logoLead = '개인정보 안전 문서 도구'
+$logoLeadWidth = $logoG.MeasureString($logoLead, $logoLeadFont, 2000, $fmt).Width
+$logoG.DrawString($logoLead, $logoLeadFont, $subtleBrush, ($logoSize - $logoLeadWidth) / 2, 985, $fmt)
+$logoBmp.Save($logoOut, [System.Drawing.Imaging.ImageFormat]::Png)
+
+$logoLeadFont.Dispose(); $logoTitleFont.Dispose(); $logoG.Dispose(); $logoBmp.Dispose()
 $g.Dispose(); $bmp.Dispose(); $badge.Dispose(); $fonts.Dispose()
-Write-Output "public/og.png ($W x $H)"
+Write-Output "public/og.png ($W x $H), brand/logo-source.png ($logoSize x $logoSize)"

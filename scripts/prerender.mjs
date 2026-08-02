@@ -26,11 +26,12 @@ const opsDir = path.join(root, 'src', 'operations')
 
 const load = (rel) => import(pathToFileURL(path.join(root, ...rel)).href)
 const site = await load(['src', 'config', 'site.js'])
-const { PAGES, sitemapPages, canonicalOf } = await load(['src', 'content', 'pages.js'])
+const { PAGES, sitemapPages, canonicalOf, isIndexable } = await load(['src', 'content', 'pages.js'])
 const { metaFor, structuredDataFor } = await load(['src', 'content', 'structuredData.js'])
 
 const SITE = site.SITE_URL
 const BRAND = site.BRAND
+const TOOL_LANDING_PATHS = site.TOOL_LANDING_PATHS
 
 // Load operation metadata (id/name/description/order) straight from meta.js.
 async function loadOps() {
@@ -74,7 +75,7 @@ function injectJsonLd(html, graphs) {
   const tags = graphs
     .map(
       (g) =>
-        `<script type="application/ld+json" data-owner="privacydoc-jsonld">${JSON.stringify(
+        `<script type="application/ld+json" data-owner="privacy-jsonld">${JSON.stringify(
           g,
         ).replace(/</g, '\\u003c')}</script>`,
     )
@@ -98,8 +99,11 @@ function applyMeta(html, meta) {
 
 /** A tool page, described the same way a content page is. */
 function toolAsPage(op, ops) {
+  const canonicalPath = TOOL_LANDING_PATHS[op.id]
   return {
     path: `/${op.id}`,
+    canonicalPath,
+    searchAlias: Boolean(canonicalPath),
     title: `${op.name} — ${BRAND}`,
     description: `${op.description} 파일은 내 브라우저에서 직접 처리됩니다. 무료이고 가입이 필요 없습니다.`,
     h1: op.name,
@@ -118,9 +122,9 @@ function toolAsPage(op, ops) {
         t: 'cards',
         title: '관련 페이지',
         items: [
-          { label: '모든 도구', href: '/tools', text: 'PDF·사진 도구 24가지' },
+          { label: '모든 도구', href: '/tools', text: `PDF·사진 도구 ${ops.length}가지` },
           { label: 'PDF 개인정보 가리기', href: '/tools/pdf-redact', text: '문서 속 개인정보 가리기' },
-          { label: '보안', href: '/security', text: '직접 확인하는 방법' },
+          { label: '개인정보 처리방침', href: '/privacy', text: '파일과 이용 정보가 처리되는 방식' },
           { label: '자주 묻는 질문', href: '/faq', text: '많이 받는 질문' },
         ],
       },
@@ -130,7 +134,7 @@ function toolAsPage(op, ops) {
         items: ops
           .filter((o) => o.id !== op.id)
           .slice(0, 12)
-          .map((o) => ({ label: o.name, href: `/${o.id}`, text: o.description })),
+          .map((o) => ({ label: o.name, href: TOOL_LANDING_PATHS[o.id] || `/${o.id}`, text: o.description })),
       },
     ],
   }
@@ -170,7 +174,7 @@ if (!existsSync(indexPath)) {
 
 const template = readFileSync(indexPath, 'utf-8')
 const ops = await loadOps()
-const ctx = { ops }
+const ctx = { ops, toolLandingPaths: TOOL_LANDING_PATHS }
 
 // Content routes (home included — it overwrites dist/index.html last).
 for (const page of PAGES) writePage(template, page, ctx)
@@ -179,16 +183,17 @@ for (const page of PAGES) writePage(template, page, ctx)
 // Without this copy an unknown address answered 200 with the app shell.
 copyFileSync(path.join(dist, '404', 'index.html'), path.join(dist, '404.html'))
 
-// The original 24 tool routes, URLs untouched.
+// Tool routes stay usable. Routes with a fuller landing page are noindex aliases
+// whose canonical points at that landing page.
 const toolPages = ops.map((op) => toolAsPage(op, ops))
 for (const page of toolPages) writePage(template, page, ctx)
 
 // Sitemap: indexable, working pages only. Tool pages are included; the editor
 // routes and any `ready: false` landing page are not.
-const urls = [...sitemapPages(), ...toolPages]
+const urls = [...sitemapPages(), ...toolPages.filter(isIndexable)]
 writeFileSync(path.join(dist, 'sitemap.xml'), sitemap(urls))
 
-const skipped = PAGES.filter((p) => p.noindex || p.ready === false)
+const skipped = [...PAGES, ...toolPages].filter((p) => !isIndexable(p))
 console.log(
   `✅ prerendered ${PAGES.length} content pages + ${toolPages.length} tool pages\n` +
     `   sitemap.xml: ${urls.length} URLs (excluded ${skipped.length}: ${skipped

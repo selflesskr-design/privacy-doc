@@ -1,12 +1,12 @@
 # 브랜드 자산 규격 (Brand Assets)
 
-PrivacyDoc의 브랜드 자산 목록, 규격, 생성 방법, 교체 절차를 정의합니다.
+Privacy의 브랜드 자산 목록, 규격, 생성 방법, 교체 절차를 정의합니다.
 
 ## 원칙
 
 | 자산군 | 텍스트 포함 | 이유 |
 |---|---|---|
-| 헤더 로고 | **포함** (`PrivacyDoc`) | 서비스명 인지 |
+| 헤더 로고 | **포함** (`Privacy`) | 서비스명 인지 |
 | 파비콘 / PWA 아이콘 | **미포함** — 심볼만 | 16~32px에서 글자가 뭉개짐. 문서 + 가림 + 방패 심볼만 사용 |
 | OG 이미지 | **포함** | 공유 카드에서는 서비스명과 한 줄 설명이 필요 |
 
@@ -17,11 +17,14 @@ PrivacyDoc의 브랜드 자산 목록, 규격, 생성 방법, 교체 절차를 �
 
 ## 1. 원본 (Source of truth)
 
+심볼과 색상의 단일 원본은 `src/config/brand.js`입니다. 아래 PNG는 디자인 확인용으로
+생성되는 참고 이미지이며, 앱에서 직접 불러오지 않습니다.
+
 | 파일 | 규격 | 설명 |
 |---|---|---|
-| `brand/logo-source.png` | 1254 × 1254 | 전달받은 로고 원본. 심볼(문서+가림바+방패) + `PrivacyDoc` 텍스트 |
+| `brand/logo-source.png` | 1254 × 1254 | 심볼(문서+가림바+방패) + `Privacy` 텍스트 참고 이미지 |
 
-원본을 교체할 때는 이 파일만 바꾸고 아래 2·3장의 생성 절차를 다시 실행합니다.
+심볼이나 색상을 바꿀 때는 `src/config/brand.js`를 수정하고 아래 생성 절차를 다시 실행합니다.
 
 ---
 
@@ -56,7 +59,7 @@ PrivacyDoc의 브랜드 자산 목록, 규격, 생성 방법, 교체 절차를 �
 |---|---|---|---|
 | `public/og.png` | **1200 × 630** | PNG | Open Graph / Twitter Card / 카카오톡 공유 |
 
-- 좌측: 심볼, 우측: `PrivacyDoc` + 한글 한 줄 설명
+- 좌측: 심볼, 우측: `Privacy` + 한글 한 줄 설명
 - 안전영역: 카카오톡 등이 가장자리를 자르므로 주요 요소를 중앙 1100 × 550 안에 배치
 - `index.html`의 `og:image:width` / `og:image:height`를 **1200 / 630**으로 맞춰야 함
 
@@ -68,7 +71,7 @@ PrivacyDoc의 브랜드 자산 목록, 규격, 생성 방법, 교체 절차를 �
 ([src/components/BrandMark.jsx](../src/components/BrandMark.jsx))
 
 - 다크모드에서 배경 없이도 읽히고, 추가 네트워크 요청이 없으며, 확대해도 깨지지 않습니다.
-- 텍스트는 `PrivacyDoc` — `Privacy`는 본문색, `Doc`은 브랜드 주황.
+- 텍스트는 `Privacy`이며 본문색을 사용합니다.
 
 ---
 
@@ -82,22 +85,21 @@ PrivacyDoc의 브랜드 자산 목록, 규격, 생성 방법, 교체 절차를 �
 | `paper` | `#FBF3E7` | 문서 면 |
 | `ink` | `#4A342A` | 문서 외곽선, 가림 바, 자물쇠, `Privacy` 글자 |
 | `muted` | `#E4D2B8` | 문서 본문 선, 아바타 박스 |
-| `accent` | `#EE8130` | 방패, `Doc` 글자 |
+| `accent` | `#EE8130` | 방패와 강조선 |
 
 ---
 
 ## 6. 교체 절차
 
 ```bash
-# 1. 새 원본을 brand/logo-source.png 로 교체
-# 2. 팔레트가 바뀌었다면 src/config/brand.js 수정
-# 3. 심볼 자산 재생성 (favicon.svg + PWA 아이콘 4종)
+# 1. 심볼이나 팔레트가 바뀌었다면 src/config/brand.js 수정
+# 2. 심볼 자산 재생성 (favicon.svg + PWA 아이콘 4종)
 npm run gen:brand
 
-# 4. OG 이미지 재생성 (원본 로고를 합성하므로 별도 실행)
+# 3. OG 이미지와 브랜드 참고 이미지 재생성
 npm run gen:og
 
-# 5. 검증
+# 4. 검증
 npm run build
 node scripts/check-external-references.mjs
 ```

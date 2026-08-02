@@ -1,7 +1,7 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 
 // Standardizes the run/progress/error/result lifecycle every operation shares.
-// The worker/async function receives a `setProgress(0..1, message?)` callback.
+// The worker/async function receives a progress callback and an AbortSignal.
 const SLOW_THRESHOLD = 500 // ms before cancel button appears
 
 export function useJob() {
@@ -11,14 +11,20 @@ export function useJob() {
   const [error, setError] = useState(null)
   const [result, setResult] = useState(null)
   const runId = useRef(0)
+  const controllerRef = useRef(null)
+
+  useEffect(() => () => controllerRef.current?.abort(), [])
 
   const run = useCallback(async (fn) => {
+    controllerRef.current?.abort()
+    const controller = new AbortController()
+    controllerRef.current = controller
     const id = ++runId.current
     setRunning(true)
     setSlow(false)
     setError(null)
     setResult(null)
-    setProgress({ value: null, message: 'Starting…' })
+    setProgress({ value: null, message: '준비하고 있습니다…' })
 
     const slowTimer = setTimeout(() => {
       if (runId.current === id) setSlow(true)
@@ -28,18 +34,19 @@ export function useJob() {
       if (runId.current === id) setProgress({ value, message })
     }
     try {
-      const out = await fn(onProgress)
+      const out = await fn(onProgress, controller.signal)
       if (runId.current === id) setResult(out)
       return out
     } catch (err) {
-      if (runId.current === id) {
+      if (runId.current === id && err?.name !== 'AbortError') {
         console.error(err)
-        setError(err?.message || String(err) || 'Something went wrong.')
+        setError(err?.message || String(err) || '파일을 처리하는 중 문제가 발생했습니다.')
       }
       return null
     } finally {
       clearTimeout(slowTimer)
       if (runId.current === id) {
+        controllerRef.current = null
         setRunning(false)
         setSlow(false)
         setProgress(null)
@@ -48,6 +55,8 @@ export function useJob() {
   }, [])
 
   const reset = useCallback(() => {
+    controllerRef.current?.abort()
+    controllerRef.current = null
     runId.current++
     setRunning(false)
     setSlow(false)

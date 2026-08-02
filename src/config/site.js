@@ -11,6 +11,14 @@ export const DEFAULT_TITLE = 'Privacy — PDF·사진 개인정보 가리기'
 export const DEFAULT_DESC =
   'PDF와 사진 속 개인정보를 가리고, 사진 정보를 지우고, PDF를 합치거나 용량을 줄입니다. 파일은 내 브라우저에서 직접 처리됩니다. 무료이고 가입이 필요 없습니다.'
 
+// These operations have a separate, fuller landing page for search visitors.
+// The working route stays usable but points search engines at this canonical.
+export const TOOL_LANDING_PATHS = {
+  'merge-pdfs': '/tools/merge-pdf',
+  'compress-pdf': '/tools/compress-pdf',
+  'strip-metadata': '/tools/remove-photo-metadata',
+}
+
 // Upstream attribution (MIT). See LICENSE and NOTICE.
 export const UPSTREAM_NAME = 'DoxDock'
 export const UPSTREAM_AUTHOR = 'Mithun Srinivas'

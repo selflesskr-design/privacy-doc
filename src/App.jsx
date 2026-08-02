@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useState, useCallback } from 'react'
+import { Suspense, lazy, useEffect, useState, useCallback, useRef } from 'react'
 import Sidebar from './components/Sidebar.jsx'
 import CommandPalette from './components/CommandPalette.jsx'
 import PrivacyBadge from './components/PrivacyBadge.jsx'
@@ -80,6 +80,13 @@ export default function App() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [collapsed, setCollapsed] = useLocalStorage('privacydoc:sidebarCollapsed', false)
+  const mobileMenuButtonRef = useRef(null)
+  const mobileDrawerRef = useRef(null)
+
+  const closeMobileNav = useCallback(() => {
+    setMobileNavOpen(false)
+    requestAnimationFrame(() => mobileMenuButtonRef.current?.focus())
+  }, [])
 
   const activeId = route.opId
   const contentPage = route.page
@@ -138,9 +145,60 @@ export default function App() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!mobileNavOpen) return undefined
+
+    const drawer = mobileDrawerRef.current
+    const focusableSelector = [
+      'a[href]',
+      'button:not([disabled])',
+      'input:not([disabled])',
+      'select:not([disabled])',
+      'textarea:not([disabled])',
+      '[tabindex]:not([tabindex="-1"])',
+    ].join(',')
+    const focusableItems = () => Array.from(drawer?.querySelectorAll(focusableSelector) || [])
+    const previousOverflow = document.body.style.overflow
+
+    document.body.style.overflow = 'hidden'
+    requestAnimationFrame(() => (focusableItems()[0] || drawer)?.focus())
+
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        closeMobileNav()
+        return
+      }
+      if (event.key !== 'Tab') return
+
+      const items = focusableItems()
+      if (!items.length) {
+        event.preventDefault()
+        drawer?.focus()
+        return
+      }
+
+      const first = items[0]
+      const last = items[items.length - 1]
+      if (event.shiftKey && (document.activeElement === first || !drawer?.contains(document.activeElement))) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+      document.body.style.overflow = previousOverflow
+    }
+  }, [mobileNavOpen, closeMobileNav])
+
   const handleSelect = (id) => {
     navigate(id)
-    setMobileNavOpen(false)
+    if (mobileNavOpen) closeMobileNav()
   }
 
   const Component = activeOp?.Component
@@ -156,14 +214,20 @@ export default function App() {
         </div>
       )}
       {/* Top bar */}
-      <header className="z-20 flex items-center gap-3 border-b border-slate-200 bg-white/80 px-4 py-3 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80">
+      <header
+        className="z-20 flex items-center gap-3 border-b border-slate-200 bg-white/80 px-4 py-3 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80"
+        aria-hidden={mobileNavOpen ? 'true' : undefined}
+      >
         <button
+          ref={mobileMenuButtonRef}
           type="button"
-          className="btn-ghost -ml-2 px-2 lg:hidden"
+          className="btn-ghost -ml-2 h-11 w-11 p-0 lg:hidden"
           aria-label="메뉴 열기"
-          onClick={() => setMobileNavOpen((o) => !o)}
+          aria-controls="mobile-navigation"
+          aria-expanded={mobileNavOpen}
+          onClick={() => setMobileNavOpen(true)}
         >
-          <Icon name={mobileNavOpen ? 'x' : 'grid'} className="h-5 w-5" />
+          <Icon name="grid" className="h-5 w-5" />
         </button>
         <button
           type="button"
@@ -203,9 +267,28 @@ export default function App() {
 
         {/* Sidebar (mobile drawer) */}
         {mobileNavOpen && (
-          <div className="fixed inset-0 z-30 lg:hidden" role="dialog" aria-modal="true">
-            <div className="absolute inset-0 bg-slate-900/40" onClick={() => setMobileNavOpen(false)} />
+          <div
+            id="mobile-navigation"
+            ref={mobileDrawerRef}
+            className="fixed inset-0 z-30 lg:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="mobile-navigation-title"
+            tabIndex={-1}
+          >
+            <div className="absolute inset-0 bg-slate-900/40" aria-hidden="true" onClick={closeMobileNav} />
             <aside className="absolute left-0 top-0 h-full w-72 border-r border-slate-200 bg-slate-50 shadow-xl dark:border-slate-800 dark:bg-slate-900">
+              <div className="flex items-center justify-between border-b border-slate-200 px-3 py-2 dark:border-slate-800">
+                <h2 id="mobile-navigation-title" className="text-sm font-semibold">전체 메뉴</h2>
+                <button
+                  type="button"
+                  className="btn-ghost h-11 w-11 p-0"
+                  aria-label="메뉴 닫기"
+                  onClick={closeMobileNav}
+                >
+                  <Icon name="x" className="h-5 w-5" />
+                </button>
+              </div>
               <Sidebar
                 activeId={activeId}
                 activePath={contentPage?.path}
@@ -216,7 +299,10 @@ export default function App() {
         )}
 
         {/* Main */}
-        <main className="min-w-0 flex-1 overflow-y-auto">
+        <main
+          className="min-w-0 flex-1 overflow-y-auto"
+          aria-hidden={mobileNavOpen ? 'true' : undefined}
+        >
           <div className={`mx-auto px-4 py-6 sm:px-6 sm:py-8 ${contentPage?.path === '/tools' ? 'max-w-6xl' : 'max-w-3xl'}`}>
             {contentPage ? (
               <>

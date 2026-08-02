@@ -24,7 +24,7 @@ export default function CompressImage() {
     set(e.target.value)
     reset()
   }
-  const go = () => run((p) => compressImage(file, { quality: Number(quality), maxDimension: Number(maxDimension), format }, p))
+  const go = () => run((p, signal) => compressImage(file, { quality: Number(quality), maxDimension: Number(maxDimension), format }, p, signal))
 
   return (
     <div className="space-y-6">

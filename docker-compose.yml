@@ -1,8 +1,0 @@
-services:
-  doxdock:
-    build: .
-    image: doxdock:latest
-    container_name: doxdock
-    ports:
-      - "8791:80"
-    restart: unless-stopped
