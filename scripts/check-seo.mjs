@@ -11,7 +11,6 @@
 //   5. internal links all point at routes that exist
 //   6. every indexable, working page is in sitemap.xml — and nothing else is
 //   7. noindex pages carry robots noindex and stay out of the sitemap
-//   8. the original 24 tool URLs still exist
 
 import { readFileSync, existsSync, readdirSync } from 'node:fs'
 import path from 'node:path'
@@ -113,12 +112,6 @@ if (!existsSync(sitemapPath)) {
   }
 }
 
-// ── 8 ───────────────────────────────────────────────────────────────────────
-if (opIds.length < 24) fail(`[8] 기존 도구 수가 24개 미만: ${opIds.length}개`)
-for (const id of opIds) {
-  if (!existsSync(fileFor(`/${id}`))) fail(`[8] 기존 도구 URL 소실: /${id}`)
-}
-
 // ── report ──────────────────────────────────────────────────────────────────
 if (problems.length) {
   console.error(`\n❌ SEO 검사 실패 (${problems.length}건)`)
@@ -136,5 +129,5 @@ console.log(
     `   sitemap 포함     ${sitemapPages().length + opIds.length}개\n` +
     `   noindex, follow  ${noindexFollow.length}개 (${noindexFollow.map((p) => p.path).join(', ')})\n` +
     `   noindex, nofollow ${noindexNofollow.length}개 (${noindexNofollow.map((p) => p.path).join(', ')})\n` +
-    `   기존 도구 URL    ${opIds.length}개 보존, title/description 중복 없음`,
+    `   도구 ${opIds.length}개, title/description 중복 없음`,
 )

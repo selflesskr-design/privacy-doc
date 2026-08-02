@@ -39,7 +39,8 @@ function resolveRoute(pathname) {
   if (page) return { page, opId: null }
   const id = path.replace(/^\//, '')
   if (id === 'home') return { page: getPage('/'), opId: null }
-  return getOperation(id) ? { page: null, opId: id } : { page: getPage('/'), opId: null }
+  if (getOperation(id)) return { page: null, opId: id }
+  return { page: getPage('/404'), opId: null }
 }
 
 function useRouteSelection() {

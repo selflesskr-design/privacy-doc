@@ -15,7 +15,7 @@
 //
 // Uses only Node built-ins.
 
-import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, copyFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { renderPageBody, escText, escAttr } from './renderBlocks.mjs'
@@ -174,6 +174,10 @@ const ctx = { ops }
 
 // Content routes (home included — it overwrites dist/index.html last).
 for (const page of PAGES) writePage(template, page, ctx)
+
+// Vercel serves dist/404.html, with a 404 status, for anything it cannot match.
+// Without this copy an unknown address answered 200 with the app shell.
+copyFileSync(path.join(dist, '404', 'index.html'), path.join(dist, '404.html'))
 
 // The original 24 tool routes, URLs untouched.
 const toolPages = ops.map((op) => toolAsPage(op, ops))

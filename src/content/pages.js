@@ -880,6 +880,24 @@ const EDITOR_PAGES = [
   },
 ]
 
+
+// Shown for any address that does not exist. Without it an unknown path fell
+// back to the home page, which answered a request for /whatever with a 200 and
+// the home page's content — the visitor could not tell they had gone nowhere.
+const NOT_FOUND = {
+  path: '/404',
+  title: `페이지를 찾을 수 없습니다 — ${BRAND}`,
+  description: '요청하신 주소가 없습니다.',
+  h1: '페이지를 찾을 수 없습니다',
+  breadcrumb: [{ name: '홈', path: '/' }],
+  noindex: true,
+  sections: [
+    { t: 'p', text: '주소가 바뀌었거나 없어진 페이지입니다.' },
+    { t: 'actions', items: [{ label: '개인정보 가리기 시작', href: '/editor/pdf-redact', primary: true }] },
+    { t: 'link', label: '모든 도구 보기 →', href: '/tools' },
+  ],
+}
+
 export const PAGES = [
   HOME,
   TOOLS_HUB,
@@ -888,6 +906,7 @@ export const PAGES = [
   ...GUIDE_PAGES,
   ...TRUST_PAGES,
   ...EDITOR_PAGES,
+  NOT_FOUND,
 ]
 
 export const PAGE_BY_PATH = new Map(PAGES.map((p) => [p.path, p]))
