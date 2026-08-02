@@ -182,28 +182,6 @@ export default function App() {
           <PrivacyBadge />
         </div>
         <div className="ml-auto flex items-center gap-2">
-          <a
-            href="/security"
-            className="btn-ghost gap-1.5 px-2.5"
-            title="파일이 밖으로 나가지 않는다는 것을 직접 확인하는 방법"
-            onClick={(e) => {
-              e.preventDefault()
-              handleSelect('/security')
-            }}
-          >
-            <Icon name="shieldCheck" className="h-4 w-4 text-brand-500" />
-            <span className="hidden sm:inline">보안</span>
-          </a>
-          <a
-            href="https://github.com/selflesskr-design/privacy-doc"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-ghost hidden px-2 sm:inline-flex"
-            title="오픈소스 (MIT) — 소스 보기 / 직접 호스팅"
-            aria-label="GitHub"
-          >
-            <Icon name="github" className="h-5 w-5" />
-          </a>
           <ThemeToggle theme={theme} setTheme={setTheme} />
         </div>
       </header>
@@ -219,7 +197,7 @@ export default function App() {
               h-full resolves to auto, its nav never becomes scrollable, and the
               aside's overflow-hidden silently clips the tools below the fold. */}
           <div className="h-full w-72">
-            <Sidebar activeId={activeId} activePath={contentPage?.path} onSelect={handleSelect} onOpenPalette={() => setPaletteOpen(true)} />
+            <Sidebar activeId={activeId} activePath={contentPage?.path} onSelect={handleSelect} />
           </div>
         </aside>
 
@@ -232,10 +210,6 @@ export default function App() {
                 activeId={activeId}
                 activePath={contentPage?.path}
                 onSelect={handleSelect}
-                onOpenPalette={() => {
-                  setMobileNavOpen(false)
-                  setPaletteOpen(true)
-                }}
               />
             </aside>
           </div>
@@ -303,7 +277,7 @@ export default function App() {
               /open-source-licenses carries the attribution in full — so the
               footer only needs to point there. */}
           <footer className="mx-auto flex max-w-3xl flex-wrap items-center gap-x-3 gap-y-1 px-4 pb-10 pt-4 text-xs text-slate-400 sm:px-6">
-            <span>{BRAND}는 파일을 내 브라우저에서 직접 처리합니다.</span>
+            <span>파일은 내 브라우저에서 직접 처리합니다.</span>
             <a
               href="/open-source-licenses"
               onClick={(e) => {

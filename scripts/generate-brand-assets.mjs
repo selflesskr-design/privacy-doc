@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// Generates the text-free PrivacyDoc mark: favicon.svg + the PWA/Apple PNG icons.
+// Generates the text-free Privacy mark: favicon.svg + the PWA/Apple PNG icons.
 // The mark is drawn from the shared geometry in src/config/brand.js, so the SVG
 // and the rasters are the same shape. Zero image dependencies — a small PNG
 // encoder (RGBA -> zlib deflate) plus 4x supersampling for smooth edges.
@@ -210,7 +210,7 @@ function faviconSvg() {
   const rr = (o, fill) =>
     `<rect x="${o.x}" y="${o.y}" width="${o.w}" height="${o.h}" rx="${o.r}" fill="${fill}"/>`
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="PrivacyDoc">
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Privacy">
   <rect width="100" height="100" rx="22" fill="${PALETTE.cream}"/>
   <path d="${docPath()}" fill="${PALETTE.paper}" stroke="${PALETTE.ink}" stroke-width="5" stroke-linejoin="round"/>
   <path d="${foldPath()}" fill="none" stroke="${PALETTE.ink}" stroke-width="4" stroke-linejoin="round"/>

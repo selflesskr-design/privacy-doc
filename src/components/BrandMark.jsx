@@ -10,7 +10,7 @@ export function BrandSymbol({ className = 'h-8 w-8' }) {
     <rect x={o.x} y={o.y} width={o.w} height={o.h} rx={o.r} fill={fill} />
   )
   return (
-    <svg viewBox="0 0 100 100" className={className} role="img" aria-label="PrivacyDoc">
+    <svg viewBox="0 0 100 100" className={className} role="img" aria-label="Privacy">
       <rect width="100" height="100" rx="22" fill={PALETTE.cream} />
       <path d={docPath()} fill={PALETTE.paper} stroke={PALETTE.ink} strokeWidth="5" strokeLinejoin="round" />
       <path d={foldPath()} fill="none" stroke={PALETTE.ink} strokeWidth="4" strokeLinejoin="round" />
@@ -33,13 +33,10 @@ export default function BrandMark() {
   return (
     <>
       <BrandSymbol />
-      {/* The logo orange (#EE8130) is only 2.6:1 on ivory, so the wordmark uses
-          the darker brand-600 in light mode and the lighter brand-400 in dark.
-          The symbol itself keeps the pure logo colour — it sits on its own cream
-          field, not on the page background. */}
-      <span className="text-lg font-bold tracking-tight">
-        Privacy<span className="text-brand-600 dark:text-brand-400">Doc</span>
-      </span>
+      {/* One word, in ink. The orange lives in the shield on the symbol, which
+          sits on its own cream field — on the page background that orange is
+          only 2.6:1 and would fail contrast as text. */}
+      <span className="text-lg font-bold tracking-tight">Privacy</span>
     </>
   )
 }

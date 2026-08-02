@@ -31,7 +31,7 @@ const HOW_WE_DO_IT =
 const FAQ = {
   upload: {
     q: '파일이 서버에 올라가나요?',
-    a: `올라가지 않습니다. ${BRAND}는 파일을 내 브라우저 안에서 직접 처리합니다. 사용 중에 파일이 밖으로 나가는 통신은 브라우저 보안 설정으로 막혀 있고, 개발자도구의 네트워크 탭에서 직접 확인할 수 있습니다.`,
+    a: `올라가지 않습니다. 이 서비스는 파일을 내 브라우저 안에서 직접 처리합니다. 사용 중에 파일이 밖으로 나가는 통신은 브라우저 보안 설정으로 막혀 있고, 개발자도구의 네트워크 탭에서 직접 확인할 수 있습니다.`,
   },
   free: {
     q: '무료인가요? 가입해야 하나요?',
@@ -84,8 +84,8 @@ const HOME = {
     { t: 'redactDemo' },
     { t: 'note', tone: 'warn', text: CHECK_FIRST },
     // Nothing else. Someone who searched for this already knows why they need
-    // it, the how-it-works reasoning lives on its own page, and a link inviting
-    // people to open devtools was never going to be taken up. Everything that
+    // it, and a link inviting people to open devtools was never going to be
+    // taken up. Everything that
     // remains either does something or warns about something.
   ],
 }
@@ -145,15 +145,14 @@ const toolPage = ({
     { t: 'h2', text: '파일을 올리지 않고 처리합니다' },
     {
       t: 'p',
-      text: `${BRAND}는 파일을 밖으로 보내지 않습니다. 브라우저가 직접 파일을 열고, 처리하고, 결과를 저장합니다.`,
+      text: `이 서비스는 파일을 밖으로 보내지 않습니다. 브라우저가 직접 파일을 열고, 처리하고, 결과를 저장합니다.`,
     },
-    { t: 'link', label: '어떻게 확인하나요?', href: '/security' },
     { t: 'h2', text: '쓰는 방법' },
     { t: 'steps', items: steps },
     ...(cautions?.length ? [{ t: 'h2', text: '알아두실 점' }, { t: 'ul', items: cautions }] : []),
     { t: 'h2', text: '자주 묻는 질문' },
     { t: 'faq', items: faq },
-    { t: 'cards', title: '함께 보면 좋은 페이지', items: related },
+    { t: 'cards', title: '함께 보면 좋은 페이지', items: related.slice(0, 2) },
   ],
 })
 
@@ -189,7 +188,6 @@ const TOOL_PAGES = [
       { label: '신분증 사본 안내', href: '/guides/id-card-redaction', text: '신분증에서 확인할 항목' },
       { label: '계약서 안내', href: '/guides/contract-personal-info-redaction', text: '계약서 제출 전 확인' },
       { label: '사진 개인정보 가리기', href: '/tools/image-redact', text: '사진으로 찍은 서류라면' },
-      { label: '파일 처리 방식', href: '/how-it-works', text: '어떻게 처리되는지' },
     ],
   }),
   toolPage({
@@ -222,7 +220,6 @@ const TOOL_PAGES = [
       { label: '신분증 사본 안내', href: '/guides/id-card-redaction', text: '신분증에서 확인할 항목' },
       { label: '통장 사본 안내', href: '/guides/bankbook-copy-redaction', text: '통장 사본에서 확인할 항목' },
       { label: '사진 정보 삭제', href: '/tools/remove-photo-metadata', text: '가리지 않고 기록만 지우려면' },
-      { label: '보안', href: '/security', text: '직접 확인하는 방법' },
     ],
   }),
   toolPage({
@@ -254,7 +251,6 @@ const TOOL_PAGES = [
       { label: '사진 개인정보 가리기', href: '/tools/image-redact', text: '사진 속 글자도 가리려면' },
       { label: '신분증 사본 안내', href: '/guides/id-card-redaction', text: '신분증 사진 다루기' },
       { label: '모든 도구', href: '/tools', text: '다른 사진 도구 보기' },
-      { label: '보안', href: '/security', text: '처리 방식 확인하기' },
     ],
   }),
   toolPage({
@@ -317,7 +313,6 @@ const TOOL_PAGES = [
       { label: 'PDF 합치기', href: '/tools/merge-pdf', text: '여러 파일을 먼저 묶으려면' },
       { label: 'PDF 개인정보 가리기', href: '/tools/pdf-redact', text: '내기 전에 가리려면' },
       { label: '모든 도구', href: '/tools', text: '다른 PDF 도구' },
-      { label: '파일 처리 방식', href: '/how-it-works', text: '어떻게 처리되는지' },
     ],
   }),
 ]
@@ -585,128 +580,6 @@ const GUIDE_PAGES = [
 
 const TRUST_PAGES = [
   {
-    path: '/how-it-works',
-    title: `파일 처리 방식 | ${BRAND}`,
-    description:
-      '파일을 서버에 올리지 않고 브라우저에서 PDF와 사진을 처리하는 방식을 설명합니다. 가린 부분이 왜 글자로 남지 않는지도 함께 다룹니다.',
-    h1: '파일이 어떻게 처리되나요',
-    breadcrumb: [{ name: '홈', path: '/' }],
-    schema: 'Article',
-    sections: [
-      { t: 'p', text: '"파일을 올리지 않는다"는 말이 막연하게 들릴 수 있어서, 실제로 무슨 일이 일어나는지 적었습니다.' },
-      { t: 'h2', text: '서버가 필요 없는 이유' },
-      {
-        t: 'p',
-        text:
-          '예전에는 PDF를 다루려면 서버의 힘을 빌려야 했습니다. 지금은 브라우저가 그 일을 직접 할 수 있습니다. 파일을 읽고, 페이지를 그리고, 새 파일로 저장하는 과정이 모두 기기 안에서 끝납니다.',
-      },
-      {
-        t: 'p',
-        text: `${BRAND}는 그 기능만 씁니다. 파일은 브라우저 메모리에서 열리고, 처리되고, 곧바로 저장됩니다. 거쳐 가는 서버가 없습니다.`,
-      },
-      { t: 'h2', text: '가린 부분이 글자로 남지 않는 이유' },
-      { t: 'p', text: OVERLAY_LIMIT },
-      {
-        t: 'p',
-        text:
-          'PDF는 글자를 글자로 저장합니다. 그 위에 사각형을 그려도 아래의 글자 데이터는 그대로 남습니다. 화면에서만 가려 보이는 것입니다.',
-      },
-      { t: 'p', text: HOW_WE_DO_IT },
-      {
-        t: 'steps',
-        items: [
-          { title: '페이지를 이미지로 다시 그림', text: '브라우저가 PDF 페이지를 그림 한 장으로 그립니다.' },
-          { title: '그림 위에 직접 칠함', text: '가릴 영역을 그림 자체에 칠합니다.' },
-          { title: '새 PDF로 저장', text: '칠해진 그림만으로 PDF를 새로 만듭니다. 원래의 글자 데이터는 옮기지 않습니다.' },
-        ],
-      },
-      {
-        t: 'note',
-        tone: 'info',
-        text: '이 방식은 저장한 PDF에서 글자 선택과 검색이 되지 않는다는 점을 감수합니다. 가린 부분의 글자를 남기지 않기 위한 맞바꿈입니다.',
-      },
-      { t: 'h2', text: '기술적인 설명' },
-      {
-        t: 'p',
-        text:
-          '조금 더 정확히 적으면 이렇습니다. PDF의 텍스트 레이어를 유지한 채 도형을 겹치는 대신, 페이지를 래스터화해 픽셀에 마스킹을 적용한 뒤 이미지 스트림만으로 문서를 재구성합니다. 사진의 경우에는 캔버스로 다시 인코딩하면서 EXIF 메타데이터가 함께 제거됩니다.',
-      },
-      { t: 'h2', text: '인터넷 없이도 동작합니다' },
-      {
-        t: 'p',
-        text:
-          '한 번 접속하면 필요한 것이 기기에 저장됩니다. 인터넷을 끊고 새로고침해도 그대로 동작합니다. 서버에 기대지 않는다는 가장 쉬운 확인 방법입니다.',
-      },
-      {
-        t: 'cards',
-        title: '이어서 보기',
-        items: [
-          { label: '보안', href: '/security', text: '직접 확인하는 방법' },
-          { label: 'PDF 개인정보 가리기', href: '/tools/pdf-redact', text: '바로 써 보기' },
-          { label: '자주 묻는 질문', href: '/faq', text: '남은 궁금증' },
-        ],
-      },
-    ],
-  },
-  {
-    path: '/security',
-    title: `파일은 어떻게 안전하게 처리되나요? | ${BRAND}`,
-    description:
-      '파일이 밖으로 나가지 않는다는 것을 직접 확인하는 네 가지 방법을 안내합니다. 브라우저 보안 설정, 개발자도구, 오프라인 사용, 공개된 소스코드.',
-    h1: '파일은 어떻게 안전하게 처리되나요',
-    breadcrumb: [{ name: '홈', path: '/' }],
-    schema: 'Article',
-    sections: [
-      {
-        t: 'p',
-        text: '"안전합니다"라는 말은 누구나 할 수 있습니다. 그래서 믿어달라고 하는 대신, 직접 확인하는 방법을 적었습니다.',
-      },
-      { t: 'h2', text: '1. 브라우저가 외부 전송을 막습니다' },
-      {
-        t: 'p',
-        text:
-          '이 사이트는 밖으로 나가는 통신을 자기 자신으로만 제한하는 보안 설정(Content-Security-Policy)을 걸어 두었습니다. 나중에 누군가 파일을 어딘가로 보내는 코드를 넣더라도 브라우저가 그 요청을 거부합니다. 서비스가 아니라 브라우저가 막는다는 점이 다릅니다.',
-      },
-      { t: 'h2', text: '2. 개발자도구에서 직접 볼 수 있습니다' },
-      {
-        t: 'ul',
-        items: [
-          'F12를 눌러 개발자도구를 엽니다',
-          '네트워크 탭을 고릅니다',
-          '아무 도구나 써서 파일을 처리합니다',
-          '이 사이트 주소 외의 요청이 없는지 봅니다',
-        ],
-      },
-      { t: 'h2', text: '3. 인터넷을 끊고 써 보세요' },
-      {
-        t: 'p',
-        text:
-          '한 번 접속한 뒤 비행기 모드로 바꾸고 새로고침해 보세요. 그대로 동작합니다. 서버로 보내야 할 것이 있었다면 될 수 없는 일입니다.',
-      },
-      { t: 'h2', text: '4. 소스코드가 공개되어 있습니다' },
-      {
-        t: 'p',
-        text:
-          '전체 코드가 MIT 라이선스로 공개되어 있습니다. 직접 읽어볼 수도 있고, 내려받아 직접 운영할 수도 있습니다. 코드를 고칠 때마다 외부 주소를 참조하는 곳이 있는지 자동으로 검사하고, 걸리면 배포가 멈춥니다.',
-      },
-      { t: 'h2', text: '기기에 저장되는 것' },
-      {
-        t: 'p',
-        text:
-          '화면 테마와 사이드바 상태 같은 화면 설정만 저장합니다. 파일 내용은 저장하지 않고, 창을 닫으면 사라집니다.',
-      },
-      {
-        t: 'cards',
-        title: '이어서 보기',
-        items: [
-          { label: '파일 처리 방식', href: '/how-it-works', text: '어떻게 동작하는지' },
-          { label: '오픈소스 라이선스', href: '/open-source-licenses', text: '쓰고 있는 오픈소스' },
-          { label: '개인정보 처리방침', href: '/privacy', text: '수집하지 않는다는 안내' },
-        ],
-      },
-    ],
-  },
-  {
     path: '/faq',
     title: `자주 묻는 질문 — ${BRAND}`,
     description:
@@ -746,8 +619,6 @@ const TRUST_PAGES = [
         t: 'cards',
         title: '더 알아보기',
         items: [
-          { label: '보안', href: '/security', text: '직접 확인하는 방법' },
-          { label: '파일 처리 방식', href: '/how-it-works', text: '동작 방식' },
           { label: '문서 종류별 안내', href: '/guides', text: '서류별로 확인할 점' },
         ],
       },
@@ -757,7 +628,7 @@ const TRUST_PAGES = [
     path: '/privacy',
     title: `개인정보 처리방침 — ${BRAND}`,
     description:
-      'PrivacyDoc은 이용자의 파일과 개인정보를 수집하지 않습니다. 수집하지 않는 이유와 기기에 저장되는 항목을 안내합니다.',
+      '이 서비스는 이용자의 파일과 개인정보를 수집하지 않습니다. 수집하지 않는 이유와 기기에 저장되는 항목을 안내합니다.',
     h1: '개인정보 처리방침',
     breadcrumb: [{ name: '홈', path: '/' }],
     schema: 'WebPage',
@@ -792,7 +663,6 @@ const TRUST_PAGES = [
         t: 'cards',
         title: '관련 안내',
         items: [
-          { label: '보안', href: '/security', text: '확인하는 방법' },
           { label: '오픈소스 라이선스', href: '/open-source-licenses', text: '쓰고 있는 오픈소스' },
         ],
       },
@@ -802,7 +672,7 @@ const TRUST_PAGES = [
     path: '/open-source-licenses',
     title: `오픈소스 라이선스 — ${BRAND}`,
     description:
-      'PrivacyDoc이 쓰는 오픈소스와 글꼴의 라이선스 안내. 원본 프로젝트 DoxDock(MIT)과 Pretendard(OFL)를 포함합니다.',
+      '이 서비스가 쓰는 오픈소스와 글꼴의 라이선스 안내. 원본 프로젝트 DoxDock(MIT)과 Pretendard(OFL)를 포함합니다.',
     h1: '오픈소스 라이선스',
     breadcrumb: [{ name: '홈', path: '/' }],
     schema: 'WebPage',
@@ -835,7 +705,6 @@ const TRUST_PAGES = [
         t: 'cards',
         title: '관련 안내',
         items: [
-          { label: '보안', href: '/security', text: '소스 확인하는 방법' },
           { label: '개인정보 처리방침', href: '/privacy', text: '수집하지 않는 것' },
         ],
       },

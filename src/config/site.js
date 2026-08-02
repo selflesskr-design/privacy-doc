@@ -3,10 +3,11 @@
 // changing the domain here updates canonical/og/sitemap everywhere at once.
 export const SITE_URL = 'https://privacy.selfless.kr'
 
-export const BRAND = 'PrivacyDoc'
-export const BRAND_KO = '프라이버시독'
+// The wordmark matches the address it lives at: privacy.selfless.kr. "Doc" tied
+// the name to documents, and photos are half of what the service handles.
+export const BRAND = 'Privacy'
 
-export const DEFAULT_TITLE = 'PrivacyDoc — PDF·사진 개인정보 가리기'
+export const DEFAULT_TITLE = 'Privacy — PDF·사진 개인정보 가리기'
 export const DEFAULT_DESC =
   'PDF와 사진 속 개인정보를 가리고, 사진 정보를 지우고, PDF를 합치거나 용량을 줄입니다. 파일은 내 브라우저에서 직접 처리됩니다. 무료이고 가입이 필요 없습니다.'
 

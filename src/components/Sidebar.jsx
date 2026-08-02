@@ -3,7 +3,7 @@ import Icon from './Icon.jsx'
 import { cx } from '../lib/format.js'
 import { groupedOperations, searchOperations } from '../registry/registry.js'
 
-export default function Sidebar({ activeId, activePath, onSelect, onOpenPalette }) {
+export default function Sidebar({ activeId, activePath, onSelect }) {
   const [query, setQuery] = useState('')
   const results = searchOperations(query)
   const groups = groupedOperations(query ? results : results.filter((op) => op.id !== 'strip-metadata'))
@@ -21,17 +21,6 @@ export default function Sidebar({ activeId, activePath, onSelect, onOpenPalette 
   return (
     <div className="flex h-full flex-col">
       <div className="p-3">
-        <button
-          type="button"
-          onClick={onOpenPalette}
-          className="flex w-full items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-500 hover:border-brand-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400"
-        >
-          <Icon name="search" className="h-4 w-4" />
-          <span>도구 검색…</span>
-          <kbd className="ml-auto hidden rounded border border-slate-300 px-1.5 py-0.5 text-[10px] font-medium text-slate-400 dark:border-slate-600 sm:inline">
-            ⌘K
-          </kbd>
-        </button>
         <label className="sr-only" htmlFor="sidebar-filter">
           Filter tools
         </label>

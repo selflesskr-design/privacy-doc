@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// Post-build prerender for SEO. PrivacyDoc is a client-side SPA, so a crawler
+// Post-build prerender for SEO. Privacy is a client-side SPA, so a crawler
 // that does not run JS would otherwise see one empty page. For every route this
 // writes dist/<path>/index.html with:
 //   - a unique <title>, description, canonical, robots, OG/Twitter tags

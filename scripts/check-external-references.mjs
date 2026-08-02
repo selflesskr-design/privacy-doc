@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // Static analysis: scan source files for external URL references that would
-// violate PrivacyDoc's "zero external network" guarantee. This catches:
+// violate Privacy's "zero external network" guarantee. This catches:
 //   - CDN links (`cdn.jsdelivr.net`, `unpkg.com`, etc.)
 //   - External fonts (`fonts.googleapis.com`)
 //   - Analytics pings, API calls, or any absolute URL to a foreign host
@@ -66,7 +66,7 @@ for (const abs of walk(SRC)) {
 }
 
 if (violations) {
-  console.error(`\n❌ ${violations} external URL(s) found. PrivacyDoc must not reference external hosts in source code.`)
+  console.error(`\n❌ ${violations} external URL(s) found. Privacy must not reference external hosts in source code.`)
   process.exit(1)
 } else {
   console.log('✅ No external URL references found in source.')
