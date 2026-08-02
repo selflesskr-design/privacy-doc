@@ -67,9 +67,9 @@ export default function MarkdownToPdf() {
           <label className="space-y-1">
             <span className="field-label">Page size</span>
             <select className="field-input" value={pageSize} onChange={(e) => setPageSize(e.target.value)}>
-              <option value="A4">A4</option>
-              <option value="Letter">Letter</option>
-              <option value="Legal">Legal</option>
+              <option value="A4">A4 (210×297mm)</option>
+              <option value="A5">A5 (148×210mm)</option>
+              <option value="B5">B5 (176×250mm)</option>
             </select>
           </label>
           <label className="space-y-1">

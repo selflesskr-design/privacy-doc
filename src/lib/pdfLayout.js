@@ -1,3 +1,4 @@
+import { PAGE_SIZES } from './pageSizes.js'
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 
 // Flowed-text PDF renderer built on pdf-lib's standard fonts. Turns a simple
@@ -14,12 +15,6 @@ import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 //   { type: 'code', text }        // preformatted block
 //   { type: 'hr' }
 // run = { text, bold?, italic?, code? }
-
-export const PAGE_SIZES = {
-  A4: [595.28, 841.89],
-  Letter: [612, 792],
-  Legal: [612, 1008],
-}
 
 const HEADING_SCALE = { 1: 1.9, 2: 1.55, 3: 1.3, 4: 1.15, 5: 1.05, 6: 1 }
 
