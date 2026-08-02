@@ -7,6 +7,7 @@ import ImageResult from '../../components/ImageResult.jsx'
 import { useJob } from '../../hooks/useJob.js'
 import { formatBytes } from '../../lib/format.js'
 import { stripMetadata } from './helpers.js'
+import { STRIP_METADATA as T } from '../../content/strings.js'
 
 export default function StripMetadata() {
   const [file, setFile] = useState(null)
@@ -20,7 +21,7 @@ export default function StripMetadata() {
 
   return (
     <div className="space-y-6">
-      <Dropzone onFiles={pick} accept="image/*" multiple={false} label="Drop an image here or click to browse" hint="JPEG images often carry GPS location and camera EXIF data" icon="image" />
+      <Dropzone onFiles={pick} accept="image/*" multiple={false} label={T.dropLabel} hint={T.dropHint} icon="image" />
 
       {file && (
         <>
@@ -29,18 +30,22 @@ export default function StripMetadata() {
             <span className="min-w-0 flex-1 truncate text-sm font-medium">{file.name}</span>
             <span className="text-xs text-slate-400">{formatBytes(file.size)}</span>
           </div>
-          <button type="button" className="btn-primary" onClick={go} disabled={running}>
-            <Icon name="lock" className="h-4 w-4" />
-            Strip metadata
-          </button>
+          {!result && (
+            <button type="button" className="btn-primary" onClick={go} disabled={running}>
+              <Icon name="lock" className="h-4 w-4" />
+              {T.strip}
+            </button>
+          )}
         </>
       )}
 
       {running && progress && <Progress value={progress.value} message={progress.message} />}
-      {error && <Note type="error" title="Couldn’t process this image">{error}</Note>}
+      {error && <Note type="error" title={T.failed}>{error}</Note>}
       {result && !running && (
         <>
-          <Note type="info">Done — the new file contains no EXIF, GPS, or camera metadata.</Note>
+          <Note type="info">
+            {T.done} {T.sizeNote}
+          </Note>
           <ImageResult result={result} />
         </>
       )}

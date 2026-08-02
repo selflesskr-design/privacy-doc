@@ -382,6 +382,119 @@ export const COMPRESS_IMAGE = {
   failed: '용량을 줄이지 못했습니다',
 }
 
+/** 사진 형식 바꾸기. */
+export const CONVERT_IMAGE = {
+  dropLabel: '형식을 바꿀 사진을 끌어다 놓거나 눌러서 선택하세요',
+
+  target: '어떤 형식으로',
+  // JPG and JPEG are the same format under two spellings; re-encoding into it
+  // only loses a little more of the picture.
+  sameAsSource: '원본과 같은 형식',
+  png: 'PNG',
+  jpeg: 'JPEG',
+  webp: 'WebP',
+  quality: (pct) => `화질: ${pct}%`,
+
+  decoding: '사진을 여는 중…',
+  encoding: '다시 저장하는 중…',
+  convert: '형식 바꾸기',
+  failed: '형식을 바꾸지 못했습니다',
+}
+
+/** 사진 워터마크. */
+export const WATERMARK_IMAGE = {
+  dropLabel: '워터마크를 넣을 사진을 끌어다 놓거나 눌러서 선택하세요',
+  dropHint: '여러 장을 한 번에 넣으면 모두 같은 표시가 들어갑니다',
+  count: (n) => `사진 ${n}장`,
+
+  mode: '무엇을 넣을까요',
+  modeText: '글자',
+  modeLogo: '그림 파일',
+  text: '넣을 문구',
+  // 신분증 사본에 용도를 적어두는 것이 국내에서 가장 흔한 쓰임입니다.
+  textPlaceholder: '예: ○○은행 제출용',
+  logo: '넣을 그림',
+
+  layout: '배치',
+  single: '한 곳에만',
+  tile: '바둑판으로 반복',
+  position: '위치',
+  positions: {
+    'top-left': '위 왼쪽',
+    'top-center': '위 가운데',
+    'top-right': '위 오른쪽',
+    'middle-left': '중간 왼쪽',
+    center: '가운데',
+    'middle-right': '중간 오른쪽',
+    'bottom-left': '아래 왼쪽',
+    'bottom-center': '아래 가운데',
+    'bottom-right': '아래 오른쪽',
+  },
+  angle: (deg) => `기울기: ${deg}°`,
+  opacity: (pct) => `진하기: ${pct}%`,
+  size: (pct) => `크기: 사진 너비의 ${pct}%`,
+  color: '글자 색',
+
+  decoding: '사진을 여는 중…',
+  drawingText: '글자를 얹는 중…',
+  drawingLogo: '그림을 얹는 중…',
+  encoding: '사진을 저장하는 중…',
+  apply: (n) => (n > 1 ? `사진 ${n}장에 워터마크 넣기` : '워터마크 넣기'),
+  failed: '워터마크를 넣지 못했습니다',
+  zipName: '워터마크.zip',
+}
+
+/** 사진 회전·뒤집기. */
+export const ROTATE_FLIP = {
+  dropLabel: '돌리거나 뒤집을 사진을 끌어다 놓거나 눌러서 선택하세요',
+
+  rotate: '돌리기',
+  none: '그대로',
+  flip: '뒤집기',
+  flipH: '좌우 뒤집기',
+  flipV: '위아래 뒤집기',
+
+  preview: '미리보기',
+  previewNote: '설정을 바꾸면 바로 반영됩니다',
+
+  decoding: '사진을 여는 중…',
+  transforming: '사진을 돌리는 중…',
+  apply: '사진 돌리기',
+  failed: '사진을 처리하지 못했습니다',
+}
+
+/** 사진 자르기. */
+export const CROP_IMAGE = {
+  dropLabel: '자를 사진을 끌어다 놓거나 눌러서 선택하세요',
+
+  // x/y/w/h meant nothing to anyone who had not written the tool.
+  x: '왼쪽에서 (px)',
+  y: '위에서 (px)',
+  w: '너비 (px)',
+  h: '높이 (px)',
+  sizes: (sw, sh, cw, ch) => `원본 ${sw}×${sh}px · 자를 크기 ${cw}×${ch}px`,
+
+  decoding: '사진을 여는 중…',
+  cropping: '자르는 중…',
+  crop: '자르기',
+  failed: '자르지 못했습니다',
+}
+
+/** 사진 정보 삭제. */
+export const STRIP_METADATA = {
+  dropLabel: '정보를 지울 사진을 끌어다 놓거나 눌러서 선택하세요',
+  dropHint: '휴대폰으로 찍은 사진에는 촬영 위치와 기기 정보가 함께 저장됩니다',
+
+  decoding: '사진을 여는 중…',
+  reencoding: '정보를 빼고 다시 저장하는 중…',
+  strip: '사진 정보 지우기',
+  failed: '사진을 처리하지 못했습니다',
+  done: '촬영 위치, 기기, 시각 정보가 지워졌습니다.',
+  // Re-encoding can land a little either side of the original. Size is not what
+  // this tool is for, so it is stated plainly rather than flagged.
+  sizeNote: '사진을 다시 저장하기 때문에 용량은 조금 달라질 수 있습니다.',
+}
+
 /** 사진 크기 바꾸기. */
 export const RESIZE_IMAGE = {
   dropLabel: '크기를 바꿀 사진을 끌어다 놓거나 눌러서 선택하세요',

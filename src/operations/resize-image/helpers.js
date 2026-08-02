@@ -48,5 +48,5 @@ export async function resizeImage(file, opts, onProgress) {
   const blob = await canvasToBlob(canvas, fmt, quality)
   bitmap.close?.()
   onProgress?.(1, 'Done')
-  return { blob, filename: outName(file.name, fmt, `-${targetW}x${targetH}`), before: file.size, after: blob.size, width: targetW, height: targetH }
+  return { blob, filename: outName(file.name, fmt, `-${targetW}x${targetH}`), width: targetW, height: targetH }
 }

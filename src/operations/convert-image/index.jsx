@@ -7,6 +7,8 @@ import ImageResult from '../../components/ImageResult.jsx'
 import { useJob } from '../../hooks/useJob.js'
 import { formatBytes } from '../../lib/format.js'
 import { convertImage } from './helpers.js'
+import { CONVERT_IMAGE as T } from '../../content/strings.js'
+import { formatFromType } from '../../lib/imageFormat.js'
 
 export default function ConvertImage() {
   const [file, setFile] = useState(null)
@@ -15,14 +17,23 @@ export default function ConvertImage() {
   const { running, progress, error, result, run, reset } = useJob()
 
   const pick = (files) => {
-    setFile(files[0])
+    const f = files[0]
+    setFile(f)
+    // Offering the format the file is already in would re-encode it for nothing.
+    const src = formatFromType(f.type)
+    if (format === src) setFormat(src === 'png' ? 'jpeg' : 'png')
+    reset()
+  }
+  const srcFormat = file ? formatFromType(file.type) : null
+  const setOption = (set) => (e) => {
+    set(e.target.value)
     reset()
   }
   const go = () => run((p) => convertImage(file, { format, quality: Number(quality) }, p))
 
   return (
     <div className="space-y-6">
-      <Dropzone onFiles={pick} accept="image/*" multiple={false} label="Drop an image here or click to browse" icon="image" />
+      <Dropzone onFiles={pick} accept="image/*" multiple={false} label={T.dropLabel} icon="image" />
 
       {file && (
         <>
@@ -35,31 +46,36 @@ export default function ConvertImage() {
           <div className="card p-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="space-y-1">
-                <span className="field-label">Convert to</span>
-                <select className="field-input" value={format} onChange={(e) => setFormat(e.target.value)}>
-                  <option value="png">PNG</option>
-                  <option value="jpeg">JPEG</option>
-                  <option value="webp">WebP</option>
+                <span className="field-label">{T.target}</span>
+                <select className="field-input" value={format} onChange={setOption(setFormat)}>
+                  {['png', 'jpeg', 'webp'].map((f) => (
+                    <option key={f} value={f} disabled={f === srcFormat}>
+                      {T[f]}
+                      {f === srcFormat ? ` — ${T.sameAsSource}` : ''}
+                    </option>
+                  ))}
                 </select>
               </label>
               {format !== 'png' && (
                 <label className="space-y-1">
-                  <span className="field-label">Quality: {Math.round(quality * 100)}%</span>
-                  <input type="range" min="0.1" max="1" step="0.05" value={quality} onChange={(e) => setQuality(e.target.value)} className="w-full accent-brand-600" />
+                  <span className="field-label">{T.quality(Math.round(quality * 100))}</span>
+                  <input type="range" min="0.1" max="1" step="0.05" value={quality} onChange={setOption(setQuality)} className="w-full accent-brand-600" />
                 </label>
               )}
             </div>
           </div>
 
-          <button type="button" className="btn-primary" onClick={go} disabled={running}>
-            <Icon name="convert" className="h-4 w-4" />
-            Convert
-          </button>
+          {!result && (
+            <button type="button" className="btn-primary" onClick={go} disabled={running}>
+              <Icon name="convert" className="h-4 w-4" />
+              {T.convert}
+            </button>
+          )}
         </>
       )}
 
       {running && progress && <Progress value={progress.value} message={progress.message} />}
-      {error && <Note type="error" title="Conversion failed">{error}</Note>}
+      {error && <Note type="error" title={T.failed}>{error}</Note>}
       {result && !running && <ImageResult result={result} />}
     </div>
   )

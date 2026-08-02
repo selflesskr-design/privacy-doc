@@ -8,6 +8,7 @@ import Cropper from './Cropper.jsx'
 import { useJob } from '../../hooks/useJob.js'
 import { decode, dimsOf } from '../../lib/imageCanvas.js'
 import { cropImage } from './helpers.js'
+import { CROP_IMAGE as T } from '../../content/strings.js'
 
 export default function CropImage() {
   const [file, setFile] = useState(null)
@@ -42,40 +43,53 @@ export default function CropImage() {
 
   return (
     <div className="space-y-6">
-      <Dropzone onFiles={pick} accept="image/*" multiple={false} label="Drop an image here or click to browse" icon="image" />
+      <Dropzone onFiles={pick} accept="image/*" multiple={false} label={T.dropLabel} icon="image" />
 
       {file && natural && sel && (
         <>
           <div className="card p-4">
             <div className="flex justify-center">
-              <Cropper url={url} natural={natural} sel={sel} onChange={setSel} />
+              <Cropper
+                url={url}
+                natural={natural}
+                sel={sel}
+                onChange={(next) => {
+                  reset()
+                  setSel(next)
+                }}
+              />
             </div>
             <div className="mt-4 grid gap-3 sm:grid-cols-4">
               {['x', 'y', 'w', 'h'].map((k) => (
                 <label key={k} className="space-y-1">
-                  <span className="field-label uppercase">{k}</span>
+                  <span className="field-label">{T[k]}</span>
                   <input
                     type="number"
                     className="field-input"
                     value={sel[k]}
                     min="0"
-                    onChange={(e) => setSel((s) => ({ ...s, [k]: Math.max(0, Number(e.target.value)) }))}
+                    onChange={(e) => {
+                      reset()
+                      setSel((s) => ({ ...s, [k]: Math.max(0, Number(e.target.value)) }))
+                    }}
                   />
                 </label>
               ))}
             </div>
-            <p className="mt-2 text-xs text-slate-500">Source: {natural.width}×{natural.height}px. Crop: {sel.w}×{sel.h}px.</p>
+            <p className="mt-2 text-xs text-slate-500">{T.sizes(natural.width, natural.height, sel.w, sel.h)}</p>
           </div>
 
-          <button type="button" className="btn-primary" onClick={go} disabled={running}>
-            <Icon name="crop" className="h-4 w-4" />
-            Crop
-          </button>
+          {!result && (
+            <button type="button" className="btn-primary" onClick={go} disabled={running}>
+              <Icon name="crop" className="h-4 w-4" />
+              {T.crop}
+            </button>
+          )}
         </>
       )}
 
       {running && progress && <Progress value={progress.value} message={progress.message} />}
-      {error && <Note type="error" title="Crop failed">{error}</Note>}
+      {error && <Note type="error" title={T.failed}>{error}</Note>}
       {result && !running && <ImageResult result={result} />}
     </div>
   )

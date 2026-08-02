@@ -4,5 +4,5 @@ export default {
   description: '90도씩 돌리고, 좌우나 위아래로 뒤집습니다.',
   category: 'image',
   icon: 'flip',
-  order: 24,
+  order: 23,
 }

@@ -6,15 +6,17 @@ import { groupedOperations, searchOperations } from '../registry/registry.js'
 export default function Sidebar({ activeId, activePath, onSelect, onOpenPalette }) {
   const [query, setQuery] = useState('')
   const results = searchOperations(query)
-  const groups = groupedOperations(results)
-  // Both redaction routes live outside the operation registry, so they are
-  // listed by hand. They go first because they are what the service is for.
-  const REDACTORS = [
-    { id: 'pdf-redact', label: 'PDF 개인정보 가리기' },
-    { id: 'image-redact', label: '사진 개인정보 가리기' },
+  const groups = groupedOperations(query ? results : results.filter((op) => op.id !== 'strip-metadata'))
+  // What protects the person, in one place: cover what shows on a PDF, cover
+  // what shows on a photo, and remove what does not show at all. The redactors
+  // are routes rather than registry operations, so this list is written by hand
+  // and 사진 정보 삭제 is pulled out of the photo group below to join them.
+  const PRIVACY = [
+    { path: '/editor/pdf-redact', label: 'PDF 개인정보 가리기', match: ['/editor/pdf-redact', '/tools/pdf-redact'] },
+    { path: '/editor/image-redact', label: '사진 개인정보 가리기', match: ['/editor/image-redact', '/tools/image-redact'] },
+    { path: '/strip-metadata', label: '사진 정보 삭제', match: ['/strip-metadata'] },
   ]
-  const isRedactActive = (id) =>
-    activePath?.startsWith(`/editor/${id}`) || activePath === `/tools/${id}`
+  const isPrivacyActive = (item) => item.match.some((m) => activePath?.startsWith(m))
 
   return (
     <div className="flex h-full flex-col">
@@ -67,13 +69,13 @@ export default function Sidebar({ activeId, activePath, onSelect, onOpenPalette 
               개인정보 보호
             </p>
             <ul className="space-y-0.5">
-              {REDACTORS.map(({ id, label }) => {
-                const active = isRedactActive(id)
+              {PRIVACY.map((item) => {
+                const active = isPrivacyActive(item)
                 return (
-                  <li key={id}>
+                  <li key={item.path}>
                     <button
                       type="button"
-                      onClick={() => onSelect(`/editor/${id}`)}
+                      onClick={() => onSelect(item.path)}
                       aria-current={active ? 'page' : undefined}
                       className={cx(
                         'flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm transition-colors',
@@ -89,7 +91,7 @@ export default function Sidebar({ activeId, activePath, onSelect, onOpenPalette 
                           active ? 'text-brand-600 dark:text-brand-300' : 'text-brand-500',
                         )}
                       />
-                      <span className="truncate">{label}</span>
+                      <span className="truncate">{item.label}</span>
                     </button>
                   </li>
                 )

@@ -1,4 +1,5 @@
 import { decode, drawToCanvas, canvasToBlob } from '../../lib/imageCanvas.js'
+import { CROP_IMAGE, COMMON } from '../../content/strings.js'
 import { formatFromType, outName } from '../../lib/imageFormat.js'
 
 /**
@@ -11,13 +12,13 @@ export async function cropImage(file, crop, onProgress) {
   const w = Math.round(crop.w)
   const h = Math.round(crop.h)
   if (w < 1 || h < 1) throw new Error('선택한 영역이 없습니다. 자를 부분을 드래그해 주세요.')
-  onProgress?.(0.4, 'Decoding image…')
+  onProgress?.(0.4, CROP_IMAGE.decoding)
   const bitmap = await decode(file)
   const fmt = formatFromType(file.type)
-  onProgress?.(0.7, 'Cropping…')
+  onProgress?.(0.7, CROP_IMAGE.cropping)
   const canvas = drawToCanvas(bitmap, { crop: { x, y, w, h }, background: fmt === 'jpeg' ? '#ffffff' : undefined })
   const blob = await canvasToBlob(canvas, fmt, 0.95)
   bitmap.close?.()
-  onProgress?.(1, 'Done')
-  return { blob, filename: outName(file.name, fmt, '-cropped'), before: file.size, after: blob.size, width: w, height: h }
+  onProgress?.(1, COMMON.done)
+  return { blob, filename: outName(file.name, fmt, '-cropped'), width: w, height: h }
 }

@@ -1,4 +1,5 @@
 import { decode, dimsOf, canvasToBlob } from '../../lib/imageCanvas.js'
+import { WATERMARK_IMAGE, COMMON } from '../../content/strings.js'
 import { formatFromType, outName } from '../../lib/imageFormat.js'
 
 // The 9-grid anchors, mirroring the placement vocabulary of watermark-pdf.
@@ -82,7 +83,7 @@ export async function watermarkImage(file, opts, onProgress) {
   if (mode === 'text' && !text.trim()) throw new Error('워터마크에 넣을 문구를 입력해 주세요.')
   if (mode === 'logo' && !logo) throw new Error('Choose a logo image.')
 
-  onProgress?.(0.2, 'Decoding image…')
+  onProgress?.(0.2, WATERMARK_IMAGE.decoding)
   const bitmap = await decode(file)
   const { width, height } = dimsOf(bitmap)
 
@@ -96,7 +97,7 @@ export async function watermarkImage(file, opts, onProgress) {
   ctx.globalAlpha = Math.min(Math.max(opacity, 0), 1)
 
   if (mode === 'text') {
-    onProgress?.(0.6, 'Drawing text watermark…')
+    onProgress?.(0.6, WATERMARK_IMAGE.drawingText)
     // Size the text off the canvas width so the result looks the same at any
     // resolution, which is what makes batch output consistent.
     const fontSize = Math.max(8, width * scale * 0.35)
@@ -114,7 +115,7 @@ export async function watermarkImage(file, opts, onProgress) {
       ctx.fillText(text, x, y)
     }
   } else {
-    onProgress?.(0.6, 'Drawing logo watermark…')
+    onProgress?.(0.6, WATERMARK_IMAGE.drawingLogo)
     const logoBitmap = await decode(logo)
     const { width: w, height: h } = scaledLogoSize(logoBitmap, width, scale)
 
@@ -128,17 +129,15 @@ export async function watermarkImage(file, opts, onProgress) {
   }
 
   ctx.globalAlpha = 1
-  onProgress?.(0.9, 'Encoding…')
+  onProgress?.(0.9, WATERMARK_IMAGE.encoding)
   const fmt = formatFromType(file.type)
   const blob = await canvasToBlob(canvas, fmt, quality)
   bitmap.close?.()
-  onProgress?.(1, 'Done')
+  onProgress?.(1, COMMON.done)
 
   return {
     blob,
     filename: outName(file.name, fmt, '-watermarked'),
-    before: file.size,
-    after: blob.size,
   }
 }
 
@@ -152,6 +151,6 @@ export async function watermarkImages(files, opts, onProgress) {
       onProgress?.((i + (value || 0)) / files.length, `${file.name}: ${message}`),
     ).then((result) => results.push(result))
   }
-  onProgress?.(1, 'Done')
+  onProgress?.(1, COMMON.done)
   return results
 }

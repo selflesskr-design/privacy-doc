@@ -7,11 +7,12 @@ import ResultGallery from '../../components/ResultGallery.jsx'
 import { useJob } from '../../hooks/useJob.js'
 import { formatBytes } from '../../lib/format.js'
 import { watermarkImages, POSITIONS } from './helpers.js'
+import { WATERMARK_IMAGE as T } from '../../content/strings.js'
 
 export default function WatermarkImage() {
   const [files, setFiles] = useState([])
   const [mode, setMode] = useState('text')
-  const [text, setText] = useState('CONFIDENTIAL')
+  const [text, setText] = useState('')
   const [logo, setLogo] = useState(null)
   const [position, setPosition] = useState('bottom-right')
   const [layout, setLayout] = useState('single')
@@ -23,6 +24,10 @@ export default function WatermarkImage() {
 
   const pick = (picked) => {
     setFiles(picked)
+    reset()
+  }
+  const setOption = (set) => (e) => {
+    set(e.target.value)
     reset()
   }
   const go = () =>
@@ -50,8 +55,8 @@ export default function WatermarkImage() {
         onFiles={pick}
         accept="image/*"
         multiple
-        label="Drop images here or click to browse"
-        hint="Watermark one image or a whole batch — all of them get the same mark"
+        label={T.dropLabel}
+        hint={T.dropHint}
         icon="image"
       />
 
@@ -60,7 +65,7 @@ export default function WatermarkImage() {
           <div className="card flex items-center gap-3 p-3">
             <Icon name="image" className="h-5 w-5 text-brand-600" />
             <span className="min-w-0 flex-1 truncate text-sm font-medium">
-              {files.length === 1 ? files[0].name : `${files.length} images`}
+              {files.length === 1 ? files[0].name : T.count(files.length)}
             </span>
             <span className="text-xs text-slate-400">
               {formatBytes(files.reduce((sum, f) => sum + f.size, 0))}
@@ -70,30 +75,30 @@ export default function WatermarkImage() {
           <div className="card space-y-4 p-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="space-y-1">
-                <span className="field-label">Watermark</span>
+                <span className="field-label">{T.mode}</span>
                 <select
                   className="field-input"
                   value={mode}
-                  onChange={(e) => setMode(e.target.value)}
+                  onChange={setOption(setMode)}
                 >
-                  <option value="text">Text</option>
-                  <option value="logo">Logo image</option>
+                  <option value="text">{T.modeText}</option>
+                  <option value="logo">{T.modeLogo}</option>
                 </select>
               </label>
 
               {mode === 'text' ? (
                 <label className="space-y-1">
-                  <span className="field-label">Text</span>
+                  <span className="field-label">{T.text}</span>
                   <input
                     className="field-input"
                     value={text}
-                    onChange={(e) => setText(e.target.value)}
-                    placeholder="CONFIDENTIAL"
+                    onChange={setOption(setText)}
+                    placeholder={T.textPlaceholder}
                   />
                 </label>
               ) : (
                 <label className="space-y-1">
-                  <span className="field-label">Logo</span>
+                  <span className="field-label">{T.logo}</span>
                   <input
                     type="file"
                     accept="image/*"
@@ -107,79 +112,79 @@ export default function WatermarkImage() {
               )}
 
               <label className="space-y-1">
-                <span className="field-label">Layout</span>
+                <span className="field-label">{T.layout}</span>
                 <select
                   className="field-input"
                   value={layout}
-                  onChange={(e) => setLayout(e.target.value)}
+                  onChange={setOption(setLayout)}
                 >
-                  <option value="single">Single placement</option>
-                  <option value="tile">Tiled across the image</option>
+                  <option value="single">{T.single}</option>
+                  <option value="tile">{T.tile}</option>
                 </select>
               </label>
 
               {layout === 'single' ? (
                 <label className="space-y-1">
-                  <span className="field-label">Position</span>
+                  <span className="field-label">{T.position}</span>
                   <select
                     className="field-input"
                     value={position}
-                    onChange={(e) => setPosition(e.target.value)}
+                    onChange={setOption(setPosition)}
                   >
                     {POSITIONS.map((p) => (
                       <option key={p} value={p}>
-                        {p.replace('-', ' ')}
+                        {T.positions[p]}
                       </option>
                     ))}
                   </select>
                 </label>
               ) : (
                 <label className="space-y-1">
-                  <span className="field-label">Angle: {angle}°</span>
+                  <span className="field-label">{T.angle(angle)}</span>
                   <input
                     type="range"
                     min="0"
                     max="90"
                     value={angle}
-                    onChange={(e) => setAngle(e.target.value)}
+                    onChange={setOption(setAngle)}
                     className="w-full accent-brand-600"
                   />
                 </label>
               )}
 
               <label className="space-y-1">
-                <span className="field-label">Opacity: {Math.round(opacity * 100)}%</span>
+                <span className="field-label">{T.opacity(Math.round(opacity * 100))}</span>
                 <input
                   type="range"
                   min="0.05"
                   max="1"
                   step="0.05"
                   value={opacity}
-                  onChange={(e) => setOpacity(e.target.value)}
+                  onChange={setOption(setOpacity)}
                   className="w-full accent-brand-600"
                 />
               </label>
 
               <label className="space-y-1">
-                <span className="field-label">Size: {Math.round(scale * 100)}% of width</span>
+                <span className="field-label">{T.size(Math.round(scale * 100))}</span>
                 <input
                   type="range"
                   min="0.05"
                   max="1"
                   step="0.05"
                   value={scale}
-                  onChange={(e) => setScale(e.target.value)}
+                  onChange={setOption(setScale)}
                   className="w-full accent-brand-600"
                 />
               </label>
 
               {mode === 'text' && (
                 <label className="space-y-1">
-                  <span className="field-label">Color</span>
+                  <span className="field-label">{T.color}</span>
                   <input
                     type="color"
                     value={color}
-                    onChange={(e) => setColor(e.target.value)}
+                    onChange={setOption(setColor)}
                     className="field-input h-10 p-1"
                   />
                 </label>
@@ -187,17 +192,19 @@ export default function WatermarkImage() {
             </div>
           </div>
 
-          <button type="button" className="btn-primary" onClick={go} disabled={running}>
-            <Icon name="droplet" className="h-4 w-4" />
-            {files.length > 1 ? `Watermark ${files.length} images` : 'Add watermark'}
-          </button>
+          {!result && (
+            <button type="button" className="btn-primary" onClick={go} disabled={running || !text.trim()}>
+              <Icon name="droplet" className="h-4 w-4" />
+              {T.apply(files.length)}
+            </button>
+          )}
         </>
       )}
 
       {running && progress && <Progress value={progress.value} message={progress.message} />}
-      {error && <Note type="error" title="Watermark failed">{error}</Note>}
+      {error && <Note type="error" title={T.failed}>{error}</Note>}
       {result && !running && (
-        <ResultGallery results={result} zipName="doxdock-watermarked.zip" />
+        <ResultGallery results={result} zipName={T.zipName} />
       )}
     </div>
   )
