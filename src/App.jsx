@@ -241,7 +241,7 @@ export default function App() {
               h-full resolves to auto, its nav never becomes scrollable, and the
               aside's overflow-hidden silently clips the tools below the fold. */}
           <div className="h-full w-72">
-            <Sidebar activeId={activeId} onSelect={handleSelect} onOpenPalette={() => setPaletteOpen(true)} />
+            <Sidebar activeId={activeId} activePath={contentPage?.path} onSelect={handleSelect} onOpenPalette={() => setPaletteOpen(true)} />
           </div>
         </aside>
 
@@ -252,6 +252,7 @@ export default function App() {
             <aside className="absolute left-0 top-0 h-full w-72 border-r border-slate-200 bg-slate-50 shadow-xl dark:border-slate-800 dark:bg-slate-900">
               <Sidebar
                 activeId={activeId}
+                activePath={contentPage?.path}
                 onSelect={handleSelect}
                 onOpenPalette={() => {
                   setMobileNavOpen(false)

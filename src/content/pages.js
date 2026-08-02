@@ -57,69 +57,39 @@ const FAQ = {
 
 const HOME = {
   path: '/',
-  title: `${BRAND} — PDF·사진 개인정보 가리기`,
+  title: `${BRAND} — PDF 주민번호·개인정보 가리기`,
   description:
-    'PDF와 사진 속 개인정보를 가리고, 사진 정보를 지우고, PDF를 합치거나 용량을 줄입니다. 파일은 내 브라우저에서 직접 처리됩니다. 무료이고 가입이 필요 없습니다.',
-  h1: '파일을 서버에 올리지 않고 개인정보를 안전하게 가리세요',
+    'PDF 속 주민등록번호나 계좌번호를 가려서 제출하세요. 가린 부분은 복사해도 나오지 않습니다. 파일은 내 브라우저에서 직접 처리되고, 무료이며 가입이 필요 없습니다.',
+  h1: '주민등록번호, 확실하게 가려서 내세요',
   breadcrumb: [],
   schema: 'WebApplication',
+  // The home page leads with one thing. The inherited tools are real but not
+  // why anyone comes here, so they sit behind a single link rather than
+  // competing for attention with the tool this service exists for.
   sections: [
-    { t: 'p', text: 'PDF와 사진은 내 브라우저에서 직접 처리됩니다.' },
+    { t: 'p', text: '가린 부분은 복사해도 글자가 나오지 않습니다. 파일은 내 브라우저 안에서만 처리됩니다.' },
+    {
+      t: 'actions',
+      items: [{ label: 'PDF 가리기 시작', href: '/editor/pdf-redact', primary: true }],
+    },
+    { t: 'redactDemo' },
     {
       t: 'p',
       text:
-        '계약서, 등본, 통장 사본, 신분증 사진. 어딘가에 내야 하는데 주민등록번호나 계좌번호가 함께 적혀 있습니다. 처음 보는 변환 사이트에 파일을 올리면 그 파일이 어디에 남는지 알기 어렵습니다.',
+        '계약서, 등본, 통장 사본. 어딘가에 내야 하는데 주민등록번호나 계좌번호가 함께 적혀 있습니다. 처음 보는 변환 사이트에 파일을 올리면 그 파일이 어디에 남는지 알기 어렵습니다.',
     },
-    {
-      t: 'p',
-      text: `${BRAND}는 파일을 올려받지 않습니다. 가리기도, 합치기도, 용량 줄이기도 모두 사용하는 기기 안에서 끝납니다.`,
-    },
-    // The primary action comes before any further reading. Everything above is
-    // two short paragraphs; a visitor who already knows what they want should
-    // not have to scan a grid of equal-weight cards to find the main tool.
-    {
-      t: 'actions',
-      items: [
-        { label: 'PDF 가리기 시작', href: '/editor/pdf-redact', primary: true },
-        { label: '사진 가리기', href: '/tools/image-redact' },
-      ],
-    },
-    { t: 'redactDemo' },
+    { t: 'note', tone: 'warn', text: CHECK_FIRST },
     { t: 'h2', text: '왜 파일을 올리지 않아도 되나요' },
     {
       t: 'p',
       text:
         '요즘 브라우저는 PDF를 읽고 다시 저장하는 일을 스스로 할 수 있습니다. 굳이 파일을 어딘가로 보낼 이유가 없습니다.',
     },
-    { t: 'note', tone: 'warn', text: CHECK_FIRST },
-    {
-      t: 'cards',
-      title: '다른 기능도 있습니다',
-      items: [
-        {
-          label: '사진 정보 삭제',
-          href: '/tools/remove-photo-metadata',
-          text: '사진에 남는 촬영 위치와 기기 기록을 지웁니다',
-        },
-        { label: 'PDF 합치기', href: '/tools/merge-pdf', text: '여러 PDF를 하나로 묶습니다' },
-        {
-          label: 'PDF 용량 줄이기',
-          href: '/tools/compress-pdf',
-          text: '첨부 용량 제한에 맞춰 줄입니다',
-        },
-        { label: '모든 도구', href: '/tools', text: 'PDF·사진 도구 전체' },
-      ],
-    },
-    {
-      t: 'cards',
-      title: '더 알아보기',
-      items: [
-        { label: '파일 처리 방식', href: '/how-it-works', text: '브라우저에서 어떻게 처리되는지' },
-        { label: '보안', href: '/security', text: '직접 확인해 보는 방법' },
-        { label: '자주 묻는 질문', href: '/faq', text: '많이 받는 질문들' },
-        { label: '문서 종류별 안내', href: '/guides', text: '신분증·통장 사본·계약서' },
-      ],
-    },
+    // Nothing else is promoted from here yet. The inherited tools work as far as
+    // static analysis goes, but none have been run end to end, and this page
+    // only carries what has actually been checked. They stay reachable through
+    // the sidebar and /tools until each one is verified.
+    { t: 'link', label: '파일이 밖으로 나가지 않는다는 것을 직접 확인하는 방법 →', href: '/security' },
   ],
 }
 
@@ -127,7 +97,7 @@ const TOOLS_HUB = {
   path: '/tools',
   title: `모든 도구 — ${BRAND}`,
   description:
-    'PDF와 사진을 다루는 24가지 도구. 개인정보 가리기부터 PDF 합치기·나누기·용량 줄이기, 사진 정리까지 모두 내 브라우저에서 무료로 쓸 수 있습니다.',
+    'PDF와 사진을 다루는 도구 모음. PDF 합치기·나누기·용량 줄이기, 사진 크기 조절과 정보 삭제까지 모두 내 브라우저에서 무료로 쓸 수 있습니다.',
   h1: '모든 도구',
   breadcrumb: [{ name: '홈', path: '/' }],
   schema: 'CollectionPage',

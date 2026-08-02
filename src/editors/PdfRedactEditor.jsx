@@ -5,7 +5,6 @@ import Note from '../components/Note.jsx'
 import Icon from '../components/Icon.jsx'
 import { useJob } from '../hooks/useJob.js'
 import { baseName } from '../lib/format.js'
-import { downloadBlob } from '../lib/download.js'
 import { COMMON, PDF_REDACT, toUserMessage } from '../content/strings.js'
 import { openPdf, pageBox, renderPageToCanvas, buildRedactedPdf } from '../lib/redact.js'
 
@@ -125,11 +124,26 @@ export default function PdfRedactEditor() {
   const [quality, setQuality] = useState('high')
   const [outName, setOutName] = useState('')
 
+  const [resultUrl, setResultUrl] = useState(null)
+
   const canvasRef = useRef(null)
   const surfaceRef = useRef(null)
   const wrapRef = useRef(null)
   const loadJob = useJob()
   const saveJob = useJob()
+
+  // Object URL for the finished file, revoked when it is replaced or the editor
+  // resets so a long session does not hold every result in memory.
+  useEffect(() => {
+    const blob = saveJob.result?.blob
+    if (!blob) {
+      setResultUrl(null)
+      return undefined
+    }
+    const url = URL.createObjectURL(blob)
+    setResultUrl(url)
+    return () => URL.revokeObjectURL(url)
+  }, [saveJob.result])
 
   // ── history ──────────────────────────────────────────────────────────────
   const commit = useCallback((next) => {
@@ -522,9 +536,12 @@ export default function PdfRedactEditor() {
                 <span className="field-label">{PDF_REDACT.fileName}</span>
                 <input className="field-input" value={outName} onChange={(e) => setOutName(e.target.value)} />
               </label>
-              <button type="button" className="btn-primary" onClick={() => downloadBlob(saveJob.result.blob, finalName(), 'application/pdf')}>
+              {/* A real anchor the user clicks, not a synthetic click from
+                  script. Chrome throttles repeated script-driven downloads from
+                  one page — saving a second file would silently do nothing. */}
+              <a className="btn-primary inline-flex" href={resultUrl} download={finalName()}>
                 <Icon name="download" className="h-4 w-4" /> {COMMON.download}
-              </button>
+              </a>
               <Note type="warning">{PDF_REDACT.recheckBeforeSubmit}</Note>
               <Note type="info">{PDF_REDACT.keepOriginal}</Note>
               <Note type="info">{PDF_REDACT.afterNote}</Note>
