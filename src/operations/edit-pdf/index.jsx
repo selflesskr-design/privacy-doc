@@ -436,11 +436,6 @@ export default function EditPdf() {
   const doExport = () =>
     exportJob.run((p) => exportEditedPdf(bytesRef.current, annos, p).then((blob) => ({ blob, filename: finalName() })))
 
-  const openStandalone = () => {
-    const url = `${window.location.origin}/edit-pdf?standalone=1`
-    window.open(url, '_blank', 'noopener,noreferrer')
-  }
-
   const pageAnnos = annos.filter((a) => a.page === pageIndex)
   const svgAnnos = pageAnnos.filter((a) => a.type === 'draw' || a.type === 'line')
   const boxAnnos = pageAnnos.filter((a) => a.type !== 'draw' && a.type !== 'line')
@@ -451,26 +446,9 @@ export default function EditPdf() {
   const showColor = ['text', 'draw', 'highlight', 'rect', 'ellipse', 'line'].includes(ctxType)
   const showStroke = ['draw', 'rect', 'ellipse', 'line'].includes(ctxType)
   const showText = ctxType === 'text'
-  const isStandalone = new URLSearchParams(window.location.search).get('standalone') === '1'
-
-  const goodToKnow = (
-    <Note type="warning" title="Good to know">
-      A visual editor that overlays your additions onto the pages and bakes them in on export. It
-      adds new content (text, ink, shapes, images, white-out) on top of the PDF — it does not
-      re-flow or edit the document’s existing text.
-    </Note>
-  )
 
   return (
     <div className="space-y-5">
-      {!isStandalone && (
-        <div className="flex justify-end">
-          <button type="button" className="btn-secondary" onClick={openStandalone} title="Open the editor in its own window">
-            <Icon name="fileOut" className="h-4 w-4" /> Open in new window
-          </button>
-        </div>
-      )}
-
       {!file && (
         <Dropzone onFiles={pick} accept="application/pdf,.pdf" multiple={false} label="Drop a PDF here or click to browse" hint="Then add text, drawings, highlights, shapes, images, or white-out" icon="pencil" />
       )}
@@ -700,8 +678,6 @@ export default function EditPdf() {
           <p className="text-xs text-slate-400">Tip: pick a tool, then click or drag on the page. Use Select to move, resize, or delete anything you’ve added.</p>
         </>
       )}
-
-      {goodToKnow}
     </div>
   )
 }
