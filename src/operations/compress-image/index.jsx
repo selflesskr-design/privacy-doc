@@ -7,14 +7,14 @@ import ImageResult from '../../components/ImageResult.jsx'
 import { useJob } from '../../hooks/useJob.js'
 import { formatBytes } from '../../lib/format.js'
 import { compressImage } from './helpers.js'
-import { COMPRESS_IMAGE as T } from '../../content/strings.js'
+import { COMPRESS_IMAGE as T, COMMON } from '../../content/strings.js'
 
 export default function CompressImage() {
   const [file, setFile] = useState(null)
   const [quality, setQuality] = useState(0.7)
   const [maxDimension, setMaxDimension] = useState(0)
   const [format, setFormat] = useState('keep')
-  const { running, progress, error, result, run, reset } = useJob()
+  const { running, slow, progress, error, result, run, reset, cancel } = useJob()
 
   const pick = (files) => {
     setFile(files[0])
@@ -60,19 +60,30 @@ export default function CompressImage() {
                   <option value="keep">{T.keepFormat}</option>
                   <option value="jpeg">JPEG</option>
                   <option value="webp">WebP</option>
-                  <option value="png">PNG</option>
                 </select>
               </label>
             </div>
             <Note type="info" className="mt-4">{T.pngNote}</Note>
           </div>
 
-          {!result && (
-            <button type="button" className="btn-primary" onClick={go} disabled={running}>
-              <Icon name="compress" className="h-4 w-4" />
-              {T.compress}
-            </button>
-          )}
+          <div className="flex flex-wrap items-center gap-3">
+            {!result && (
+              <button type="button" className="btn-primary" onClick={go} disabled={running}>
+                <Icon name="compress" className="h-4 w-4" />
+                {T.compress}
+              </button>
+            )}
+            {running && slow && (
+              <button
+                type="button"
+                onClick={cancel}
+                className="flex items-center justify-center gap-1.5 rounded-lg border border-red-500 bg-red-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-red-600 hover:bg-red-600"
+              >
+                <Icon name="x" className="h-4 w-4" />
+                {COMMON.cancel}
+              </button>
+            )}
+          </div>
         </>
       )}
 

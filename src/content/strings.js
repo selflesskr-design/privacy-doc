@@ -365,7 +365,10 @@ export const COMPRESS_IMAGE = {
   format: '저장 형식',
   keepFormat: '원본과 같게',
 
-  pngNote: 'PNG는 화질을 낮춰도 거의 줄지 않습니다. 사진이라면 JPEG이나 WebP로 바꾸세요.',
+  // PNG is not offered as an output: it stores photos losslessly, so it makes
+  // them bigger, ignores the quality slider, and takes a long time to encode a
+  // large one. Changing format for its own sake is 사진 형식 바꾸기.
+  pngNote: 'PNG 사진은 화질을 낮춰도 거의 줄지 않습니다. JPEG이나 WebP로 저장하면 크게 줄어듭니다.',
 
   compressing: (pct) => `줄이는 중… ${pct}%`,
   compress: '용량 줄이기',
