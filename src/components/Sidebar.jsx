@@ -10,11 +10,11 @@ export default function Sidebar({ activeId, activePath, onSelect }) {
   // What protects the person, in one place: cover what shows on a PDF, cover
   // what shows on a photo, and remove what does not show at all. The redactors
   // are routes rather than registry operations, so this list is written by hand
-  // and 사진 정보 삭제 is pulled out of the photo group below to join them.
+  // and the metadata tool is pulled out of the photo group below to join them.
   const PRIVACY = [
     { path: '/editor/pdf-redact', label: 'PDF 개인정보 가리기', match: ['/editor/pdf-redact', '/tools/pdf-redact'] },
     { path: '/editor/image-redact', label: '사진 개인정보 가리기', match: ['/editor/image-redact', '/tools/image-redact'] },
-    { path: '/strip-metadata', label: '사진 정보 삭제', match: ['/strip-metadata'] },
+    { path: '/strip-metadata', label: '사진 위치정보 확인·삭제', match: ['/strip-metadata'] },
   ]
   const isPrivacyActive = (item) => item.match.some((m) => activePath?.startsWith(m))
 

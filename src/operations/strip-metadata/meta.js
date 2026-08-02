@@ -1,7 +1,7 @@
 export default {
   id: 'strip-metadata',
-  name: '사진 정보 삭제',
-  description: '사진에 남은 촬영 위치와 기기 기록을 지웁니다.',
+  name: '사진 위치정보 확인·삭제',
+  description: '사진에 촬영 위치와 기기 기록이 있는지 확인하고 지웁니다.',
   category: 'image',
   icon: 'lock',
   order: 19,
