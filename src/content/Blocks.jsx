@@ -98,19 +98,28 @@ function RedactDemo() {
 }
 
 export default function Blocks({ sections, onNavigate }) {
-  const link = (href, children, className, key) => (
-    <a
-      key={key}
-      href={href}
-      className={className}
-      onClick={(e) => {
-        e.preventDefault()
-        onNavigate(href)
-      }}
-    >
-      {children}
-    </a>
-  )
+  // Internal paths are handed to the router; anything with a host of its own
+  // has to leave the app, or the router swallows it and lands on /404.
+  const link = (href, children, className, key) => {
+    const external = /^https?:\/\//.test(href)
+    return (
+      <a
+        key={key}
+        href={href}
+        className={className}
+        {...(external
+          ? { target: '_blank', rel: 'noopener noreferrer' }
+          : {
+              onClick: (e) => {
+                e.preventDefault()
+                onNavigate(href)
+              },
+            })}
+      >
+        {children}
+      </a>
+    )
+  }
 
   return (
     <div className="space-y-5">

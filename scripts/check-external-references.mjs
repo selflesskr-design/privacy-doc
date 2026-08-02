@@ -10,6 +10,7 @@
 //   - privacy.selfless.kr                    (our own deployment)
 //   - github.com/selflesskr-design/privacy-doc   (our repository link)
 //   - github.com/mithun-srinivas/DoxDock         (upstream MIT attribution — see NOTICE)
+//   - uniquelab.selfless.kr                      (who made this — a link, never a request)
 //   - opensource.org                             (license reference)
 //   - schema.org                                 (JSON-LD @context — an identifier
 //                                                 string, never fetched at runtime)
@@ -29,6 +30,7 @@ const ALLOWED_HOSTS = [
   'privacy.selfless.kr',
   'github.com/selflesskr-design/privacy-doc',
   'github.com/mithun-srinivas/DoxDock',
+  'uniquelab.selfless.kr',
   'opensource.org',
   'schema.org',
 ]

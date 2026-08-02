@@ -274,19 +274,19 @@ export default function App() {
           {/* MIT asks that the copyright and permission notice ship with the
               software, not that it be repeated on every screen. LICENSE and
               NOTICE go out with the build, the repository is public, and
-              /open-source-licenses carries the attribution in full — so the
+              /about carries the attribution in full — so the
               footer only needs to point there. */}
           <footer className="mx-auto flex max-w-3xl flex-wrap items-center gap-x-3 gap-y-1 px-4 pb-10 pt-4 text-xs text-slate-400 sm:px-6">
             <span>파일은 내 브라우저에서 직접 처리합니다.</span>
             <a
-              href="/open-source-licenses"
+              href="/about"
               onClick={(e) => {
                 e.preventDefault()
-                handleSelect('/open-source-licenses')
+                handleSelect('/about')
               }}
               className="font-medium text-slate-500 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-300"
             >
-              오픈소스 라이선스
+              소개·라이선스
             </a>
             <a
               href="https://github.com/selflesskr-design/privacy-doc"

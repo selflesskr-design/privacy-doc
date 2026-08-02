@@ -663,50 +663,41 @@ const TRUST_PAGES = [
         t: 'cards',
         title: '관련 안내',
         items: [
-          { label: '오픈소스 라이선스', href: '/open-source-licenses', text: '쓰고 있는 오픈소스' },
         ],
       },
     ],
   },
   {
-    path: '/open-source-licenses',
-    title: `오픈소스 라이선스 — ${BRAND}`,
+    path: '/about',
+    title: `소개와 라이선스 — ${BRAND}`,
     description:
-      '이 서비스가 쓰는 오픈소스와 글꼴의 라이선스 안내. 원본 프로젝트 DoxDock(MIT)과 Pretendard(OFL)를 포함합니다.',
-    h1: '오픈소스 라이선스',
+      '만든 곳과, 이 서비스가 쓰는 오픈소스·글꼴의 라이선스 안내입니다.',
+    h1: '소개와 라이선스',
     breadcrumb: [{ name: '홈', path: '/' }],
     schema: 'WebPage',
+    // MIT is satisfied by the LICENSE and NOTICE files that ship with the
+    // build; this page is the courtesy version of the same thing, so it can be
+    // short. The full list lives in THIRD_PARTY_NOTICES.md.
     sections: [
-      { t: 'p', text: `${BRAND}는 오픈소스로 만들었고, 그 자체도 MIT 라이선스로 공개되어 있습니다.` },
-      { t: 'h2', text: '원본 프로젝트' },
+      { t: 'h2', text: '만든 곳' },
       {
         t: 'p',
-        text:
-          '이 서비스는 MIT 라이선스로 공개된 DoxDock을 기반으로 만들었습니다. Copyright (c) 2026 Mithun Srinivas. 원저작권 안내는 저장소의 LICENSE 파일에 원문 그대로 두었습니다.',
+        text: '유니크랩에서 만들었습니다.',
       },
-      { t: 'h2', text: '글꼴' },
-      {
-        t: 'p',
-        text: 'PDF에 한글을 넣을 때 Pretendard를 씁니다. Copyright (c) 2021 Kil Hyung-jin, SIL Open Font License 1.1.',
-      },
-      { t: 'h2', text: '주요 라이브러리' },
+      { t: 'link', label: 'uniquelab.selfless.kr →', href: 'https://uniquelab.selfless.kr' },
+      { t: 'h2', text: '라이선스' },
       {
         t: 'ul',
         items: [
-          'pdf-lib (MIT) — PDF 만들기와 편집',
-          'pdf.js (Apache-2.0) — PDF 화면 표시와 글자 추출',
-          'React (MIT) — 화면 구성',
-          'Vite (MIT) — 빌드 도구',
-          'fflate (MIT) — 여러 파일 묶기',
+          `${BRAND} — MIT 라이선스로 공개되어 있습니다`,
+          'DoxDock (MIT) — 이 서비스의 바탕이 된 원본 프로젝트. Copyright (c) 2026 Mithun Srinivas',
+          'Pretendard (SIL OFL 1.1) — PDF에 한글을 넣을 때 쓰는 글꼴. Copyright (c) 2021 Kil Hyung-jin',
+          'pdf-lib · pdf.js · React 등 오픈소스 라이브러리',
         ],
       },
-      { t: 'p', text: '전체 목록과 쓰이는 위치는 저장소의 THIRD_PARTY_NOTICES.md에 정리해 두었습니다.' },
       {
-        t: 'cards',
-        title: '관련 안내',
-        items: [
-          { label: '개인정보 처리방침', href: '/privacy', text: '수집하지 않는 것' },
-        ],
+        t: 'p',
+        text: '전체 목록과 원문은 저장소의 LICENSE, NOTICE, THIRD_PARTY_NOTICES.md에 있습니다.',
       },
     ],
   },
