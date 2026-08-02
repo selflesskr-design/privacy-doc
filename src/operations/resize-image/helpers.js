@@ -1,4 +1,5 @@
 import { decode, dimsOf, drawToCanvas, canvasToBlob } from '../../lib/imageCanvas.js'
+import { RESIZE_IMAGE } from '../../content/strings.js'
 import { formatFromType, outName } from '../../lib/imageFormat.js'
 
 /**
@@ -8,7 +9,7 @@ import { formatFromType, outName } from '../../lib/imageFormat.js'
  */
 export async function resizeImage(file, opts, onProgress) {
   const { mode = 'dimensions', width, height, percent = 100, keepAspect = true, format = 'keep', quality = 0.9 } = opts || {}
-  onProgress?.(0.2, 'Decoding image…')
+  onProgress?.(0.2, RESIZE_IMAGE.decoding)
   const bitmap = await decode(file)
   const src = dimsOf(bitmap)
 
@@ -41,7 +42,7 @@ export async function resizeImage(file, opts, onProgress) {
   }
   if (targetW < 1 || targetH < 1) throw new Error('결과 크기가 너무 작습니다.')
 
-  onProgress?.(0.6, 'Resizing…')
+  onProgress?.(0.6, RESIZE_IMAGE.resizing)
   const fmt = format === 'keep' ? formatFromType(file.type) : format
   const canvas = drawToCanvas(bitmap, { width: targetW, height: targetH, background: fmt === 'jpeg' ? '#ffffff' : undefined })
   const blob = await canvasToBlob(canvas, fmt, quality)

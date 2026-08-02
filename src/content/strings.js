@@ -382,6 +382,29 @@ export const COMPRESS_IMAGE = {
   failed: '용량을 줄이지 못했습니다',
 }
 
+/** 사진 크기 바꾸기. */
+export const RESIZE_IMAGE = {
+  dropLabel: '크기를 바꿀 사진을 끌어다 놓거나 눌러서 선택하세요',
+
+  mode: '어떻게 정할까요',
+  byPixels: '가로세로 길이로',
+  byPercent: '원본 대비 비율로',
+
+  width: '가로 (px)',
+  height: '세로 (px)',
+  scale: (pct) => `원본의 ${pct}%`,
+  keepAspect: '가로세로 비율 유지',
+  keepAspectHint: '끄면 사진이 늘어나거나 찌그러집니다',
+
+  format: '저장 형식',
+  keepFormat: '원본과 같게',
+
+  decoding: '사진을 여는 중…',
+  resizing: '크기를 바꾸는 중…',
+  resize: '크기 바꾸기',
+  failed: '크기를 바꾸지 못했습니다',
+}
+
 /** 사진 개인정보 가리기. */
 export const IMAGE_REDACT = {
   title: '사진 개인정보 가리기',
