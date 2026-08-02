@@ -3,6 +3,7 @@ import Dropzone from '../components/Dropzone.jsx'
 import Progress from '../components/Progress.jsx'
 import Note from '../components/Note.jsx'
 import Icon from '../components/Icon.jsx'
+import AreaBox, { MIN_FRACTION } from '../components/AreaBox.jsx'
 import { useJob } from '../hooks/useJob.js'
 import { baseName } from '../lib/format.js'
 import { COMMON, PDF_REDACT, toUserMessage } from '../content/strings.js'
@@ -12,97 +13,10 @@ import { openPdf, pageBox, renderPageToCanvas, buildRedactedPdf } from '../lib/r
 // device pixel ratio and export DPI cannot shift them. See src/lib/redact.js.
 
 const ZOOMS = [0.5, 0.75, 1, 1.5, 2]
-const MIN_FRACTION = 0.004 // ignore stray clicks
-const HANDLES = ['nw', 'ne', 'sw', 'se']
 
 let seq = 0
 const nextId = () =>
   typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `a${++seq}`
-
-function AreaBox({ area, selected, selectMode, onSelect, onChange, surfaceRef }) {
-  const drag = useRef(null)
-
-  const begin = (mode) => (e) => {
-    if (!selectMode) return
-    e.stopPropagation()
-    e.preventDefault()
-    onSelect(area.id)
-    // Measure at drag start: the surface is the only source of truth for size,
-    // so zoom or a responsive reflow can never desynchronise the maths.
-    const r = surfaceRef.current.getBoundingClientRect()
-    drag.current = { mode, sx: e.clientX, sy: e.clientY, base: { ...area }, pxW: r.width, pxH: r.height }
-    window.addEventListener('pointermove', move)
-    window.addEventListener('pointerup', end)
-  }
-  const move = (e) => {
-    const d = drag.current
-    if (!d) return
-    const dx = (e.clientX - d.sx) / d.pxW
-    const dy = (e.clientY - d.sy) / d.pxH
-    const b = d.base
-    let { x, y, w, h } = b
-    if (d.mode === 'move') {
-      x = b.x + dx
-      y = b.y + dy
-    } else {
-      if (d.mode.includes('w')) { x = b.x + dx; w = b.w - dx }
-      if (d.mode.includes('e')) { w = b.w + dx }
-      if (d.mode.includes('n')) { y = b.y + dy; h = b.h - dy }
-      if (d.mode.includes('s')) { h = b.h + dy }
-      if (w < MIN_FRACTION) { w = MIN_FRACTION; if (d.mode.includes('w')) x = b.x + b.w - MIN_FRACTION }
-      if (h < MIN_FRACTION) { h = MIN_FRACTION; if (d.mode.includes('n')) y = b.y + b.h - MIN_FRACTION }
-    }
-    // Keep areas inside the page so nothing is silently lost on export.
-    x = Math.min(Math.max(0, x), 1 - w)
-    y = Math.min(Math.max(0, y), 1 - h)
-    onChange(area.id, { x, y, w, h })
-  }
-  const end = () => {
-    drag.current = null
-    window.removeEventListener('pointermove', move)
-    window.removeEventListener('pointerup', end)
-  }
-
-  return (
-    <div
-      onPointerDown={begin('move')}
-      style={{
-        position: 'absolute',
-        left: `${area.x * 100}%`,
-        top: `${area.y * 100}%`,
-        width: `${area.w * 100}%`,
-        height: `${area.h * 100}%`,
-        background: area.color === 'white' ? '#fff' : '#000',
-        outline: selected ? '2px solid #B85512' : '1px solid rgba(255,255,255,.35)',
-        outlineOffset: '1px',
-        cursor: selectMode ? 'move' : 'crosshair',
-        touchAction: 'none',
-      }}
-    >
-      {selectMode && selected &&
-        HANDLES.map((c) => (
-          <span
-            key={c}
-            onPointerDown={begin(c)}
-            style={{
-              position: 'absolute',
-              width: 14,
-              height: 14,
-              background: '#fff',
-              border: '2px solid #B85512',
-              borderRadius: '50%',
-              top: c[0] === 'n' ? -7 : undefined,
-              bottom: c[0] === 's' ? -7 : undefined,
-              left: c[1] === 'w' ? -7 : undefined,
-              right: c[1] === 'e' ? -7 : undefined,
-              cursor: `${c}-resize`,
-              touchAction: 'none',
-            }}
-          />
-        ))}
-    </div>
-  )
-}
 
 export default function PdfRedactEditor() {
   const [file, setFile] = useState(null)
@@ -146,11 +60,15 @@ export default function PdfRedactEditor() {
   }, [saveJob.result])
 
   // ── history ──────────────────────────────────────────────────────────────
+  // Any change to the areas throws away the built PDF. Without this, drawing
+  // one more box after saving left the earlier file — the one missing that box
+  // — on the download button, with nothing on screen to say so.
   const commit = useCallback((next) => {
     setPast((p) => [...p, areas])
     setFuture([])
     setAreas(next)
-  }, [areas])
+    saveJob.reset()
+  }, [areas, saveJob])
 
   const undo = () => {
     if (!past.length) return
@@ -158,6 +76,7 @@ export default function PdfRedactEditor() {
     setAreas(past[past.length - 1])
     setPast((p) => p.slice(0, -1))
     setSelectedId(null)
+    saveJob.reset()
   }
   const redo = () => {
     if (!future.length) return
@@ -165,6 +84,7 @@ export default function PdfRedactEditor() {
     setAreas(future[0])
     setFuture((f) => f.slice(1))
     setSelectedId(null)
+    saveJob.reset()
   }
 
   // ── file ─────────────────────────────────────────────────────────────────
@@ -511,15 +431,17 @@ export default function PdfRedactEditor() {
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
-              <button
-                type="button"
-                className="btn-primary"
-                onClick={doSave}
-                disabled={saveJob.running || areas.length === 0}
-                title={areas.length === 0 ? PDF_REDACT.saveNothing : undefined}
-              >
-                <Icon name="shieldCheck" className="h-4 w-4" /> {PDF_REDACT.save}
-              </button>
+              {!saveJob.result && (
+                <button
+                  type="button"
+                  className="btn-primary"
+                  onClick={doSave}
+                  disabled={saveJob.running || areas.length === 0}
+                  title={areas.length === 0 ? PDF_REDACT.saveNothing : undefined}
+                >
+                  <Icon name="shieldCheck" className="h-4 w-4" /> {PDF_REDACT.save}
+                </button>
+              )}
               <button type="button" className="btn-ghost" onClick={reset}>
                 {COMMON.reset}
               </button>
@@ -542,7 +464,6 @@ export default function PdfRedactEditor() {
               <a className="btn-primary inline-flex" href={resultUrl} download={finalName()}>
                 <Icon name="download" className="h-4 w-4" /> {COMMON.download}
               </a>
-              <Note type="warning">{PDF_REDACT.recheckBeforeSubmit}</Note>
               <Note type="info">{PDF_REDACT.keepOriginal}</Note>
               <Note type="info">{PDF_REDACT.afterNote}</Note>
             </div>

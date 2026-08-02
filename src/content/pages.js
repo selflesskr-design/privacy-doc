@@ -195,7 +195,7 @@ const TOOL_PAGES = [
     h1: '사진 개인정보 가리기',
     lead:
       '사진으로 찍은 서류에서 가리고 싶은 부분을 가립니다. 저장할 때 사진에 남아 있던 촬영 위치와 기기 기록도 함께 지워집니다.',
-    ready: false,
+    ready: true,
     runHref: '/editor/image-redact',
     runLabel: '파일 선택',
     problem: [
@@ -867,16 +867,9 @@ const EDITOR_PAGES = [
     breadcrumb: [{ name: '홈', path: '/' }],
     noindex: true,
     schema: 'WebPage',
-    sections: [
-      { t: 'note', tone: 'warn', text: '기능 준비 중입니다.' },
-      {
-        t: 'cards',
-        items: [
-          { label: '사진 개인정보 가리기 안내', href: '/tools/image-redact', text: '어떤 방식인지 보기' },
-          { label: '사진 정보 삭제', href: '/strip-metadata', text: '지금 쓸 수 있는 기능' },
-        ],
-      },
-    ],
+    editor: 'image-redact',
+    // Nothing above the editor — whoever pressed the button came to open a file.
+    sections: [],
   },
 ]
 

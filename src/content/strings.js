@@ -353,13 +353,42 @@ export const PDF_TO_IMAGES = {
   failed: 'PDF를 사진으로 만들지 못했습니다',
 }
 
-/** 사진 개인정보 가리기 — Phase 3. */
+/** 사진 개인정보 가리기. */
 export const IMAGE_REDACT = {
   title: '사진 개인정보 가리기',
+  beta: '베타',
+  betaNote: '저장한 사진을 열어 가린 위치가 맞는지 꼭 확인한 뒤 보내 주세요.',
   dropLabel: '가릴 사진을 끌어다 놓거나 눌러서 선택하세요',
   dropHint: '사진은 내 브라우저에서만 열립니다',
-  save: '안전하게 저장',
-  notReady: '사진 개인정보 가리기는 준비 중입니다.',
+
+  opening: '사진을 여는 중…',
+  openFailed: '사진을 열 수 없습니다',
+
+  areaTool: '가릴 영역',
+  areaToolHint: '드래그해서 가릴 곳을 사각형으로 지정하세요',
+  selectTool: '선택',
+  selectToolHint: '이미 만든 영역을 옮기거나 크기를 바꿉니다',
+  areaCount: (n) => (n === 0 ? '아직 지정한 영역이 없습니다' : `가릴 영역 ${n}개`),
+  emptyState: '가릴 곳을 드래그해서 지정하세요. 여러 곳을 지정할 수 있습니다.',
+
+  format: '저장 형식',
+  jpeg: 'JPEG — 용량이 작습니다',
+  png: 'PNG — 글자가 또렷합니다',
+  quality: (pct) => `화질: ${pct}%`,
+
+  building: '가린 사진을 만드는 중…',
+  save: '가린 사진 만들기',
+  saveNothing: '가릴 영역을 먼저 지정해 주세요',
+  saveNote: '원본 사진은 건드리지 않고, 가려진 사진을 새로 만듭니다.',
+  saveFailed: '사진을 만들지 못했습니다',
+  ready: '가린 사진이 만들어졌습니다. 이름을 정하고 받으세요.',
+  fileName: '파일 이름',
+
+  // The two things a photographed document gives away, in the order they
+  // matter: what is printed on it, and where it was taken.
+  metadataNote: '저장하면 촬영 위치와 기기 정보도 함께 지워집니다.',
+  keepOriginal: '원본 사진은 변경되지 않습니다. 앨범에 남은 원본도 함께 정리해 주세요.',
+  checkFirst: '제출처마다 필요한 정보와 가림 기준이 다를 수 있습니다. 가리기 전에 제출기관의 안내를 먼저 확인하세요.',
 }
 
 /**

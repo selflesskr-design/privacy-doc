@@ -21,6 +21,7 @@ import { COMMON } from './content/strings.js'
 // libraries stay out of every other page's bundle.
 const EDITORS = {
   'pdf-redact': lazy(() => import('./editors/PdfRedactEditor.jsx')),
+  'image-redact': lazy(() => import('./editors/ImageRedactEditor.jsx')),
 }
 
 // Path routing. Two kinds of route share one path space:
@@ -275,7 +276,15 @@ export default function App() {
                   {activeOp.notes && (
                     <div className="mt-4">
                       <Note type="warning" title="알아두실 점">
-                        {activeOp.notes}
+                        {Array.isArray(activeOp.notes) ? (
+                          <ul className="list-disc space-y-1 pl-4">
+                            {activeOp.notes.map((n) => (
+                              <li key={n}>{n}</li>
+                            ))}
+                          </ul>
+                        ) : (
+                          activeOp.notes
+                        )}
                       </Note>
                     </div>
                   )}

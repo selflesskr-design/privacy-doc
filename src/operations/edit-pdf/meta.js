@@ -7,6 +7,9 @@ export default {
   order: 0,
   // Shown above the editor by the shared header. This is a warning, not a
   // description: covering text here leaves it in the file.
-  notes:
-    '이 기능은 화면에 보이는 대로 꾸미는 편집 도구입니다. 사각형으로 덮어도 아래의 원본 글자는 그대로 남습니다. 개인정보를 가려야 한다면 "PDF 개인정보 가리기"를 써 주세요.',
+  notes: [
+    '화면에 보이는 대로 꾸미는 편집 도구입니다',
+    '사각형으로 덮어도 아래의 원본 글자는 그대로 남습니다',
+    '개인정보를 가려야 한다면 "PDF 개인정보 가리기"를 쓰세요',
+  ],
 }

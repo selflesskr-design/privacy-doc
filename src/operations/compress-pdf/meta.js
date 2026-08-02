@@ -5,7 +5,9 @@ export default {
   category: 'pdf',
   icon: 'compress',
   order: 7,
-  // Names the two choices exactly as the select shows them.
-  notes:
-    '스캔한 서류는 "쪽을 사진으로 바꾸기"가 잘 듣습니다. 글자 위주 문서는 오히려 커질 수 있으니 "문서 정보만 지우기"를 고르세요.',
+  // One line per choice, named exactly as the select shows them.
+  notes: [
+    '사진이 많은 문서 → "쪽을 사진으로 바꾸기"',
+    '글자 위주 문서 → "문서 정보만 지우기". 사진으로 바꾸면 오히려 커집니다',
+  ],
 }
