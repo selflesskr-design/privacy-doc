@@ -74,7 +74,7 @@ const HOME = {
     },
     {
       t: 'actions',
-      items: [{ label: 'PDF 가리기 시작', href: '/editor/pdf-redact', primary: true }],
+      items: [{ label: '개인정보 가리기 시작', href: '/editor/pdf-redact', primary: true }],
     },
     { t: 'redactDemo' },
     { t: 'note', tone: 'warn', text: CHECK_FIRST },
@@ -842,13 +842,13 @@ const TRUST_PAGES = [
 const EDITOR_PAGES = [
   {
     path: '/editor/pdf-redact',
-    title: `PDF 가리기 — ${BRAND}`,
+    title: `PDF 개인정보 가리기 — ${BRAND}`,
     description: 'PDF 개인정보 가리기 편집 화면입니다.',
-    h1: 'PDF 가리기',
-    breadcrumb: [
-      { name: '홈', path: '/' },
-      { name: 'PDF 개인정보 가리기', path: '/tools/pdf-redact' },
-    ],
+    // One tool, one name. The breadcrumb ends in the h1, so listing the
+    // explanation page here as well printed the same feature twice under two
+    // names and made them look like two different things.
+    h1: 'PDF 개인정보 가리기',
+    breadcrumb: [{ name: '홈', path: '/' }],
     noindex: true,
     schema: 'WebPage',
     // The real editor is code-split and mounted by App.jsx; these blocks are
@@ -861,13 +861,10 @@ const EDITOR_PAGES = [
   },
   {
     path: '/editor/image-redact',
-    title: `사진 가리기 — ${BRAND}`,
+    title: `사진 개인정보 가리기 — ${BRAND}`,
     description: '사진 개인정보 가리기 편집 화면입니다.',
-    h1: '사진 가리기',
-    breadcrumb: [
-      { name: '홈', path: '/' },
-      { name: '사진 개인정보 가리기', path: '/tools/image-redact' },
-    ],
+    h1: '사진 개인정보 가리기',
+    breadcrumb: [{ name: '홈', path: '/' }],
     noindex: true,
     schema: 'WebPage',
     sections: [

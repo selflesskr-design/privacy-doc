@@ -12,17 +12,17 @@ import { EDIT_PDF } from '../../content/strings.js'
 const FONT_OPTIONS = ['Helvetica', 'Times', 'Courier']
 
 const TOOLS = [
-  { id: 'select', icon: 'cursor', label: 'Select / move' },
-  { id: 'text', icon: 'type', label: 'Text' },
-  { id: 'draw', icon: 'pencil', label: 'Draw' },
-  { id: 'highlight', icon: 'highlighter', label: 'Highlight' },
-  { id: 'rect', icon: 'square', label: 'Rectangle' },
-  { id: 'ellipse', icon: 'circle', label: 'Ellipse' },
-  { id: 'line', icon: 'slash', label: 'Line' },
-  { id: 'image', icon: 'image', label: 'Image' },
-  { id: 'whiteout', icon: 'whiteout', label: 'White-out (cover with white)' },
-  { id: 'erase', icon: 'eraser', label: 'Erase added items' },
-]
+  { id: 'select', icon: 'cursor' },
+  { id: 'text', icon: 'type' },
+  { id: 'draw', icon: 'pencil' },
+  { id: 'highlight', icon: 'highlighter' },
+  { id: 'rect', icon: 'square' },
+  { id: 'ellipse', icon: 'circle' },
+  { id: 'line', icon: 'slash' },
+  { id: 'image', icon: 'image' },
+  { id: 'whiteout', icon: 'whiteout' },
+  { id: 'erase', icon: 'eraser' },
+].map((t) => ({ ...t, label: EDIT_PDF.tools[t.id] }))
 const RESIZABLE = new Set(['rect', 'ellipse', 'highlight', 'whiteout', 'image'])
 let uid = 0
 const nextId = () =>
@@ -354,7 +354,7 @@ export default function EditPdf() {
     }
     if (tool === 'text') {
       const id = nextId()
-      commit((prev) => [...prev, { id, type: 'text', page: pageIndex, x: p.x, y: p.y, text: 'Text', fontSize, color, fontFamily, bold, italic }])
+      commit((prev) => [...prev, { id, type: 'text', page: pageIndex, x: p.x, y: p.y, text: EDIT_PDF.newText, fontSize, color, fontFamily, bold, italic }])
       setSelectedId(id)
       setEditingId(id)
       setTool('select') // so you can type immediately without spawning new boxes
@@ -450,11 +450,11 @@ export default function EditPdf() {
   return (
     <div className="space-y-5">
       {!file && (
-        <Dropzone onFiles={pick} accept="application/pdf,.pdf" multiple={false} label="Drop a PDF here or click to browse" hint="Then add text, drawings, highlights, shapes, images, or white-out" icon="pencil" />
+        <Dropzone onFiles={pick} accept="application/pdf,.pdf" multiple={false} label={EDIT_PDF.dropLabel} hint={EDIT_PDF.dropHint} icon="pencil" />
       )}
 
-      {loadJob.running && loadJob.progress && <Progress message="Opening PDF…" />}
-      {loadJob.error && <Note type="error" title="Couldn’t open this PDF">{loadJob.error}</Note>}
+      {loadJob.running && loadJob.progress && <Progress message={EDIT_PDF.opening} />}
+      {loadJob.error && <Note type="error" title={EDIT_PDF.openFailed}>{loadJob.error}</Note>}
 
       {file && pdfjsDoc && (
         <>
@@ -480,7 +480,7 @@ export default function EditPdf() {
             {(showColor || showStroke || showText) && <div className="mx-1 h-6 w-px bg-slate-200 dark:bg-slate-700" />}
 
             {showColor && (
-              <label className="flex items-center gap-1.5" title="Color">
+              <label className="flex items-center gap-1.5" title={EDIT_PDF.color}>
                 <input
                   type="color"
                   value={color}
@@ -491,7 +491,7 @@ export default function EditPdf() {
             )}
             {showStroke && (
               <label className="flex items-center gap-1.5 text-xs text-slate-500">
-                Width
+                {EDIT_PDF.width}
                 <input
                   type="range"
                   min="1"
@@ -508,14 +508,14 @@ export default function EditPdf() {
                   value={fontFamily}
                   onChange={(e) => { setFontFamily(e.target.value); patchSelected({ fontFamily: e.target.value }) }}
                   className="field-input h-8 w-28 py-1"
-                  title="Font"
+                  title={EDIT_PDF.font}
                 >
                   {FONT_OPTIONS.map((f) => (
                     <option key={f} value={f}>{f}</option>
                   ))}
                 </select>
                 <label className="flex items-center gap-1.5 text-xs text-slate-500">
-                  Size
+                  {EDIT_PDF.size}
                   <input
                     type="number"
                     min="6"
@@ -525,34 +525,33 @@ export default function EditPdf() {
                     className="field-input h-8 w-16 py-1"
                   />
                 </label>
-                <button type="button" title="Bold" onClick={() => { const v = !bold; setBold(v); patchSelected({ bold: v }) }} className={'flex h-8 w-8 items-center justify-center rounded-lg font-bold ' + (bold ? 'bg-brand-600 text-white' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800')}>B</button>
-                <button type="button" title="Italic" onClick={() => { const v = !italic; setItalic(v); patchSelected({ italic: v }) }} className={'flex h-8 w-8 items-center justify-center rounded-lg italic ' + (italic ? 'bg-brand-600 text-white' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800')}>I</button>
+                <button type="button" title={EDIT_PDF.bold} onClick={() => { const v = !bold; setBold(v); patchSelected({ bold: v }) }} className={'flex h-8 w-8 items-center justify-center rounded-lg font-bold ' + (bold ? 'bg-brand-600 text-white' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800')}>B</button>
+                <button type="button" title={EDIT_PDF.italic} onClick={() => { const v = !italic; setItalic(v); patchSelected({ italic: v }) }} className={'flex h-8 w-8 items-center justify-center rounded-lg italic ' + (italic ? 'bg-brand-600 text-white' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800')}>I</button>
               </>
             )}
 
             <div className="mx-1 h-6 w-px bg-slate-200 dark:bg-slate-700" />
-            <button type="button" className="btn-ghost h-9 px-2" onClick={undo} disabled={!historyRef.current.length} title="Undo">
-              <Icon name="undo" className="h-4 w-4" /> Undo
+            <button type="button" className="btn-ghost h-9 px-2" onClick={undo} disabled={!historyRef.current.length} title={EDIT_PDF.undo}>
+              <Icon name="undo" className="h-4 w-4" /> {EDIT_PDF.undo}
             </button>
             {selectedId && (
               <button type="button" className="btn-ghost h-9 px-2 text-red-600" onClick={() => { commit((p) => p.filter((a) => a.id !== selectedId)); setSelectedId(null) }}>
-                <Icon name="trash" className="h-4 w-4" /> Delete
+                <Icon name="trash" className="h-4 w-4" /> {EDIT_PDF.remove}
               </button>
             )}
           </div>
 
-          {/* Korean text is drawn with the one bundled weight, so the saved file
-              can differ from the preview. Shown only while the text tool is in use. */}
+          {/* Shown only while the text tool is in use. */}
           {showText && <Note type="warning">{EDIT_PDF.koreanFontWarning}</Note>}
 
           {/* Page nav */}
           <div className="flex items-center justify-center gap-4 text-sm">
             <button type="button" className="btn-secondary px-3 py-1" disabled={pageIndex === 0} onClick={() => { setPageIndex((i) => Math.max(0, i - 1)); setSelectedId(null) }}>
-              <Icon name="arrowUp" className="h-4 w-4 -rotate-90" /> Prev
+              <Icon name="arrowUp" className="h-4 w-4 -rotate-90" /> {EDIT_PDF.prev}
             </button>
-            <span className="tabular-nums text-slate-500">Page {pageIndex + 1} / {numPages}</span>
+            <span className="tabular-nums text-slate-500">{EDIT_PDF.pageOf(pageIndex + 1, numPages)}</span>
             <button type="button" className="btn-secondary px-3 py-1" disabled={pageIndex >= numPages - 1} onClick={() => { setPageIndex((i) => Math.min(numPages - 1, i + 1)); setSelectedId(null) }}>
-              Next <Icon name="arrowDown" className="h-4 w-4 -rotate-90" />
+              {EDIT_PDF.next} <Icon name="arrowDown" className="h-4 w-4 -rotate-90" />
             </button>
           </div>
 
@@ -651,31 +650,31 @@ export default function EditPdf() {
 
           <div className="flex flex-wrap items-center gap-3">
             <button type="button" className="btn-primary" onClick={doExport} disabled={exportJob.running}>
-              <Icon name="download" className="h-4 w-4" /> Apply edits &amp; download
+              <Icon name="download" className="h-4 w-4" /> {EDIT_PDF.save}
             </button>
             <button type="button" className="btn-ghost" onClick={() => { setFile(null); setPdfjsDoc(null); setDims(null) }}>
-              Choose another file
+              {EDIT_PDF.otherFile}
             </button>
           </div>
 
           {exportJob.running && exportJob.progress && <Progress value={exportJob.progress.value} message={exportJob.progress.message} />}
-          {exportJob.error && <Note type="error" title="Export failed">{exportJob.error}</Note>}
+          {exportJob.error && <Note type="error" title={EDIT_PDF.saveFailed}>{exportJob.error}</Note>}
 
           {/* File name step — only shown once the edited PDF has been prepared. */}
           {exportJob.result && !exportJob.running && (
             <div className="card space-y-3 p-4">
-              <p className="text-sm font-medium text-brand-700 dark:text-brand-300">Your edited PDF is ready — name it and download.</p>
+              <p className="text-sm font-medium text-brand-700 dark:text-brand-300">{EDIT_PDF.ready}</p>
               <label className="block space-y-1">
-                <span className="field-label">File name</span>
+                <span className="field-label">{EDIT_PDF.fileName}</span>
                 <input className="field-input" value={outName} onChange={(e) => setOutName(e.target.value)} placeholder="edited.pdf" />
               </label>
               <button type="button" className="btn-primary" onClick={() => downloadBlob(exportJob.result.blob, finalName(), 'application/pdf')}>
-                <Icon name="download" className="h-4 w-4" /> Download {finalName()}
+                <Icon name="download" className="h-4 w-4" /> {EDIT_PDF.download(finalName())}
               </button>
             </div>
           )}
 
-          <p className="text-xs text-slate-400">Tip: pick a tool, then click or drag on the page. Use Select to move, resize, or delete anything you’ve added.</p>
+          <p className="text-xs text-slate-400">{EDIT_PDF.tip}</p>
         </>
       )}
     </div>

@@ -96,10 +96,61 @@ export const PDF_REDACT = {
     '제출처마다 필요한 정보와 가림 기준이 다를 수 있습니다. 가리기 전에 제출기관의 안내를 먼저 확인하세요.',
 }
 
-/** PDF 편집 — only the notices this service adds on top of the tool. */
+/** PDF 편집. */
 export const EDIT_PDF = {
-  koreanFontWarning:
-    '일부 한글 글꼴은 저장 결과가 다르게 보일 수 있습니다. 저장한 파일을 반드시 확인해 주세요.',
+  // The bundled Korean face is Regular 400 only — see src/lib/koreanFont.js.
+  // Bold and italic silently do nothing to Hangul, so say so while the text
+  // tool is open rather than letting people find out after saving.
+  koreanFontWarning: '한글은 한 가지 굵기로만 저장됩니다. 굵게·기울임을 골라도 저장한 파일에는 적용되지 않습니다.',
+
+  dropLabel: '편집할 PDF를 끌어다 놓거나 눌러서 선택하세요',
+  dropHint: '파일은 내 브라우저에서만 열립니다',
+  opening: 'PDF를 여는 중…',
+  openFailed: 'PDF를 열 수 없습니다',
+
+  tools: {
+    select: '선택·이동',
+    text: '글자 넣기',
+    draw: '자유롭게 그리기',
+    highlight: '형광펜',
+    rect: '사각형',
+    ellipse: '원',
+    line: '직선',
+    image: '이미지 넣기',
+    whiteout: '흰색으로 덮기',
+    erase: '내가 넣은 것 지우기',
+  },
+
+  color: '색',
+  width: '굵기',
+  font: '글꼴',
+  size: '크기',
+  bold: '굵게',
+  italic: '기울임',
+  undo: '되돌리기',
+  remove: '삭제',
+
+  prev: '이전',
+  next: '다음',
+  pageOf: (n, total) => `${total}쪽 중 ${n}쪽`,
+
+  // Same reasoning as PDF_REDACT.save — the button builds the file, the one
+  // below it is what writes it to disk.
+  save: '편집한 PDF 만들기',
+  otherFile: '다른 파일 선택',
+  saveFailed: '저장하지 못했습니다',
+  ready: '편집한 PDF가 만들어졌습니다. 이름을 정하고 받으세요.',
+  fileName: '파일 이름',
+  download: (name) => `${name} 내려받기`,
+
+  tip: '도구를 고른 뒤 문서 위를 누르거나 끌어 보세요. 선택 도구로 옮기고, 크기를 바꾸고, 지울 수 있습니다.',
+
+  // Placed already selected, so typing replaces it.
+  newText: '글자',
+
+  applying: '편집 내용을 적용하는 중…',
+  saving: '새 PDF를 만드는 중…',
+  done: '완료',
 }
 
 /** 사진 개인정보 가리기 — Phase 3. */

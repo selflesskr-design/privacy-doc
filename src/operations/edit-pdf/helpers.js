@@ -1,6 +1,7 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 import { loadPdf } from '../../lib/pdfjs.js'
 import { hasHangul } from '../../lib/koreanFont.js'
+import { EDIT_PDF } from '../../content/strings.js'
 
 // Font family -> pdf-lib StandardFonts, by [regular, bold, italic, boldItalic].
 export const FONT_FAMILIES = {
@@ -105,7 +106,7 @@ export async function prepareImage(file) {
  * Annotation coordinates are in PDF points with a top-left origin.
  */
 export async function exportEditedPdf(origBytes, annotations, onProgress) {
-  onProgress?.(0.2, 'Opening PDF…')
+  onProgress?.(0.2, EDIT_PDF.opening)
   const doc = await PDFDocument.load(origBytes)
   const pages = doc.getPages()
   const imgCache = new Map()
@@ -131,7 +132,7 @@ export async function exportEditedPdf(origBytes, annotations, onProgress) {
     const a = list[i]
     const page = pages[a.page]
     if (!page) continue
-    onProgress?.(0.3 + (0.6 * i) / list.length, 'Applying edits…')
+    onProgress?.(0.3 + (0.6 * i) / list.length, EDIT_PDF.applying)
     const H = page.getHeight()
 
     if (a.type === 'text') {
@@ -178,8 +179,8 @@ export async function exportEditedPdf(origBytes, annotations, onProgress) {
     }
   }
 
-  onProgress?.(0.95, 'Saving…')
+  onProgress?.(0.95, EDIT_PDF.saving)
   const out = await doc.save()
-  onProgress?.(1, 'Done')
+  onProgress?.(1, EDIT_PDF.done)
   return new Blob([out], { type: 'application/pdf' })
 }
