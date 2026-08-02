@@ -271,23 +271,29 @@ export default function App() {
             ) : null}
           </div>
 
-          {/* MIT asks that the copyright and permission notice ship with the
-              software, not that it be repeated on every screen. LICENSE and
-              NOTICE go out with the build, the repository is public, and
-              /about carries the attribution in full — so the
-              footer only needs to point there. */}
+          {/* Everything that is not a tool lives here. 개인정보처리방침 could be
+              reached from nowhere at all, which is a poor look on a service
+              whose subject is exactly that. MIT is satisfied by the LICENSE and
+              NOTICE files shipping with the build; /about is the courtesy copy. */}
           <footer className="mx-auto flex max-w-3xl flex-wrap items-center gap-x-3 gap-y-1 px-4 pb-10 pt-4 text-xs text-slate-400 sm:px-6">
             <span>파일은 내 브라우저에서 직접 처리합니다.</span>
-            <a
-              href="/about"
-              onClick={(e) => {
-                e.preventDefault()
-                handleSelect('/about')
-              }}
-              className="font-medium text-slate-500 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-300"
-            >
-              소개·라이선스
-            </a>
+            {[
+              ['/faq', '자주 묻는 질문'],
+              ['/privacy', '개인정보처리방침'],
+              ['/about', '소개·라이선스'],
+            ].map(([href, label]) => (
+              <a
+                key={href}
+                href={href}
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleSelect(href)
+                }}
+                className="font-medium text-slate-500 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-300"
+              >
+                {label}
+              </a>
+            ))}
             <a
               href="https://github.com/selflesskr-design/privacy-doc"
               target="_blank"

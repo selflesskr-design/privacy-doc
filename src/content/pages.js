@@ -659,12 +659,10 @@ const TRUST_PAGES = [
       },
       { t: 'h2', text: '제3자 제공' },
       { t: 'p', text: '수집하는 정보가 없으므로 다른 곳에 제공하는 정보도 없습니다.' },
-      {
-        t: 'cards',
-        title: '관련 안내',
-        items: [
-        ],
-      },
+      { t: 'h2', text: '운영과 문의' },
+      { t: 'p', text: '유니크랩에서 운영합니다. 문의는 아래 주소로 주세요.' },
+      { t: 'link', label: 'uniquelab.selfless.kr →', href: 'https://uniquelab.selfless.kr' },
+      { t: 'p', text: '시행일: 2026년 8월 2일' },
     ],
   },
   {
