@@ -1,4 +1,5 @@
 import { PDFDocument } from 'pdf-lib'
+import { IMAGES_TO_PDF } from '../../content/strings.js'
 
 // Page sizes in PDF points (1pt = 1/72 inch).
 export const PAGE_SIZES = {
@@ -49,7 +50,7 @@ export async function imagesToPdf(files, opts, onProgress) {
   const pdfDoc = await PDFDocument.create()
 
   for (let i = 0; i < files.length; i++) {
-    onProgress?.(i / files.length, `Adding image ${i + 1} of ${files.length}…`)
+    onProgress?.(i / files.length, IMAGES_TO_PDF.adding(i + 1, files.length))
     const img = await embedImage(pdfDoc, files[i])
 
     let pageW, pageH

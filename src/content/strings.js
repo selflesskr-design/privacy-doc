@@ -153,6 +153,27 @@ export const EDIT_PDF = {
   done: '완료',
 }
 
+/** 사진을 PDF로. */
+export const IMAGES_TO_PDF = {
+  dropLabel: 'PDF로 만들 사진을 끌어다 놓거나 눌러서 선택하세요',
+  dropHint: 'JPEG, PNG, WebP, GIF, BMP — 넣은 뒤 아래에서 순서를 바꿀 수 있습니다',
+
+  options: '설정',
+  pageSize: '쪽 크기',
+  fitToImage: '사진 크기에 맞춤',
+  orientation: '방향',
+  auto: '자동 (사진마다)',
+  portrait: '세로',
+  landscape: '가로',
+  // pt is what the PDF itself uses; 72pt = 1inch.
+  margin: '여백 (pt · 28pt ≈ 1cm)',
+
+  create: 'PDF 만들기',
+  adding: (n, total) => `${total}장 중 ${n}장 넣는 중…`,
+  failed: 'PDF를 만들지 못했습니다',
+  ready: 'PDF가 만들어졌습니다. 이 기기 안에서만 처리했습니다.',
+}
+
 /** 사진 개인정보 가리기 — Phase 3. */
 export const IMAGE_REDACT = {
   title: '사진 개인정보 가리기',

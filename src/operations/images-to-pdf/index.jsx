@@ -8,11 +8,12 @@ import Icon from '../../components/Icon.jsx'
 import { useJob } from '../../hooks/useJob.js'
 import { dedupeFiles, skippedNotice } from '../../lib/dedupeFiles.js'
 import { imagesToPdf } from './helpers.js'
+import { IMAGES_TO_PDF as T } from '../../content/strings.js'
 
 export default function ImagesToPdf() {
   const [files, setFiles] = useState([])
   const [notice, setNotice] = useState('')
-  const [pageSize, setPageSize] = useState('fit')
+  const [pageSize, setPageSize] = useState('A4')
   const [orientation, setOrientation] = useState('auto')
   const [margin, setMargin] = useState(0)
   const { running, progress, error, result, run, reset } = useJob()
@@ -45,8 +46,8 @@ export default function ImagesToPdf() {
       <Dropzone
         onFiles={addFiles}
         accept="image/*"
-        label="Drop images here or click to browse"
-        hint="JPEG, PNG, WebP, GIF, BMP — reorder them below after adding"
+        label={T.dropLabel}
+        hint={T.dropHint}
         icon="imagePlus"
       />
 
@@ -66,37 +67,37 @@ export default function ImagesToPdf() {
 
           <div className="card p-4">
             <h3 className="mb-3 text-sm font-semibold text-slate-700 dark:text-slate-200">
-              Options
+              {T.options}
             </h3>
             <div className="grid gap-4 sm:grid-cols-3">
               <label className="space-y-1">
-                <span className="field-label">Page size</span>
+                <span className="field-label">{T.pageSize}</span>
                 <select
                   className="field-input"
                   value={pageSize}
                   onChange={(e) => setPageSize(e.target.value)}
                 >
-                  <option value="fit">Fit to image</option>
+                  <option value="fit">{T.fitToImage}</option>
                   <option value="A4">A4</option>
                   <option value="Letter">Letter</option>
                   <option value="Legal">Legal</option>
                 </select>
               </label>
               <label className="space-y-1">
-                <span className="field-label">Orientation</span>
+                <span className="field-label">{T.orientation}</span>
                 <select
                   className="field-input"
                   value={orientation}
                   disabled={pageSize === 'fit'}
                   onChange={(e) => setOrientation(e.target.value)}
                 >
-                  <option value="auto">Auto (per image)</option>
-                  <option value="portrait">Portrait</option>
-                  <option value="landscape">Landscape</option>
+                  <option value="auto">{T.auto}</option>
+                  <option value="portrait">{T.portrait}</option>
+                  <option value="landscape">{T.landscape}</option>
                 </select>
               </label>
               <label className="space-y-1">
-                <span className="field-label">Margin (pt)</span>
+                <span className="field-label">{T.margin}</span>
                 <input
                   type="number"
                   min="0"
@@ -117,7 +118,7 @@ export default function ImagesToPdf() {
               disabled={running}
             >
               <Icon name="fileText" className="h-4 w-4" />
-              Create PDF
+              {T.create}
             </button>
             {result && <DownloadButton result={result} />}
           </div>
@@ -126,9 +127,9 @@ export default function ImagesToPdf() {
 
       {notice && <Note type="warning">{notice}</Note>}
       {running && progress && <Progress value={progress.value} message={progress.message} />}
-      {error && <Note type="error" title="Couldn’t create the PDF">{error}</Note>}
+      {error && <Note type="error" title={T.failed}>{error}</Note>}
       {result && !running && (
-        <Note type="info">Your PDF is ready — it was generated entirely on this device.</Note>
+        <Note type="info">{T.ready}</Note>
       )}
     </div>
   )
