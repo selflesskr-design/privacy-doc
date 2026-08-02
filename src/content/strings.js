@@ -250,7 +250,7 @@ export const COMPRESS_PDF = {
   noGainTry: '글자 위주 문서에서 자주 그렇습니다. "문서 정보만 지우기"를 고르거나 해상도를 낮춰 보세요.',
 }
 
-/** PDF 쪽 정리. */
+/** 쪽 빼기·순서 바꾸기. */
 export const ORGANIZE_PDF = {
   dropLabel: '정리할 PDF를 끌어다 놓거나 눌러서 선택하세요',
   openFailed: 'PDF를 열 수 없습니다',
