@@ -20,6 +20,7 @@ export const COMMON = {
   redo: '다시 실행',
   delete: '삭제',
   clearAll: '모두 지우기',
+  wrongType: '이 도구에서 쓸 수 없는 형식입니다',
   working: '처리하고 있습니다…',
   preparing: '준비하고 있습니다…',
   saving: '저장하고 있습니다…',
@@ -166,6 +167,25 @@ export const IMAGES_TO_PDF = {
   adding: (n, total) => `${total}장 중 ${n}장 넣는 중…`,
   failed: 'PDF를 만들지 못했습니다',
   ready: 'PDF가 만들어졌습니다. 이 기기 안에서만 처리했습니다.',
+}
+
+/** PDF 쪽 정리. */
+export const ORGANIZE_PDF = {
+  dropLabel: '정리할 PDF를 끌어다 놓거나 눌러서 선택하세요',
+  openFailed: 'PDF를 열 수 없습니다',
+  thumbnails: (n, total) => `${total}쪽 중 ${n}쪽 불러오는 중…`,
+
+  kept: (kept, total) => (kept === total ? `${total}쪽` : `${total}쪽 중 ${kept}쪽 남김`),
+  hint: '끌어서 순서를 바꾸고, ✕를 눌러 뺍니다',
+  restore: '처음 상태로',
+  pageNo: (n) => `${n}쪽`,
+  removePage: (n) => `${n}쪽 빼기`,
+  lastPage: '마지막 한 쪽은 뺄 수 없습니다',
+
+  assembling: '쪽을 다시 붙이는 중…',
+  saving: '새 PDF를 만드는 중…',
+  apply: '정리한 PDF 만들기',
+  failed: 'PDF를 만들지 못했습니다',
 }
 
 /** PDF 회전. */

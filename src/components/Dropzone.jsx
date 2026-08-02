@@ -2,10 +2,27 @@ import { useRef, useState, useCallback, useId } from 'react'
 import Icon from './Icon.jsx'
 import { cx } from '../lib/format.js'
 import { useFileDrop } from '../hooks/useFileDrop.js'
+import { COMMON } from '../content/strings.js'
 
 // Reusable drag-and-drop dropzone + file picker. Keyboard accessible (Enter/Space
 // opens the picker). Files never leave the browser — they are handed straight to
 // the calling operation.
+
+// `accept` only ever constrained the file picker; a drop bypassed it entirely.
+// Dragging a page thumbnail inside a tool is enough to produce one, because the
+// browser hands the dragged image over as a file, and a PNG arriving at a PDF
+// tool surfaced as "Invalid PDF structure".
+function matchesAccept(file, accept) {
+  const patterns = (accept || '').split(',').map((p) => p.trim().toLowerCase()).filter(Boolean)
+  if (!patterns.length) return true
+  const type = (file.type || '').toLowerCase()
+  const name = (file.name || '').toLowerCase()
+  return patterns.some((p) => {
+    if (p.startsWith('.')) return name.endsWith(p)
+    if (p.endsWith('/*')) return type.startsWith(p.slice(0, -1))
+    return type === p
+  })
+}
 export default function Dropzone({
   onFiles,
   accept,
@@ -16,14 +33,18 @@ export default function Dropzone({
 }) {
   const inputRef = useRef(null)
   const [dragging, setDragging] = useState(false)
+  const [rejected, setRejected] = useState(false)
   const id = useId()
 
   const handleFiles = useCallback(
     (fileList) => {
-      const files = Array.from(fileList || [])
+      const all = Array.from(fileList || [])
+      if (!all.length) return
+      const files = all.filter((f) => matchesAccept(f, accept))
+      setRejected(files.length === 0)
       if (files.length) onFiles(multiple ? files : [files[0]])
     },
-    [onFiles, multiple],
+    [onFiles, multiple, accept],
   )
 
   const onDrop = useCallback(
@@ -86,6 +107,9 @@ export default function Dropzone({
           <p id={`${id}-hint`} className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             {hint}
           </p>
+        )}
+        {rejected && (
+          <p className="mt-1 text-sm text-red-600 dark:text-red-400">{COMMON.wrongType}</p>
         )}
       </div>
       <input
