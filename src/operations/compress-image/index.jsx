@@ -48,11 +48,12 @@ export default function CompressImage() {
                 <span className="field-label">{T.maxSize}</span>
                 <select className="field-input" value={maxDimension} onChange={setOption(setMaxDimension)}>
                   <option value={0}>{T.keepSize}</option>
-                  <option value={3840}>{T.px(3840)}</option>
-                  <option value={1920}>{T.px(1920)}</option>
-                  <option value={1280}>{T.px(1280)}</option>
-                  <option value={800}>{T.px(800)}</option>
+                  <option value={3840}>{T.px3840}</option>
+                  <option value={1920}>{T.px1920}</option>
+                  <option value={1280}>{T.px1280}</option>
+                  <option value={800}>{T.px800}</option>
                 </select>
+                <span className="text-xs text-slate-500">{T.maxSizeHint}</span>
               </label>
               <label className="space-y-1">
                 <span className="field-label">{T.format}</span>

@@ -359,9 +359,16 @@ export const COMPRESS_IMAGE = {
   dropHint: 'JPEG, PNG, WebP',
 
   quality: (pct) => `화질: ${pct}%`,
-  maxSize: '최대 크기',
-  keepSize: '원본 크기 그대로',
-  px: (n) => `${n}px`,
+  // Shrinking the picture beats lowering quality: halving the long side cuts
+  // the pixel count to a quarter. Phone photos are 12 megapixels and almost
+  // nothing needs that, so each choice says what it is enough for.
+  maxSize: '가장 긴 쪽 길이',
+  maxSizeHint: '크기를 줄이는 쪽이 화질을 낮추는 것보다 용량이 훨씬 많이 줄어듭니다',
+  keepSize: '원본 그대로 (줄이지 않음)',
+  px3840: '3840px — 인쇄하거나 크게 볼 때',
+  px1920: '1920px — 서류 첨부에 넉넉합니다',
+  px1280: '1280px — 화면으로만 볼 때',
+  px800: '800px — 아주 가볍게',
   format: '저장 형식',
   keepFormat: '원본과 같게',
 
