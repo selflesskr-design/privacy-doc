@@ -7,7 +7,14 @@ export default function Sidebar({ activeId, activePath, onSelect, onOpenPalette 
   const [query, setQuery] = useState('')
   const results = searchOperations(query)
   const groups = groupedOperations(results)
-  const redactActive = activePath?.startsWith('/editor/pdf-redact') || activePath === '/tools/pdf-redact'
+  // Both redaction routes live outside the operation registry, so they are
+  // listed by hand. They go first because they are what the service is for.
+  const REDACTORS = [
+    { id: 'pdf-redact', label: 'PDF 개인정보 가리기' },
+    { id: 'image-redact', label: '사진 개인정보 가리기' },
+  ]
+  const isRedactActive = (id) =>
+    activePath?.startsWith(`/editor/${id}`) || activePath === `/tools/${id}`
 
   return (
     <div className="flex h-full flex-col">
@@ -54,37 +61,39 @@ export default function Sidebar({ activeId, activePath, onSelect, onOpenPalette 
           </button>
         )}
 
-        {/* Redaction is not an entry in the operation registry — it is a route of
-            its own — so it needs listing by hand. It goes first because it is
-            what the service is for; the inherited tools follow. */}
         {!query && (
           <div className="mb-2">
             <p className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400 dark:text-slate-500">
               개인정보 보호
             </p>
             <ul className="space-y-0.5">
-              <li>
-                <button
-                  type="button"
-                  onClick={() => onSelect('/editor/pdf-redact')}
-                  aria-current={redactActive ? 'page' : undefined}
-                  className={cx(
-                    'flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm transition-colors',
-                    redactActive
-                      ? 'bg-brand-50 font-medium text-brand-700 dark:bg-brand-900/30 dark:text-brand-200'
-                      : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800',
-                  )}
-                >
-                  <Icon
-                    name="shieldCheck"
-                    className={cx(
-                      'h-4 w-4 flex-shrink-0',
-                      redactActive ? 'text-brand-600 dark:text-brand-300' : 'text-brand-500',
-                    )}
-                  />
-                  <span className="truncate">PDF 개인정보 가리기</span>
-                </button>
-              </li>
+              {REDACTORS.map(({ id, label }) => {
+                const active = isRedactActive(id)
+                return (
+                  <li key={id}>
+                    <button
+                      type="button"
+                      onClick={() => onSelect(`/editor/${id}`)}
+                      aria-current={active ? 'page' : undefined}
+                      className={cx(
+                        'flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm transition-colors',
+                        active
+                          ? 'bg-brand-50 font-medium text-brand-700 dark:bg-brand-900/30 dark:text-brand-200'
+                          : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800',
+                      )}
+                    >
+                      <Icon
+                        name="shieldCheck"
+                        className={cx(
+                          'h-4 w-4 flex-shrink-0',
+                          active ? 'text-brand-600 dark:text-brand-300' : 'text-brand-500',
+                        )}
+                      />
+                      <span className="truncate">{label}</span>
+                    </button>
+                  </li>
+                )
+              })}
             </ul>
           </div>
         )}

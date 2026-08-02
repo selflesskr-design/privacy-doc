@@ -72,9 +72,14 @@ const HOME = {
       text:
         '가린 부분은 복사해도 글자가 나오지 않습니다. 파일은 별도 서버에 저장하지 않고 내 브라우저 안에서만 처리됩니다.',
     },
+    // Two buttons, because the first thing a visitor knows is what they are
+    // holding: a PDF, or a photo of the document.
     {
       t: 'actions',
-      items: [{ label: '개인정보 가리기 시작', href: '/editor/pdf-redact', primary: true }],
+      items: [
+        { label: 'PDF 개인정보 가리기', href: '/editor/pdf-redact', primary: true },
+        { label: '사진 개인정보 가리기', href: '/editor/image-redact', primary: true },
+      ],
     },
     { t: 'redactDemo' },
     { t: 'note', tone: 'warn', text: CHECK_FIRST },
