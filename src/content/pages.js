@@ -152,7 +152,9 @@ const toolPage = ({
     ...(cautions?.length ? [{ t: 'h2', text: '알아두실 점' }, { t: 'ul', items: cautions }] : []),
     { t: 'h2', text: '자주 묻는 질문' },
     { t: 'faq', items: faq },
-    { t: 'cards', title: '함께 보면 좋은 페이지', items: related.slice(0, 2) },
+    // Only when there is somewhere worth sending them. An empty list used to
+    // render the heading on its own.
+    ...(related?.length ? [{ t: 'cards', title: '함께 보면 좋은 페이지', items: related.slice(0, 2) }] : []),
   ],
 })
 
@@ -184,11 +186,6 @@ const TOOL_PAGES = [
       CHECK_FIRST,
     ],
     faq: [FAQ.upload, FAQ.undo, FAQ.textSelect, FAQ.mobile, FAQ.free],
-    related: [
-      { label: '신분증 사본 안내', href: '/guides/id-card-redaction', text: '신분증에서 확인할 항목' },
-      { label: '계약서 안내', href: '/guides/contract-personal-info-redaction', text: '계약서 제출 전 확인' },
-      { label: '사진 개인정보 가리기', href: '/tools/image-redact', text: '사진으로 찍은 서류라면' },
-    ],
   }),
   toolPage({
     path: '/tools/image-redact',
@@ -216,11 +213,6 @@ const TOOL_PAGES = [
       CHECK_FIRST,
     ],
     faq: [FAQ.upload, FAQ.undo, FAQ.mobile, FAQ.offline],
-    related: [
-      { label: '신분증 사본 안내', href: '/guides/id-card-redaction', text: '신분증에서 확인할 항목' },
-      { label: '통장 사본 안내', href: '/guides/bankbook-copy-redaction', text: '통장 사본에서 확인할 항목' },
-      { label: '사진 정보 삭제', href: '/tools/remove-photo-metadata', text: '가리지 않고 기록만 지우려면' },
-    ],
   }),
   toolPage({
     path: '/tools/remove-photo-metadata',
@@ -247,11 +239,6 @@ const TOOL_PAGES = [
       '원본 사진은 그대로 남습니다.',
     ],
     faq: [FAQ.upload, FAQ.free, FAQ.offline],
-    related: [
-      { label: '사진 개인정보 가리기', href: '/tools/image-redact', text: '사진 속 글자도 가리려면' },
-      { label: '신분증 사본 안내', href: '/guides/id-card-redaction', text: '신분증 사진 다루기' },
-      { label: '모든 도구', href: '/tools', text: '다른 사진 도구 보기' },
-    ],
   }),
   toolPage({
     path: '/tools/merge-pdf',
@@ -360,7 +347,7 @@ const GUIDES_HUB = {
   ],
 }
 
-const guidePage = ({ path, title, description, h1, lead, when, whatToCheck, steps, runHref, faq, related }) => ({
+const guidePage = ({ path, title, description, h1, lead, when, whatToCheck, steps, runHref, faq }) => ({
   path,
   title,
   description,
@@ -391,7 +378,6 @@ const guidePage = ({ path, title, description, h1, lead, when, whatToCheck, step
     { t: 'cta', label: '파일 선택', href: runHref },
     { t: 'h2', text: '자주 묻는 질문' },
     { t: 'faq', items: faq },
-    { t: 'cards', title: '관련 안내', items: related },
   ],
 })
 
@@ -435,11 +421,6 @@ const GUIDE_PAGES = [
       FAQ.undo,
       FAQ.mobile,
     ],
-    related: [
-      { label: '통장 사본 제출 전 확인', href: '/guides/bankbook-copy-redaction', text: '통장 사본도 낸다면' },
-      { label: '사진 정보 삭제', href: '/tools/remove-photo-metadata', text: '기록만 지우려면' },
-      { label: '사진 개인정보 가리기', href: '/tools/image-redact', text: '도구 바로 쓰기' },
-    ],
   }),
   guidePage({
     path: '/guides/bankbook-copy-redaction',
@@ -479,11 +460,6 @@ const GUIDE_PAGES = [
       },
       FAQ.upload,
       FAQ.undo,
-    ],
-    related: [
-      { label: '신분증 사본 가리기', href: '/guides/id-card-redaction', text: '신분증도 낸다면' },
-      { label: '계약서 개인정보 확인', href: '/guides/contract-personal-info-redaction', text: '계약서를 공유한다면' },
-      { label: '사진 개인정보 가리기', href: '/tools/image-redact', text: '도구 바로 쓰기' },
     ],
   }),
   guidePage({
@@ -525,11 +501,6 @@ const GUIDE_PAGES = [
       FAQ.textSelect,
       FAQ.upload,
     ],
-    related: [
-      { label: 'PDF 개인정보 가리기', href: '/tools/pdf-redact', text: '도구 바로 쓰기' },
-      { label: '통장 사본 제출 전 확인', href: '/guides/bankbook-copy-redaction', text: '계좌 정보도 낸다면' },
-      { label: 'PDF 합치기', href: '/tools/merge-pdf', text: '여러 장을 하나로 묶으려면' },
-    ],
   }),
   guidePage({
     path: '/guides/resident-registration-redaction',
@@ -570,11 +541,6 @@ const GUIDE_PAGES = [
       FAQ.undo,
       FAQ.upload,
     ],
-    related: [
-      { label: '신분증 사본 가리기', href: '/guides/id-card-redaction', text: '신분증도 함께 낸다면' },
-      { label: '계약서 개인정보 확인', href: '/guides/contract-personal-info-redaction', text: '계약서도 낸다면' },
-      { label: 'PDF 개인정보 가리기', href: '/tools/pdf-redact', text: '도구 바로 쓰기' },
-    ],
   }),
 ]
 
@@ -613,13 +579,6 @@ const TRUST_PAGES = [
             q: '한글 문서도 문제없나요?',
             a: 'PDF를 열고, 가리고, 합치고, 용량을 줄이는 기능은 한글 문서에서 잘 동작합니다. PDF에 한글을 새로 써 넣는 것도 됩니다.',
           },
-        ],
-      },
-      {
-        t: 'cards',
-        title: '더 알아보기',
-        items: [
-          { label: '문서 종류별 안내', href: '/guides', text: '서류별로 확인할 점' },
         ],
       },
     ],
