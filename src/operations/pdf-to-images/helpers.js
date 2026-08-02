@@ -1,6 +1,7 @@
 import { loadPdf } from '../../lib/pdfjs.js'
 import { canvasToBlob } from '../../lib/imageCanvas.js'
 import { baseName, parsePageRanges } from '../../lib/format.js'
+import { PDF_TO_IMAGES, COMMON } from '../../content/strings.js'
 
 /**
  * Render PDF pages to images.
@@ -21,7 +22,7 @@ export async function pdfToImages(file, opts, onProgress) {
   const results = []
   for (let idx = 0; idx < pages.length; idx++) {
     const pageNum = pages[idx]
-    onProgress?.(idx / pages.length, `Rendering page ${pageNum} (${idx + 1}/${pages.length})…`)
+    onProgress?.(idx / pages.length, PDF_TO_IMAGES.rendering(pageNum, idx + 1, pages.length))
     const page = await pdf.getPage(pageNum)
     const viewport = page.getViewport({ scale })
     const canvas = document.createElement('canvas')
@@ -43,6 +44,6 @@ export async function pdfToImages(file, opts, onProgress) {
     })
     page.cleanup?.()
   }
-  onProgress?.(1, 'Done')
+  onProgress?.(1, COMMON.done)
   return results
 }

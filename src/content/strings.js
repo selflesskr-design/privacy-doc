@@ -168,6 +168,33 @@ export const IMAGES_TO_PDF = {
   ready: 'PDF가 만들어졌습니다. 이 기기 안에서만 처리했습니다.',
 }
 
+/** PDF를 사진으로. */
+export const PDF_TO_IMAGES = {
+  dropLabel: '사진으로 만들 PDF를 끌어다 놓거나 눌러서 선택하세요',
+  dropHint: '한 번에 한 개씩',
+  pages: (n) => `${n}쪽`,
+
+  format: '형식',
+  png: 'PNG (원본 그대로)',
+  jpeg: 'JPEG (용량 작음)',
+
+  // Says what each setting is for. dpi is on the label because print shops ask
+  // for it, but nobody should need to know it to choose.
+  quality: '화질',
+  qualityScreen: '화면용 (72dpi)',
+  qualityHigh: '높음 (144dpi)',
+  qualityPrint: '인쇄용 (216dpi)',
+  qualityMax: '최고 (288dpi)',
+
+  range: '쪽 고르기 (선택)',
+  rangePlaceholder: '예: 1-3,5',
+  rangeEmpty: (part, total) => `"${part}"에 해당하는 쪽이 없습니다. 이 문서는 ${total}쪽입니다.`,
+
+  convert: '사진으로 만들기',
+  rendering: (page, n, total) => `${page}쪽 그리는 중 (${total}장 중 ${n}장)…`,
+  failed: 'PDF를 사진으로 만들지 못했습니다',
+}
+
 /** 사진 개인정보 가리기 — Phase 3. */
 export const IMAGE_REDACT = {
   title: '사진 개인정보 가리기',
