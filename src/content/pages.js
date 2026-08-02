@@ -891,7 +891,13 @@ const NOT_FOUND = {
   noindex: true,
   sections: [
     { t: 'p', text: '주소가 바뀌었거나 없어진 페이지입니다.' },
-    { t: 'actions', items: [{ label: '개인정보 가리기 시작', href: '/editor/pdf-redact', primary: true }] },
+    {
+      t: 'actions',
+      items: [
+        { label: 'PDF 개인정보 가리기', href: '/editor/pdf-redact', primary: true },
+        { label: '사진 개인정보 가리기', href: '/editor/image-redact', primary: true },
+      ],
+    },
     { t: 'link', label: '모든 도구 보기 →', href: '/tools' },
   ],
 }
