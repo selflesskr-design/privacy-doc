@@ -29,8 +29,8 @@ export function dedupeFiles(existing, incoming) {
   return { unique, skipped }
 }
 
-/** "Skipped N file(s) already added", or '' when nothing was skipped. */
+/** 건너뛴 중복 파일 안내, or '' when nothing was skipped. */
 export function skippedNotice(skipped) {
   if (skipped < 1) return ''
-  return `Skipped ${skipped} file${skipped > 1 ? 's' : ''} already added`
+  return `이미 넣은 파일 ${skipped}개는 건너뛰었습니다`
 }

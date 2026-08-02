@@ -25,14 +25,24 @@ export default function ImagesToPdf() {
     setNotice(skippedNotice(skipped))
     reset()
   }
-  const move = (from, to) =>
+  const move = (from, to) => {
+    reset()
     setFiles((prev) => {
       const next = [...prev]
       const [item] = next.splice(from, 1)
       next.splice(to, 0, item)
       return next
     })
-  const remove = (i) => setFiles((prev) => prev.filter((_, idx) => idx !== i))
+  }
+  const remove = (i) => {
+    reset()
+    setFiles((prev) => prev.filter((_, idx) => idx !== i))
+  }
+  // Settings changed means the built PDF no longer matches what is on screen.
+  const setOption = (set) => (e) => {
+    set(e.target.value)
+    reset()
+  }
 
   const generate = () =>
     run((onProgress) =>
@@ -75,7 +85,7 @@ export default function ImagesToPdf() {
                 <select
                   className="field-input"
                   value={pageSize}
-                  onChange={(e) => setPageSize(e.target.value)}
+                  onChange={setOption(setPageSize)}
                 >
                   <option value="fit">{T.fitToImage}</option>
                   <option value="A4">A4</option>
@@ -89,7 +99,7 @@ export default function ImagesToPdf() {
                   className="field-input"
                   value={orientation}
                   disabled={pageSize === 'fit'}
-                  onChange={(e) => setOrientation(e.target.value)}
+                  onChange={setOption(setOrientation)}
                 >
                   <option value="auto">{T.auto}</option>
                   <option value="portrait">{T.portrait}</option>
@@ -104,23 +114,26 @@ export default function ImagesToPdf() {
                   max="144"
                   className="field-input"
                   value={margin}
-                  onChange={(e) => setMargin(e.target.value)}
+                  onChange={setOption(setMargin)}
                 />
               </label>
             </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              className="btn-primary"
-              onClick={generate}
-              disabled={running}
-            >
-              <Icon name="fileText" className="h-4 w-4" />
-              {T.create}
-            </button>
-            {result && <DownloadButton result={result} />}
+            {result ? (
+              <DownloadButton result={result} />
+            ) : (
+              <button
+                type="button"
+                className="btn-primary"
+                onClick={generate}
+                disabled={running}
+              >
+                <Icon name="fileText" className="h-4 w-4" />
+                {T.create}
+              </button>
+            )}
           </div>
         </>
       )}
