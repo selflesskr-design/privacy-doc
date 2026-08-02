@@ -1,11 +1,12 @@
 import { PDFDocument } from 'pdf-lib'
+import { MERGE_PDFS } from '../../content/strings.js'
 
 /** Merge PDFs (in the given order) into one document. */
 export async function mergePdfs(files, onProgress) {
   if (!files || files.length < 2) throw new Error('합칠 PDF를 두 개 이상 선택해 주세요.')
   const out = await PDFDocument.create()
   for (let i = 0; i < files.length; i++) {
-    onProgress?.(i / files.length, `Merging ${files[i].name} (${i + 1}/${files.length})…`)
+    onProgress?.(i / files.length, MERGE_PDFS.merging(files[i].name, i + 1, files.length))
     let src
     try {
       src = await PDFDocument.load(await files[i].arrayBuffer())
@@ -15,7 +16,7 @@ export async function mergePdfs(files, onProgress) {
     const pages = await out.copyPages(src, src.getPageIndices())
     pages.forEach((p) => out.addPage(p))
   }
-  onProgress?.(1, 'Finalizing…')
+  onProgress?.(1, MERGE_PDFS.finalizing)
   const bytes = await out.save()
   return new Blob([bytes], { type: 'application/pdf' })
 }

@@ -168,6 +168,16 @@ export const IMAGES_TO_PDF = {
   ready: 'PDF가 만들어졌습니다. 이 기기 안에서만 처리했습니다.',
 }
 
+/** PDF 합치기. */
+export const MERGE_PDFS = {
+  dropLabel: '합칠 PDF를 끌어다 놓거나 눌러서 선택하세요',
+  dropHint: '두 개 이상 넣은 뒤 아래에서 순서를 바꿀 수 있습니다',
+  merge: (n) => (n > 1 ? `PDF ${n}개 합치기` : 'PDF 합치기'),
+  merging: (name, n, total) => `${total}개 중 ${n}개 합치는 중 — ${name}`,
+  finalizing: '새 PDF를 만드는 중…',
+  failed: '합치지 못했습니다',
+}
+
 /** PDF를 사진으로. */
 export const PDF_TO_IMAGES = {
   dropLabel: '사진으로 만들 PDF를 끌어다 놓거나 눌러서 선택하세요',
