@@ -1,12 +1,16 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
+import { PAGE_NUMBERS, COMMON } from '../../content/strings.js'
 
+// Numerals and punctuation only. Writing "1쪽" would pull the embedded Korean
+// face into the file — 1.2 MB for a page number — and "Page 1" is English in a
+// Korean document. "- 1 -" is what these documents use anyway.
 function label(format, page, total, start) {
   const n = page + start - 1
   switch (format) {
     case 'n-of-total':
-      return `${n} of ${total + start - 1}`
-    case 'page-n':
-      return `Page ${n}`
+      return `${n} / ${total + start - 1}`
+    case 'dashed':
+      return `- ${n} -`
     default:
       return `${n}`
   }
@@ -31,7 +35,7 @@ export async function addPageNumbers(file, opts, onProgress) {
   const [vpos, hpos] = position.split('-')
 
   for (let i = 0; i < total; i++) {
-    onProgress?.(i / total, `Numbering page ${i + 1}…`)
+    onProgress?.(i / total, PAGE_NUMBERS.numbering(i + 1, total))
     const page = pages[i]
     const { width, height } = page.getSize()
     const text = label(format, i + 1, total, Number(start))
@@ -43,7 +47,7 @@ export async function addPageNumbers(file, opts, onProgress) {
     const y = vpos === 'top' ? height - margin - fontSize : margin
     page.drawText(text, { x, y, size: fontSize, font, color: rgb(0.25, 0.27, 0.32) })
   }
-  onProgress?.(1, 'Saving…')
+  onProgress?.(1, PAGE_NUMBERS.saving)
   const bytes = await doc.save()
   return new Blob([bytes], { type: 'application/pdf' })
 }

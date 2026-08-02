@@ -169,6 +169,34 @@ export const IMAGES_TO_PDF = {
   ready: 'PDF가 만들어졌습니다. 이 기기 안에서만 처리했습니다.',
 }
 
+/** 쪽 번호 넣기. */
+export const PAGE_NUMBERS = {
+  dropLabel: '쪽 번호를 넣을 PDF를 끌어다 놓거나 눌러서 선택하세요',
+  pages: (n) => `${n}쪽`,
+
+  position: '위치',
+  bottomCenter: '아래 가운데',
+  bottomRight: '아래 오른쪽',
+  bottomLeft: '아래 왼쪽',
+  topCenter: '위 가운데',
+  topRight: '위 오른쪽',
+  topLeft: '위 왼쪽',
+
+  format: '표기',
+  fontSize: (pt) => `글자 크기: ${pt}pt`,
+  start: '시작 번호',
+  startHint: '앞표지를 빼고 세려면 0부터 시작하세요',
+
+  preview: '미리보기',
+  previewNote: '첫 쪽에 넣어본 모습입니다',
+  previewLoading: '미리보기를 만드는 중…',
+
+  numbering: (n, total) => `${total}쪽 중 ${n}쪽 넣는 중…`,
+  saving: '새 PDF를 만드는 중…',
+  apply: '쪽 번호 넣기',
+  failed: '쪽 번호를 넣지 못했습니다',
+}
+
 /** PDF 워터마크. */
 export const WATERMARK_PDF = {
   dropLabel: '워터마크를 넣을 PDF를 끌어다 놓거나 눌러서 선택하세요',
