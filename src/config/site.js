@@ -2,6 +2,9 @@
 // (useSeo) and by the build-time prerenderer (scripts/prerender.mjs), so
 // changing the domain here updates canonical/og/sitemap everywhere at once.
 export const SITE_URL = 'https://privacy.selfless.kr'
+// Change this version when the social sharing artwork changes. KakaoTalk and
+// other crawlers cache image URLs aggressively, so a new URL forces a refresh.
+export const OG_IMAGE_URL = `${SITE_URL}/og.png?v=20260802`
 
 // The wordmark matches the address it lives at: privacy.selfless.kr. "Doc" tied
 // the name to documents, and photos are half of what the service handles.

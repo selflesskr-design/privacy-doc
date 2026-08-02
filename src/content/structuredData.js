@@ -1,10 +1,10 @@
-import { SITE_URL, BRAND, DEFAULT_DESC } from '../config/site.js'
+import { SITE_URL, BRAND, DEFAULT_DESC, OG_IMAGE_URL } from '../config/site.js'
 import { canonicalOf, isIndexable } from './pages.js'
 
 // JSON-LD builders. Plain objects with no DOM access, so the React runtime and
 // the Node prerenderer emit byte-identical structured data.
 
-const OG_IMAGE = `${SITE_URL}/og.png`
+const OG_IMAGE = OG_IMAGE_URL
 
 function breadcrumbLd(page) {
   if (!page.breadcrumb?.length) return null
