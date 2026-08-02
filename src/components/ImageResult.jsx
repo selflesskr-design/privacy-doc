@@ -3,6 +3,7 @@ import Icon from './Icon.jsx'
 import SizeCompare from './SizeCompare.jsx'
 import { downloadBlob } from '../lib/download.js'
 import { formatBytes } from '../lib/format.js'
+import { COMMON } from '../content/strings.js'
 
 // Shows a produced image with a download button, and (when before/after sizes
 // are supplied) the reusable size-compare bar.
@@ -28,7 +29,7 @@ export default function ImageResult({ result }) {
         <div className="flex flex-wrap items-center gap-3 p-3">
           <button type="button" className="btn-primary" onClick={() => downloadBlob(blob, filename, blob.type)}>
             <Icon name="download" className="h-4 w-4" />
-            Download
+            {COMMON.download}
           </button>
           <span className="text-xs text-slate-400">
             {filename} · {formatBytes(blob.size)}

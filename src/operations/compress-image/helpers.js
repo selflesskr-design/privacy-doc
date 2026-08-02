@@ -1,4 +1,5 @@
 import imageCompression from 'browser-image-compression'
+import { COMPRESS_IMAGE } from '../../content/strings.js'
 
 const MIME = { jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp' }
 
@@ -14,7 +15,7 @@ export async function compressImage(file, opts, onProgress) {
     initialQuality: quality,
     useWebWorker: true, // heavy work off the main thread; worker is bundled (no network)
     maxSizeMB: Number.POSITIVE_INFINITY, // let quality/dimension drive the result
-    onProgress: (p) => onProgress?.(p / 100, `Compressing… ${Math.round(p)}%`),
+    onProgress: (p) => onProgress?.(p / 100, COMPRESS_IMAGE.compressing(Math.round(p))),
   }
   if (maxDimension) options.maxWidthOrHeight = Number(maxDimension)
   if (format !== 'keep') options.fileType = MIME[format]

@@ -353,6 +353,25 @@ export const PDF_TO_IMAGES = {
   failed: 'PDF를 사진으로 만들지 못했습니다',
 }
 
+/** 사진 용량 줄이기. */
+export const COMPRESS_IMAGE = {
+  dropLabel: '용량을 줄일 사진을 끌어다 놓거나 눌러서 선택하세요',
+  dropHint: 'JPEG, PNG, WebP',
+
+  quality: (pct) => `화질: ${pct}%`,
+  maxSize: '최대 크기',
+  keepSize: '원본 크기 그대로',
+  px: (n) => `${n}px`,
+  format: '저장 형식',
+  keepFormat: '원본과 같게',
+
+  pngNote: 'PNG는 화질을 낮춰도 거의 줄지 않습니다. 사진이라면 JPEG이나 WebP로 바꾸세요.',
+
+  compressing: (pct) => `줄이는 중… ${pct}%`,
+  compress: '용량 줄이기',
+  failed: '용량을 줄이지 못했습니다',
+}
+
 /** 사진 개인정보 가리기. */
 export const IMAGE_REDACT = {
   title: '사진 개인정보 가리기',
