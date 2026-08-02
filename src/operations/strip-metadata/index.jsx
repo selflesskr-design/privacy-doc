@@ -8,15 +8,27 @@ import { useJob } from '../../hooks/useJob.js'
 import { formatBytes } from '../../lib/format.js'
 import { stripMetadata } from './helpers.js'
 import { STRIP_METADATA as T } from '../../content/strings.js'
+import { readExif } from '../../lib/exif.js'
 
 export default function StripMetadata() {
   const [file, setFile] = useState(null)
+  const [exif, setExif] = useState(null)
   const { running, progress, error, result, run, reset } = useJob()
 
-  const pick = (files) => {
-    setFile(files[0])
+  const pick = async (files) => {
+    const f = files[0]
+    setFile(f)
+    setExif(null)
     reset()
+    setExif(readExif(await f.arrayBuffer()))
   }
+
+  const findings = exif && [
+    exif.gps && [T.gpsLabel, T.gpsValue(exif.gps.lat, exif.gps.lon)],
+    exif.taken && [T.takenLabel, exif.taken],
+    exif.camera && [T.cameraLabel, exif.camera],
+    exif.software && [T.softwareLabel, exif.software],
+  ].filter(Boolean)
   const go = () => run((p) => stripMetadata(file, {}, p))
 
   return (
@@ -30,7 +42,24 @@ export default function StripMetadata() {
             <span className="min-w-0 flex-1 truncate text-sm font-medium">{file.name}</span>
             <span className="text-xs text-slate-400">{formatBytes(file.size)}</span>
           </div>
-          {!result && (
+          {findings && (findings.length ? (
+            <div className="card space-y-3 p-4">
+              <span className="field-label">{T.found}</span>
+              <dl className="space-y-1.5 text-sm">
+                {findings.map(([label, value]) => (
+                  <div key={label} className="flex flex-wrap gap-x-3">
+                    <dt className="w-24 shrink-0 text-slate-500 dark:text-slate-400">{label}</dt>
+                    <dd className="font-medium tabular-nums">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+              {exif.gps && <Note type="warning">{T.gpsWarn}</Note>}
+            </div>
+          ) : (
+            <Note type="info">{T.foundNone}</Note>
+          ))}
+
+          {!result && findings?.length > 0 && (
             <button type="button" className="btn-primary" onClick={go} disabled={running}>
               <Icon name="lock" className="h-4 w-4" />
               {T.strip}

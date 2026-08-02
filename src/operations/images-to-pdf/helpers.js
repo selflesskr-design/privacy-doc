@@ -1,7 +1,7 @@
 import { PDFDocument } from 'pdf-lib'
 import { IMAGES_TO_PDF } from '../../content/strings.js'
 import { PAGE_SIZES } from '../../lib/pageSizes.js'
-import { readJpegOrientation } from '../../lib/exifOrientation.js'
+import { readJpegOrientation } from '../../lib/exif.js'
 
 // pdf-lib can only embed JPEG and PNG directly. Anything else (WebP, GIF, BMP)
 // is transcoded to JPEG on a canvas first — all in-browser.

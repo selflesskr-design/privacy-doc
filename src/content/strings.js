@@ -485,6 +485,19 @@ export const STRIP_METADATA = {
   dropLabel: '정보를 지울 사진을 끌어다 놓거나 눌러서 선택하세요',
   dropHint: '휴대폰으로 찍은 사진에는 촬영 위치와 기기 정보가 함께 저장됩니다',
 
+  // What the photo is carrying, before offering to remove it. People do not
+  // look for this tool because the problem is invisible until something reads
+  // the tags out loud.
+  checking: '사진에 무엇이 들어 있는지 확인하는 중…',
+  found: '이 사진에 들어 있는 정보',
+  foundNone: '이 사진에는 위치나 기기 정보가 없습니다. 지울 것이 없습니다.',
+  gpsLabel: '촬영 위치',
+  gpsValue: (lat, lon) => `${lat.toFixed(6)}, ${lon.toFixed(6)}`,
+  gpsWarn: '이 좌표는 사진을 찍은 자리입니다. 집에서 찍었다면 집 주소가 됩니다.',
+  takenLabel: '촬영 시각',
+  cameraLabel: '촬영 기기',
+  softwareLabel: '편집 프로그램',
+
   decoding: '사진을 여는 중…',
   reencoding: '정보를 빼고 다시 저장하는 중…',
   strip: '사진 정보 지우기',
