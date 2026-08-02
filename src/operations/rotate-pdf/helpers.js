@@ -1,4 +1,5 @@
 import { PDFDocument, degrees } from 'pdf-lib'
+import { ROTATE_PDF } from '../../content/strings.js'
 import { parsePageRanges } from '../../lib/format.js'
 
 /**
@@ -21,11 +22,11 @@ export async function rotatePdf(file, opts, onProgress) {
   const pages = doc.getPages()
   for (let i = 0; i < pages.length; i++) {
     if (!set.has(i + 1)) continue
-    onProgress?.(i / pages.length, `Rotating page ${i + 1}…`)
+    onProgress?.(i / pages.length, ROTATE_PDF.rotating(i + 1))
     const current = pages[i].getRotation().angle || 0
     pages[i].setRotation(degrees((current + Number(angle)) % 360))
   }
-  onProgress?.(1, 'Saving…')
+  onProgress?.(1, ROTATE_PDF.saving)
   const bytes = await doc.save()
   return new Blob([bytes], { type: 'application/pdf' })
 }

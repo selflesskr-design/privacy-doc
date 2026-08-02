@@ -168,6 +168,30 @@ export const IMAGES_TO_PDF = {
   ready: 'PDF가 만들어졌습니다. 이 기기 안에서만 처리했습니다.',
 }
 
+/** PDF 회전. */
+export const ROTATE_PDF = {
+  dropLabel: '돌릴 PDF를 끌어다 놓거나 눌러서 선택하세요',
+  pages: (n) => `${n}쪽`,
+
+  angle: '얼마나 돌릴까요',
+  cw90: '오른쪽으로 90°',
+  deg180: '180° (거꾸로)',
+  ccw90: '왼쪽으로 90°',
+
+  range: '돌릴 쪽 (선택)',
+  rangePlaceholder: '비워두면 전체 — 예: 1-3,5',
+  rangeEmpty: (part, total) => `"${part}"에 해당하는 쪽이 없습니다. 이 문서는 ${total}쪽입니다.`,
+
+  preview: '미리보기',
+  previewNote: '첫 쪽을 돌려본 모습입니다',
+  previewLoading: '미리보기를 만드는 중…',
+
+  rotating: (n) => `${n}쪽 돌리는 중…`,
+  saving: '새 PDF를 만드는 중…',
+  rotate: '돌린 PDF 만들기',
+  failed: '돌리지 못했습니다',
+}
+
 /** PDF 나누기. */
 export const SPLIT_PDF = {
   dropLabel: '나눌 PDF를 끌어다 놓거나 눌러서 선택하세요',

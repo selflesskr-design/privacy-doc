@@ -90,15 +90,17 @@ export default function SplitPdf() {
             )}
           </div>
 
-          <button
-            type="button"
-            className="btn-primary"
-            onClick={go}
-            disabled={running || (mode === 'ranges' && (!ranges.trim() || !!rangeError))}
-          >
-            <Icon name="scissors" className="h-4 w-4" />
-            Split PDF
-          </button>
+          {!result && (
+            <button
+              type="button"
+              className="btn-primary"
+              onClick={go}
+              disabled={running || (mode === 'ranges' && (!ranges.trim() || !!rangeError))}
+            >
+              <Icon name="scissors" className="h-4 w-4" />
+              {T.split}
+            </button>
+          )}
         </>
       )}
 
