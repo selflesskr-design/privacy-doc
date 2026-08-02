@@ -67,29 +67,21 @@ const HOME = {
   // why anyone comes here, so they sit behind a single link rather than
   // competing for attention with the tool this service exists for.
   sections: [
-    { t: 'p', text: '가린 부분은 복사해도 글자가 나오지 않습니다. 파일은 내 브라우저 안에서만 처리됩니다.' },
+    {
+      t: 'p',
+      text:
+        '가린 부분은 복사해도 글자가 나오지 않습니다. 파일은 별도 서버에 저장하지 않고 내 브라우저 안에서만 처리됩니다.',
+    },
     {
       t: 'actions',
       items: [{ label: 'PDF 가리기 시작', href: '/editor/pdf-redact', primary: true }],
     },
     { t: 'redactDemo' },
-    {
-      t: 'p',
-      text:
-        '계약서, 등본, 통장 사본. 어딘가에 내야 하는데 주민등록번호나 계좌번호가 함께 적혀 있습니다. 처음 보는 변환 사이트에 파일을 올리면 그 파일이 어디에 남는지 알기 어렵습니다.',
-    },
     { t: 'note', tone: 'warn', text: CHECK_FIRST },
-    { t: 'h2', text: '왜 파일을 올리지 않아도 되나요' },
-    {
-      t: 'p',
-      text:
-        '요즘 브라우저는 PDF를 읽고 다시 저장하는 일을 스스로 할 수 있습니다. 굳이 파일을 어딘가로 보낼 이유가 없습니다.',
-    },
-    // Nothing else is promoted from here yet. The inherited tools work as far as
-    // static analysis goes, but none have been run end to end, and this page
-    // only carries what has actually been checked. They stay reachable through
-    // the sidebar and /tools until each one is verified.
-    { t: 'link', label: '파일이 밖으로 나가지 않는다는 것을 직접 확인하는 방법 →', href: '/security' },
+    // Nothing else. Someone who searched for this already knows why they need
+    // it, the how-it-works reasoning lives on its own page, and a link inviting
+    // people to open devtools was never going to be taken up. Everything that
+    // remains either does something or warns about something.
   ],
 }
 
@@ -862,20 +854,10 @@ const EDITOR_PAGES = [
     // The real editor is code-split and mounted by App.jsx; these blocks are
     // what a crawler or a JS-less visitor sees.
     editor: 'pdf-redact',
-    sections: [
-      {
-        t: 'p',
-        text:
-          'PDF에서 가릴 곳을 사각형으로 지정하면, 그 부분을 문서 이미지에 직접 적용해 새 PDF로 저장합니다. 파일은 내 브라우저에서만 열립니다.',
-      },
-      {
-        t: 'cards',
-        items: [
-          { label: 'PDF 개인정보 가리기 안내', href: '/tools/pdf-redact', text: '어떤 방식인지 보기' },
-          { label: 'PDF 편집', href: '/edit-pdf', text: '개인정보 가리기 용도가 아닙니다' },
-        ],
-      },
-    ],
+    // Nothing above the editor. Someone who pressed "가리기 시작" came here to
+    // open a file, and the only things offered were a link back to the
+    // explanation and a link to the one tool they must not use for this.
+    sections: [],
   },
   {
     path: '/editor/image-redact',

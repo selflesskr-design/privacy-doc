@@ -14,7 +14,7 @@ import { useLocalStorage } from './hooks/useLocalStorage.js'
 import { useSeo } from './hooks/useSeo.js'
 import { getOperation } from './registry/registry.js'
 import { emitFileDrop } from './lib/fileDropBus.js'
-import { BRAND, UPSTREAM_NAME, UPSTREAM_AUTHOR, UPSTREAM_URL } from './config/site.js'
+import { BRAND } from './config/site.js'
 import { COMMON } from './content/strings.js'
 
 // Editor routes mount a real tool instead of prose. Code-split so the PDF
@@ -311,35 +311,32 @@ export default function App() {
             ) : null}
           </div>
 
-          <footer className="mx-auto max-w-3xl space-y-2 px-4 pb-10 pt-4 text-xs text-slate-400 sm:px-6">
-            <p>
-              {BRAND}는 파일을 내 브라우저에서 직접 처리합니다. 고른 파일은 밖으로 나가지 않고, 사용 중에
-              외부로 나가는 통신도 없습니다. MIT 라이선스 오픈소스입니다.
-            </p>
-            {/* MIT 의무 사항: 원저작권 고지 유지. LICENSE / NOTICE 파일도 함께 배포됩니다. */}
-            <p>
-              이 서비스는 MIT 라이선스로 공개된{' '}
-              <a
-                href={UPSTREAM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium text-slate-500 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-300"
-              >
-                {UPSTREAM_NAME}
-              </a>
-              를 기반으로 만들어졌습니다. Copyright (c) 2026 {UPSTREAM_AUTHOR}.
-            </p>
-            <p className="flex items-center gap-3">
-              <a
-                href="https://github.com/selflesskr-design/privacy-doc"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 font-medium text-slate-500 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-300"
-              >
-                <Icon name="github" className="h-3.5 w-3.5" />
-                GitHub에서 소스 보기
-              </a>
-            </p>
+          {/* MIT asks that the copyright and permission notice ship with the
+              software, not that it be repeated on every screen. LICENSE and
+              NOTICE go out with the build, the repository is public, and
+              /open-source-licenses carries the attribution in full — so the
+              footer only needs to point there. */}
+          <footer className="mx-auto flex max-w-3xl flex-wrap items-center gap-x-3 gap-y-1 px-4 pb-10 pt-4 text-xs text-slate-400 sm:px-6">
+            <span>{BRAND}는 파일을 내 브라우저에서 직접 처리합니다.</span>
+            <a
+              href="/open-source-licenses"
+              onClick={(e) => {
+                e.preventDefault()
+                handleSelect('/open-source-licenses')
+              }}
+              className="font-medium text-slate-500 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-300"
+            >
+              오픈소스 라이선스
+            </a>
+            <a
+              href="https://github.com/selflesskr-design/privacy-doc"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 font-medium text-slate-500 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-300"
+            >
+              <Icon name="github" className="h-3.5 w-3.5" />
+              소스 보기
+            </a>
           </footer>
         </main>
       </div>

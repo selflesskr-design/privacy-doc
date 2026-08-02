@@ -63,16 +63,14 @@ function RedactDemo() {
       <rect width="130" height="92" rx="6" fill="#FBF7F2" stroke="#E7DACA" />
       {line(14, 60, '#D5C3AC')}
       {line(26, 90, '#E7DACA')}
+      {/* Only the second half is covered — that is what a submission office
+          usually asks for, and leaving the front visible makes it obvious what
+          was covered and what was not. */}
+      <text x="14" y="46" fontSize="9" fontFamily="monospace" fill="#2B221A">990909-</text>
       {covered ? (
-        <>
-          <rect x="14" y="38" width="34" height="9" rx="2" fill="#2B221A" />
-          <rect x="52" y="38" width="50" height="9" rx="2" fill="#2B221A" />
-        </>
+        <rect x="52" y="38" width="50" height="10" rx="2" fill="#2B221A" />
       ) : (
-        <>
-          <text x="14" y="46" fontSize="9" fontFamily="monospace" fill="#2B221A">990909-</text>
-          <text x="52" y="46" fontSize="9" fontFamily="monospace" fill="#B85512">1234567</text>
-        </>
+        <text x="52" y="46" fontSize="9" fontFamily="monospace" fill="#B85512">1234567</text>
       )}
       {line(58, 86, '#E7DACA')}
       {line(70, 66, '#E7DACA')}

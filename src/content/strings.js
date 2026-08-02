@@ -73,17 +73,20 @@ export const PDF_REDACT = {
   qualityMax: '최고',
   qualityHint: '화질이 높을수록 글자가 또렷하지만 파일이 커집니다',
 
-  save: '안전하게 저장',
+  // Says what the button does. It does not save anywhere — it builds the file,
+  // and the next button is what puts it on disk. "안전하게" was praise, not
+  // information: there is no unsafe save to contrast it with.
+  save: '가린 PDF 만들기',
   saveNothing: '가릴 영역을 먼저 지정해 주세요',
 
   // States the effect, not the mechanism. PDF goes in, PDF comes out — how the
   // pages are rebuilt belongs on /how-it-works, not in the editor.
   saveNote:
-    '원본 파일은 그대로 두고, 가려진 새 PDF를 만듭니다. 새 PDF에서는 글자 검색과 복사가 되지 않습니다.',
+    '원본 파일은 건드리지 않고, 가려진 PDF를 새로 만듭니다. 새 PDF에서는 글자 검색과 복사가 되지 않습니다.',
 
   converting: (n, total) => `${total}쪽 중 ${n}쪽 변환 중…`,
   building: '새 PDF를 만드는 중…',
-  ready: '가림 처리가 끝났습니다. 파일 이름을 정하고 받으세요.',
+  ready: '가린 PDF가 만들어졌습니다. 이름을 정하고 받으세요.',
   fileName: '파일 이름',
 
   recheckBeforeSubmit: '제출하기 전에 가린 위치와 문서 내용을 다시 확인해 주세요.',
