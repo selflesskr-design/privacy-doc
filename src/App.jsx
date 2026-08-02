@@ -30,7 +30,14 @@ const EDITORS = {
 // Content paths are checked first; the 24 original tool URLs are untouched.
 // Legacy hash links ("/#/merge-pdfs") are redirected to the path form on load.
 function normalizePath(pathname) {
-  const clean = decodeURIComponent(pathname).replace(/\/+$/, '')
+  let clean
+  try {
+    clean = decodeURIComponent(pathname).replace(/\/+$/, '')
+  } catch {
+    // A malformed percent-encoded URL (for example, "/%" or "/%ZZ") must
+    // render the normal not-found page instead of crashing before React mounts.
+    return '/404'
+  }
   return clean === '' ? '/' : clean
 }
 

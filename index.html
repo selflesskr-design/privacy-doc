@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!--
-      Strict Content-Security-Policy — this is the technical backbone of the
-      promise that files stay on the device. The only hosts the browser will
-      talk to are our own origin and Google Analytics: no CDNs, no external
-      fonts, nowhere a file could be sent even if a future change tried. The
-      files themselves are never read by the analytics tag, which sees page
-      addresses and nothing else. Its config lives in /ga.js on our origin so
-      that 'unsafe-inline' is not needed.
+      Vercel sends this policy as an HTTP response header so frame-ancestors
+      is enforced before the document loads. This meta copy preserves the
+      remaining CSP protections when the static build is hosted elsewhere.
+      The policy limits network access to our own origin and Google Analytics.
+      There are no CDN or external-font connections.
+      The app's file-processing code never adds selected files, file names,
+      sizes, or contents to network requests. Google Analytics receives page,
+      browser, and device information for visit statistics. Its config lives
+      in /ga.js on our origin so that 'unsafe-inline' is not needed.
         - script-src 'wasm-unsafe-eval': allows WebAssembly (image compression) but not eval().
         - img-src data: blob:: canvas-generated previews and object URLs.
         - worker-src blob:: web workers (pdf.js, image compression) load from blobs.

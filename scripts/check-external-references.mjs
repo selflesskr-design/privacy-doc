@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-// Static analysis: scan source files for external URL references that would
-// violate Privacy's "zero external network" guarantee. This catches:
+// Static analysis: scan source files for external URL references outside the
+// product's documented allowlist. This catches:
 //   - CDN links (`cdn.jsdelivr.net`, `unpkg.com`, etc.)
 //   - External fonts (`fonts.googleapis.com`)
-//   - Analytics pings, API calls, or any absolute URL to a foreign host
+//   - Unapproved analytics, API calls, or absolute URLs to a foreign host
 //
 // Allowed patterns (not flagged):
 //   - privacy.selfless.kr                    (our own deployment)
