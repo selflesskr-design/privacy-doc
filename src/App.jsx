@@ -116,9 +116,9 @@ export default function App() {
       e.stopPropagation()
       dragCounter = 0
       setIsDragging(false)
-      const file = e.dataTransfer?.files?.[0]
-      if (!file) return
-      emitFileDrop(file)
+      const files = Array.from(e.dataTransfer?.files || [])
+      if (!files.length) return
+      emitFileDrop(files)
     }
 
     window.addEventListener('dragenter', onDragEnter)

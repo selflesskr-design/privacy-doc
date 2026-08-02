@@ -1,10 +1,7 @@
 import { useEffect } from 'react'
-import { registerFileDropHandler } from '../lib/fileDropBus'
+import { registerFileDropHandler } from '../lib/fileDropBus.js'
 
-
-export function useFileDrop(onFile){
-useEffect(()=>{
-    const unregister = registerFileDropHandler(onFile)
-    return unregister;
-}, [onFile])
+/** Receives files dropped anywhere outside the dropzone, as an array. */
+export function useFileDrop(onFiles) {
+  useEffect(() => registerFileDropHandler(onFiles), [onFiles])
 }

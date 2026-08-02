@@ -48,7 +48,7 @@ export default function MergePdfs() {
         </>
       )}
 
-      {notice && <Note type="warning">{notice}</Note>}
+      {notice && <Note type="info">{notice}</Note>}
       {running && progress && <Progress value={progress.value} message={progress.message} />}
       {error && <Note type="error" title="Merge failed">{error}</Note>}
     </div>

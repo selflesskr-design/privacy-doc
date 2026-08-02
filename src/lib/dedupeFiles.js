@@ -11,16 +11,16 @@ const keyOf = (file) => `${file.name}:${file.size}`
  *
  * @param {File[]} existing - files already in the list
  * @param {File[]} incoming - the newly selected batch
- * @returns {{ unique: File[], skipped: number }}
+ * @returns {{ unique: File[], skipped: string[] }} skipped holds their names
  */
 export function dedupeFiles(existing, incoming) {
   const seen = new Set(existing.map(keyOf))
   const unique = []
-  let skipped = 0
+  const skipped = []
   for (const file of incoming) {
     const key = keyOf(file)
     if (seen.has(key)) {
-      skipped += 1
+      skipped.push(file.name)
       continue
     }
     seen.add(key)
@@ -29,8 +29,12 @@ export function dedupeFiles(existing, incoming) {
   return { unique, skipped }
 }
 
-/** 건너뛴 중복 파일 안내, or '' when nothing was skipped. */
+/**
+ * Names what was left out and why. Nothing went wrong and there is nothing to
+ * do about it, so it says what happened rather than warning.
+ */
 export function skippedNotice(skipped) {
-  if (skipped < 1) return ''
-  return `이미 넣은 파일 ${skipped}개는 건너뛰었습니다`
+  if (!skipped?.length) return ''
+  // Names go last so the sentence needs no particle after them.
+  return `같은 파일은 한 번만 넣습니다: ${skipped.join(', ')}`
 }

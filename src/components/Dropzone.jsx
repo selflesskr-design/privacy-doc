@@ -29,6 +29,9 @@ export default function Dropzone({
   const onDrop = useCallback(
     (e) => {
       e.preventDefault()
+      // Without this the drop also reaches the window listener, which hands the
+      // same files back through the bus and adds them a second time.
+      e.stopPropagation()
       setDragging(false)
       handleFiles(e.dataTransfer.files)
     },
@@ -37,12 +40,8 @@ export default function Dropzone({
 
   const open = () => inputRef.current?.click()
 
-  // Route window-wide drops (anywhere outside this box) into the same file pipeline.
-  const onWindowFileDrop = useCallback(
-    (file) => handleFiles([file]),
-    [handleFiles],
-  )
-  useFileDrop(onWindowFileDrop)
+  // Route window-wide drops (anywhere outside this box) into the same pipeline.
+  useFileDrop(handleFiles)
 
   return (
     <div
