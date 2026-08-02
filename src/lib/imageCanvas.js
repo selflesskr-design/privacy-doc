@@ -11,10 +11,16 @@ const MIME = {
 
 export const FORMAT_EXT = { jpeg: 'jpg', png: 'png', webp: 'webp' }
 
-/** Decode a File/Blob into an ImageBitmap (with a fallback to <img>). */
+/**
+ * Decode a File/Blob into an ImageBitmap (with a fallback to <img>).
+ *
+ * `from-image` applies the EXIF orientation, so the pixels come out the way
+ * every viewer shows them. It matters most where we re-encode: dropping the
+ * tag without turning the pixels first would leave the image lying on its side.
+ */
 export async function decode(file) {
   try {
-    return await createImageBitmap(file)
+    return await createImageBitmap(file, { imageOrientation: 'from-image' })
   } catch {
     // Fallback for formats createImageBitmap may reject in some browsers.
     return await new Promise((resolve, reject) => {

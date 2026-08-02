@@ -1,19 +1,26 @@
 import { PDFDocument } from 'pdf-lib'
 import { IMAGES_TO_PDF } from '../../content/strings.js'
 import { PAGE_SIZES } from '../../lib/pageSizes.js'
+import { readJpegOrientation } from '../../lib/exifOrientation.js'
 
 // pdf-lib can only embed JPEG and PNG directly. Anything else (WebP, GIF, BMP)
 // is transcoded to JPEG on a canvas first — all in-browser.
 async function embedImage(pdfDoc, file) {
   const type = (file.type || '').toLowerCase()
   const buf = await file.arrayBuffer()
-  if (type === 'image/jpeg' || type === 'image/jpg') return pdfDoc.embedJpg(buf)
+  const isJpeg = type === 'image/jpeg' || type === 'image/jpg'
+  // A photo shot in portrait is landscape pixels plus an EXIF tag. embedJpg
+  // reads the pixels and ignores the tag, so an upright photo arrives on its
+  // side. Only such photos pay for the re-encode below.
+  if (isJpeg && readJpegOrientation(buf) === 1) return pdfDoc.embedJpg(buf)
   if (type === 'image/png') return pdfDoc.embedPng(buf)
 
   // Transcode via canvas.
   let bitmap
   try {
-    bitmap = await createImageBitmap(new Blob([buf], { type: type || 'image/*' }))
+    bitmap = await createImageBitmap(new Blob([buf], { type: type || 'image/*' }), {
+      imageOrientation: 'from-image',
+    })
   } catch {
     throw new Error(`${file.name} 파일은 지원하지 않는 형식입니다. JPEG, PNG, WebP 파일을 사용해 주세요.`)
   }

@@ -81,7 +81,9 @@ export async function prepareImage(file) {
   let bytes = new Uint8Array(await file.arrayBuffer())
   let mime = type
   if (type !== 'image/png' && type !== 'image/jpeg' && type !== 'image/jpg') {
-    const bmp = await createImageBitmap(new Blob([bytes], { type: type || 'image/*' }))
+    const bmp = await createImageBitmap(new Blob([bytes], { type: type || 'image/*' }), {
+      imageOrientation: 'from-image',
+    })
     const c = document.createElement('canvas')
     c.width = bmp.width
     c.height = bmp.height
