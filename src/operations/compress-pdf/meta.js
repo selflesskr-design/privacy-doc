@@ -4,7 +4,7 @@ export default {
   description: '쪽 안의 사진을 다시 저장해 파일 크기를 줄입니다.',
   category: 'pdf',
   icon: 'compress',
-  order: 7,
+  order: 10,
   // One line per choice, named exactly as the select shows them.
   notes: [
     '사진이 많은 문서 → "쪽을 사진으로 바꾸기"',

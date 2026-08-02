@@ -4,5 +4,5 @@ export default {
   description: '위치와 모양을 골라 PDF에 쪽 번호를 넣습니다.',
   category: 'pdf',
   icon: 'hash',
-  order: 9,
+  order: 4,
 }

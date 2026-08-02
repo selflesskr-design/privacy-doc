@@ -4,5 +4,5 @@ export default {
   description: '쪽 미리보기를 보면서 필요 없는 쪽을 빼고 순서를 바꿉니다.',
   category: 'pdf',
   icon: 'grid',
-  order: 6,
+  order: 3,
 }
