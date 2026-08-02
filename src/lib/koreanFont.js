@@ -45,8 +45,13 @@ const perDocument = new WeakMap()
  * Embed Pretendard Regular into `doc` and return the PDFFont, reusing the same
  * embed for repeated calls on one document.
  *
- * Subsetting is not optional: the full face adds ~1.2 MB to every output PDF,
- * a subset of the glyphs actually used adds ~5 KB.
+ * Subsetting is off, and that adds ~1.4 MB to every output PDF that carries
+ * Korean. @pdf-lib/fontkit's subsetter writes some glyphs with an empty
+ * outline: the character is encoded correctly, extracts and copies fine, and
+ * simply does not draw. Which glyphs it loses is not predictable —
+ * '안녕하세요 홍길동 990909-1234567' came back missing 안, 갑, 2 and the hyphen.
+ * A document that looks right on screen and prints blanks at the counter is
+ * worse than a large file.
  *
  * Only Regular 400 is bundled, so Korean text is always drawn at regular
  * weight — bold/italic styling does not apply to it.
@@ -60,7 +65,7 @@ export async function embedKoreanFont(doc) {
     loadFontBytes(),
   ])
   doc.registerFontkit(fontkit)
-  const font = await doc.embedFont(bytes, { subset: true })
+  const font = await doc.embedFont(bytes, { subset: false })
   perDocument.set(doc, font)
   return font
 }

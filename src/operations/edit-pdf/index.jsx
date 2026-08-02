@@ -173,7 +173,7 @@ export default function EditPdf() {
   const [tool, setTool] = useState('select')
   const [color, setColor] = useState('#e11d48')
   const [strokeWidth, setStrokeWidth] = useState(3)
-  const [fontSize, setFontSize] = useState(16)
+  const [fontSize, setFontSize] = useState(24)
   const [fontFamily, setFontFamily] = useState('Helvetica')
   const [bold, setBold] = useState(false)
   const [italic, setItalic] = useState(false)
