@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!--
-      Strict Content-Security-Policy — this is the technical backbone of Privacy's
-      "provably local" guarantee. connect-src 'self' means the app is forbidden
-      from making any outbound network request (fetch/XHR/WebSocket) to any host
-      other than its own origin. No CDNs, no analytics, no external fonts.
+      Strict Content-Security-Policy — this is the technical backbone of the
+      promise that files stay on the device. The only hosts the browser will
+      talk to are our own origin and Google Analytics: no CDNs, no external
+      fonts, nowhere a file could be sent even if a future change tried. The
+      files themselves are never read by the analytics tag, which sees page
+      addresses and nothing else. Its config lives in /ga.js on our origin so
+      that 'unsafe-inline' is not needed.
         - script-src 'wasm-unsafe-eval': allows WebAssembly (image compression) but not eval().
         - img-src data: blob:: canvas-generated previews and object URLs.
         - worker-src blob:: web workers (pdf.js, image compression) load from blobs.
@@ -17,7 +20,7 @@
     -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; connect-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'"
+      content="default-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; script-src 'self' 'wasm-unsafe-eval' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'"
     />
 
     <meta name="theme-color" content="#FBF7F2" media="(prefers-color-scheme: light)" />
@@ -28,6 +31,8 @@
          is loaded and nothing is sent. Google needs none — selfless.kr is
          verified as a domain property, which covers every subdomain. -->
     <meta name="naver-site-verification" content="64c05ee0d671382dc7976cc1852a6666feb6dedd" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N4R2D8DVN4"></script>
+    <script src="/ga.js"></script>
     <title>Privacy — PDF·사진 개인정보 가리기</title>
     <meta
       name="description"

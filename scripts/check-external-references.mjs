@@ -31,6 +31,9 @@ const ALLOWED_HOSTS = [
   'github.com/selflesskr-design/privacy-doc',
   'github.com/mithun-srinivas/DoxDock',
   'uniquelab.selfless.kr',
+  // Analytics. Sees which pages are opened; never the files, which are read
+  // by the browser itself and never uploaded anywhere.
+  'www.googletagmanager.com',
   'opensource.org',
   'schema.org',
 ]
