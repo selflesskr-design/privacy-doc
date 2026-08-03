@@ -101,7 +101,7 @@ export default function Blocks({ sections, onNavigate }) {
   // Internal paths are handed to the router; anything with a host of its own
   // has to leave the app, or the router swallows it and lands on /404.
   const link = (href, children, className, key) => {
-    const external = /^https?:\/\//.test(href)
+    const external = /^[a-z][a-z0-9+.-]*:/i.test(href)
     return (
       <a
         key={key}
