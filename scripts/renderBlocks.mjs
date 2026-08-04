@@ -58,6 +58,15 @@ export function renderBlocks(sections, ctx = {}) {
               .map((i) => `<li>${a(i.href, i.label)} — ${escText(i.text)}</li>`)
               .join('')}</ul>`
           )
+        case 'guideCards':
+          return `<ul>${b.items
+            .map(
+              (i) =>
+                `<li>${escText(i.category)} · ${a(i.href, i.label)} — ${escText(i.text)}</li>`,
+            )
+            .join('')}</ul>`
+        case 'ctaBox':
+          return `<h2>${escText(b.title)}</h2><p>${escText(b.text)}</p><p>${a(b.href, b.label)}</p>`
         case 'faq':
           return `<dl>${b.items
             .map((i) => `<dt>${escText(i.q)}</dt><dd>${escText(i.a)}</dd>`)

@@ -245,6 +245,55 @@ export default function Blocks({ sections, onNavigate }) {
               </section>
             )
 
+          case 'guideCards':
+            return (
+              <div key={i} className={`grid gap-4 ${b.items.length > 1 ? 'sm:grid-cols-2' : ''}`}>
+                {b.items.map((item) => (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      onNavigate(item.href)
+                    }}
+                    className="card flex flex-col p-5 transition-colors hover:border-brand-400"
+                  >
+                    <span className="w-fit rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-900/40 dark:text-brand-200">
+                      {item.category}
+                    </span>
+                    <span className="mt-3 block font-semibold">{item.label}</span>
+                    <span className="mt-1.5 block flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                      {item.text}
+                    </span>
+                    <span className="mt-4 block text-sm font-medium text-brand-600 dark:text-brand-400">
+                      가이드 보기 →
+                    </span>
+                  </a>
+                ))}
+              </div>
+            )
+
+          case 'ctaBox':
+            return (
+              <section
+                key={i}
+                className="rounded-2xl border border-brand-200 bg-brand-50 p-5 dark:border-brand-800/70 dark:bg-brand-900/25 sm:p-6"
+              >
+                <h2 className="text-lg font-bold tracking-tight sm:text-xl">{b.title}</h2>
+                <p className="mt-1.5 leading-relaxed text-slate-600 dark:text-slate-300">{b.text}</p>
+                <div className="mt-4">
+                  {link(
+                    b.href,
+                    <>
+                      {b.label}
+                      <Icon name="arrowDown" className="h-4 w-4 -rotate-90" />
+                    </>,
+                    'btn-primary inline-flex',
+                  )}
+                </div>
+              </section>
+            )
+
           case 'faq':
             return (
               <dl key={i} className="space-y-4">

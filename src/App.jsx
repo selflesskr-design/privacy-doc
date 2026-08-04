@@ -371,6 +371,7 @@ export default function App() {
           <footer className="mx-auto flex max-w-3xl flex-wrap items-center gap-x-3 gap-y-1 px-4 pb-10 pt-4 text-xs text-slate-400 sm:px-6">
             <span>파일은 내 브라우저에서 직접 처리합니다.</span>
             {[
+              ['/guides', '파일·문서 실용 가이드'],
               ['/faq', '자주 묻는 질문'],
               ['/privacy', '개인정보처리방침'],
               ['/about', '소개·라이선스'],

@@ -1,4 +1,6 @@
 import { SITE_URL, BRAND } from '../config/site.js'
+import { CHECK_FIRST, FAQ } from './common.js'
+import { guideCards, guidePages, GUIDES_PATH, GUIDES_TITLE } from './guides.js'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Every page on the site, as data.
@@ -16,44 +18,13 @@ import { SITE_URL, BRAND } from '../config/site.js'
 // Copy rules (see docs/copy-guide.md): plain Korean, one idea per sentence,
 // no claim that something is impossible to recover, and never state what a
 // user "must" hide — that is the receiving office's call, not ours.
+//
+// The guides are the exception: they are data of their own in
+// src/content/guides.js, because a new guide should mean one new entry there
+// and nothing else. This file only wires them into the route table.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const CHECK_FIRST =
-  '제출처마다 필요한 정보와 가림 기준이 다를 수 있습니다. 가리기 전에 제출기관의 안내를 먼저 확인하세요.'
-
-const OVERLAY_LIMIT =
-  '편집 도구로 검은 사각형을 덮는 방법은 화면에서만 가려집니다. 원본 글자가 파일 안에 그대로 남아 있어, 받는 사람이 글자를 복사하면 가린 내용이 보일 수 있습니다.'
-
-const HOW_WE_DO_IT =
-  '선택한 영역을 문서 이미지에 직접 적용한 뒤 새 PDF로 저장합니다. 가린 부분의 원본 글자가 결과 PDF에서 검색·선택·복사되지 않도록 처리합니다.'
-
-/** Answers reused where they genuinely fit that page's question. */
-const FAQ = {
-  upload: {
-    q: '파일이 서버에 올라가나요?',
-    a: '올라가지 않습니다. 선택한 파일과 파일 내용은 Privacy 서버나 구글 애널리틱스로 전송하지 않고 내 브라우저 안에서 처리합니다. 다만 방문 통계를 위해 현재 페이지 주소와 브라우저·기기 정보가 구글 애널리틱스로 전송됩니다. 개발자도구의 네트워크 탭에서 직접 확인할 수 있습니다.',
-  },
-  free: {
-    q: '무료인가요? 가입해야 하나요?',
-    a: '무료이고 가입도 필요 없습니다. 설치할 프로그램도 없습니다.',
-  },
-  offline: {
-    q: '인터넷 없이도 되나요?',
-    a: '한 번 접속하고 나면 인터넷 없이도 쓸 수 있습니다.',
-  },
-  undo: {
-    q: '가린 부분을 다시 되돌릴 수 있나요?',
-    a: '되돌릴 수 없습니다. 저장한 파일에는 가린 상태만 남습니다. 원본은 따로 보관해 두세요.',
-  },
-  mobile: {
-    q: '휴대폰에서도 되나요?',
-    a: '됩니다. 손가락으로 가릴 영역을 정할 수 있습니다.',
-  },
-  textSelect: {
-    q: '저장한 PDF에서 글자 선택이 안 됩니다',
-    a: '가리기를 적용하면 페이지가 새 PDF로 다시 만들어지기 때문입니다. 글자를 그대로 두면 가린 부분도 함께 남기 때문에, 대신 글자 선택과 검색을 포기하는 방식입니다.',
-  },
-}
+const GUIDE_CARDS = guideCards()
 
 const HOME = {
   path: '/',
@@ -83,10 +54,17 @@ const HOME = {
     },
     { t: 'redactDemo' },
     { t: 'note', tone: 'warn', text: CHECK_FIRST },
-    // Nothing else. Someone who searched for this already knows why they need
-    // it, and a link inviting people to open devtools was never going to be
-    // taken up. Everything that
-    // remains either does something or warns about something.
+    // One guide, below everything that does something. Someone who came to
+    // redact a file gets the buttons first; someone who is not sure whether
+    // they should be redacting at all gets a way in.
+    {
+      t: 'cards',
+      title: GUIDES_TITLE,
+      items: [
+        { label: GUIDE_CARDS[0].label, href: GUIDE_CARDS[0].href, text: GUIDE_CARDS[0].text },
+        { label: '가이드 전체 보기', href: GUIDES_PATH, text: '파일과 문서를 다루는 상황별 안내' },
+      ],
+    },
   ],
 }
 
@@ -307,244 +285,23 @@ const TOOL_PAGES = [
 ]
 
 const GUIDES_HUB = {
-  path: '/guides',
-  title: `문서 종류별 개인정보 가리기 방법 | ${BRAND}`,
+  path: GUIDES_PATH,
+  title: `${GUIDES_TITLE} | ${BRAND}`,
   description:
-    '신분증 사본, 통장 사본, 계약서, 주민등록등본. 서류를 내기 전에 어떤 정보가 함께 담겨 있는지 확인하는 방법을 정리했습니다.',
-  h1: '문서 종류별 안내',
+    'PDF, 사진과 각종 파일을 일상과 업무에서 더 안전하고 편리하게 다루는 방법을 확인하세요.',
+  h1: GUIDES_TITLE,
   breadcrumb: [{ name: '홈', path: '/' }],
   schema: 'CollectionPage',
   sections: [
     {
       t: 'p',
       text:
-        '서류마다 함께 담기는 정보가 다르고, 받는 곳마다 필요한 항목도 다릅니다. 자주 내는 서류를 기준으로 정리했습니다.',
+        '일상과 업무에서 PDF, 사진과 각종 파일을 더 안전하고 편리하게 다루는 방법을 알아보세요.',
     },
-    { t: 'note', tone: 'warn', text: CHECK_FIRST },
-    {
-      t: 'cards',
-      items: [
-        {
-          label: '신분증 사본 주민등록번호 가리기',
-          href: '/guides/id-card-redaction',
-          text: '신분증 사본에 함께 담기는 정보',
-        },
-        {
-          label: '통장 사본 제출 전 확인',
-          href: '/guides/bankbook-copy-redaction',
-          text: '계좌번호는 남기고 확인할 항목',
-        },
-        {
-          label: '계약서 개인정보 확인',
-          href: '/guides/contract-personal-info-redaction',
-          text: '계약서를 공유하기 전에',
-        },
-        {
-          label: '주민등록등본 제출 전 확인',
-          href: '/guides/resident-registration-redaction',
-          text: '등본 한 장에 담기는 정보',
-        },
-      ],
-    },
+    { t: 'guideCards', items: GUIDE_CARDS },
   ],
 }
 
-const guidePage = ({ path, title, description, h1, lead, when, whatToCheck, steps, runHref, faq }) => ({
-  path,
-  title,
-  description,
-  h1,
-  breadcrumb: [
-    { name: '홈', path: '/' },
-    { name: '문서 종류별 안내', path: '/guides' },
-  ],
-  schema: 'Article',
-  sections: [
-    { t: 'p', text: lead },
-    { t: 'h2', text: '이럴 때 봅니다' },
-    { t: 'ul', items: when },
-    { t: 'h2', text: '가리기 전에 확인하세요' },
-    { t: 'note', tone: 'warn', text: CHECK_FIRST },
-    {
-      t: 'p',
-      text:
-        '어디까지 가릴지는 서류를 받는 곳이 정합니다. 뒷자리만 가려도 되는 곳이 있고, 원본 그대로를 원하는 곳도 있습니다. 먼저 물어보는 편이 다시 발급받는 것보다 빠릅니다.',
-    },
-    { t: 'h2', text: '함께 담기는 정보' },
-    { t: 'ul', items: whatToCheck },
-    { t: 'h2', text: '사각형으로 덮는 방법의 한계' },
-    { t: 'p', text: OVERLAY_LIMIT },
-    { t: 'p', text: HOW_WE_DO_IT },
-    { t: 'h2', text: '처리 순서' },
-    { t: 'steps', items: steps },
-    { t: 'cta', label: '파일 선택', href: runHref },
-    { t: 'h2', text: '자주 묻는 질문' },
-    { t: 'faq', items: faq },
-  ],
-})
-
-const GUIDE_PAGES = [
-  guidePage({
-    path: '/guides/id-card-redaction',
-    title: `신분증 사본 주민등록번호 가리는 방법 | ${BRAND}`,
-    description:
-      '주민등록증이나 운전면허증 사본을 낼 때 함께 담기는 정보를 확인하고 가리는 방법. 사진으로 찍은 신분증의 촬영 위치 기록 정리까지 안내합니다.',
-    h1: '신분증 사본 주민등록번호 가리는 방법',
-    lead:
-      '신분증 사본은 가장 자주 요구되는 서류입니다. 한 장에 이름, 주민등록번호, 주소, 얼굴 사진이 모두 담깁니다.',
-    when: [
-      '통신사나 금융기관에 본인 확인용으로 낼 때',
-      '계약서에 붙일 때',
-      '온라인 서비스에서 본인 인증을 요구할 때',
-      '중고 거래나 대여 서비스에서 신원 확인을 요구할 때',
-    ],
-    whatToCheck: [
-      '주민등록번호 뒷자리 — 본인 확인만 필요하면 앞자리로 충분한 경우가 많습니다',
-      '발급일자와 발급기관',
-      '운전면허번호',
-      '주소',
-    ],
-    steps: [
-      { title: '사진 찍기', text: '글자가 또렷하게 보이도록 밝은 곳에서 찍습니다.' },
-      { title: '제출처에 확인', text: '어떤 항목이 필요한지 먼저 물어봅니다.' },
-      { title: '가릴 영역 선택', text: '가릴 곳을 손가락이나 마우스로 칠합니다.' },
-      { title: '안전하게 저장', text: '저장할 때 촬영 위치 기록도 함께 지워집니다.' },
-    ],
-    runHref: '/tools/image-redact',
-    faq: [
-      {
-        q: '사본에 "○○ 제출용"이라고 적어도 되나요?',
-        a: '쓰임을 적어 두면 다른 곳에 다시 쓰이는 것을 어느 정도 줄일 수 있습니다. 가리기와 함께 쓰면 좋습니다.',
-      },
-      {
-        q: '사진으로 찍은 신분증에도 위치 기록이 남나요?',
-        a: '남는 경우가 많습니다. 휴대폰으로 찍으면 찍은 곳의 좌표가 사진 파일에 함께 저장됩니다.',
-      },
-      FAQ.undo,
-      FAQ.mobile,
-    ],
-  }),
-  guidePage({
-    path: '/guides/bankbook-copy-redaction',
-    title: `통장 사본 제출 전 확인할 개인정보 | ${BRAND}`,
-    description:
-      '통장 사본을 낼 때 계좌번호는 남기고 함께 담긴 다른 정보를 확인하는 방법. 급여 계좌 등록이나 환불 신청에 낼 때 참고하세요.',
-    h1: '통장 사본 제출 전 확인할 개인정보',
-    lead:
-      '통장 사본은 계좌번호를 알려주려고 냅니다. 그런데 사본에는 계좌번호 말고도 여러 가지가 함께 찍힙니다.',
-    when: [
-      '회사에 급여 계좌를 등록할 때',
-      '환불이나 정산 계좌를 알려줄 때',
-      '보험금이나 지원금 신청에 낼 때',
-      '거래처에 입금 계좌를 전달할 때',
-    ],
-    whatToCheck: [
-      '통장에 인쇄된 주민등록번호 — 계좌 확인에는 필요하지 않은 경우가 많습니다',
-      '거래 내역과 잔액이 보이는 면',
-      '주소',
-      '계좌번호와 예금주 이름은 남겨야 합니다. 이게 알려주려는 정보입니다',
-    ],
-    steps: [
-      { title: '표지 면 준비', text: '거래 내역이 아니라 계좌번호가 인쇄된 면을 씁니다.' },
-      { title: '남길 것 정하기', text: '계좌번호·예금주·은행 이름은 남기고 나머지를 봅니다.' },
-      { title: '가릴 영역 선택', text: '가릴 곳을 정합니다.' },
-      { title: '확인 후 전달', text: '계좌번호가 또렷하게 보이는지 다시 확인합니다.' },
-    ],
-    runHref: '/tools/image-redact',
-    faq: [
-      {
-        q: '계좌번호도 일부 가려야 하나요?',
-        a: '아닙니다. 계좌번호는 입금을 받으려고 알려주는 정보이므로 다 보여야 합니다. 살펴볼 것은 함께 찍힌 다른 정보입니다.',
-      },
-      {
-        q: '인터넷뱅킹 화면을 캡처해도 되나요?',
-        a: '받는 곳에서 인정하면 됩니다. 다만 캡처 화면에는 잔액이나 다른 계좌가 함께 보이는 경우가 많습니다.',
-      },
-      FAQ.upload,
-      FAQ.undo,
-    ],
-  }),
-  guidePage({
-    path: '/guides/contract-personal-info-redaction',
-    title: `계약서 개인정보 가리고 공유하는 방법 | ${BRAND}`,
-    description:
-      '계약서를 다른 사람과 공유하거나 증빙으로 낼 때, 함께 담긴 주민등록번호·계좌번호·연락처를 확인하고 가리는 방법을 안내합니다.',
-    h1: '계약서 개인정보 가리고 공유하는 방법',
-    lead:
-      '계약서는 원본 그대로 돌려보는 일이 많습니다. 그런데 계약서 한 장에는 양쪽 당사자의 정보가 함께 들어 있습니다.',
-    when: [
-      '전세나 월세 계약서를 대출 심사에 낼 때',
-      '근로계약서를 증빙으로 낼 때',
-      '거래 계약서를 세무나 정산 자료로 보낼 때',
-      '계약 내용을 가족이나 지인에게 보여줄 때',
-    ],
-    whatToCheck: [
-      '상대방의 주민등록번호와 연락처 — 내가 아닌 사람의 정보입니다',
-      '계좌번호 — 계약금 입금 계좌가 적혀 있는 경우가 있습니다',
-      '서명과 도장 이미지',
-      '금액 조항 — 확인 목적에 따라 필요 여부가 갈립니다',
-    ],
-    steps: [
-      { title: '파일 선택', text: 'PDF로 된 계약서를 고릅니다. 종이라면 찍거나 스캔합니다.' },
-      { title: '무엇이 필요한지 확인', text: '받는 곳이 어떤 조항을 보려는지 먼저 물어봅니다.' },
-      { title: '가릴 영역 선택', text: '가릴 곳 위를 드래그해 사각형을 그립니다.' },
-      { title: '안전하게 저장', text: '저장한 파일을 열어 가린 부분을 드래그해 봅니다. 글자가 선택되지 않으면 정상입니다.' },
-    ],
-    runHref: '/tools/pdf-redact',
-    faq: [
-      {
-        q: '상대방 정보도 가려야 하나요?',
-        a: '계약 상대방의 정보는 내 정보가 아닙니다. 계약 확인에 꼭 필요한 경우가 아니라면 함께 살펴보는 편이 좋습니다.',
-      },
-      {
-        q: '여러 장짜리 계약서는 어떻게 하나요?',
-        a: '페이지를 넘기면서 각 장에서 가릴 곳을 정할 수 있습니다. 필요한 장만 따로 뽑아 내는 방법도 있습니다.',
-      },
-      FAQ.textSelect,
-      FAQ.upload,
-    ],
-  }),
-  guidePage({
-    path: '/guides/resident-registration-redaction',
-    title: `주민등록등본 제출 전 개인정보 확인 방법 | ${BRAND}`,
-    description:
-      '주민등록등본을 내기 전에 어떤 정보가 함께 담겨 있는지 확인하는 방법. 제출처마다 필요한 항목이 다르므로 먼저 확인하는 방법도 함께 안내합니다.',
-    h1: '주민등록등본 제출 전 개인정보 확인 방법',
-    lead:
-      '등본은 낼 일이 많은 서류이면서, 한 장에 담기는 정보가 가장 많은 서류이기도 합니다. 세대원 전원의 이름과 주민등록번호, 주소 변동 이력까지 들어 있습니다.',
-    when: [
-      '회사에 가족관계 확인용으로 낼 때',
-      '부동산 계약이나 대출 심사에 낼 때',
-      '학교나 어린이집에 거주 확인용으로 낼 때',
-      '정부 지원 신청에 붙일 때',
-    ],
-    whatToCheck: [
-      '본인의 주민등록번호 뒷자리',
-      '함께 사는 세대원의 주민등록번호 — 본인 확인이 목적이면 필요 없는 경우가 많습니다',
-      '과거 주소 변동 이력 — 지금 주소만 필요한 경우가 많습니다',
-      '발급 번호',
-    ],
-    steps: [
-      { title: '정부24에서 발급', text: 'PDF로 저장하면 그대로 쓸 수 있습니다. 종이라면 찍거나 스캔합니다.' },
-      { title: '제출처에 확인', text: '뒷자리만 가려도 되는지, 세대원 정보가 필요한지 물어봅니다.' },
-      { title: '가릴 영역 선택', text: '가릴 곳 위를 드래그해 사각형을 그립니다.' },
-      { title: '안전하게 저장', text: '저장한 파일을 열어 가린 부분을 드래그해 봅니다. 글자가 선택되지 않으면 정상입니다.' },
-    ],
-    runHref: '/tools/pdf-redact',
-    faq: [
-      {
-        q: '뒷자리만 가려도 되나요?',
-        a: '받는 곳에 따라 다릅니다. 뒷자리만 가리도록 안내하는 곳이 많지만, 번호 전체를 가리라는 곳도 있고 원본 그대로를 원하는 곳도 있습니다. 접수처에 먼저 물어보세요.',
-      },
-      {
-        q: '세대원 정보도 가려야 하나요?',
-        a: '본인 확인이 목적이면 본인 정보만 있으면 되는 경우가 많습니다. 다만 가족관계를 확인하려는 서류라면 세대원 이름이 필요할 수 있습니다.',
-      },
-      FAQ.undo,
-      FAQ.upload,
-    ],
-  }),
-]
 
 const TRUST_PAGES = [
   {
@@ -785,7 +542,7 @@ export const PAGES = [
   TOOLS_HUB,
   ...TOOL_PAGES,
   GUIDES_HUB,
-  ...GUIDE_PAGES,
+  ...guidePages(),
   ...TRUST_PAGES,
   ...EDITOR_PAGES,
   NOT_FOUND,

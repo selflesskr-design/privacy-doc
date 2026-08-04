@@ -53,6 +53,29 @@ export default function Sidebar({ activeId, activePath, onSelect }) {
         )}
 
         {!query && (
+          <button
+            type="button"
+            onClick={() => onSelect('/guides')}
+            aria-current={activePath?.startsWith('/guides') ? 'page' : undefined}
+            className={cx(
+              'mb-2 flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm transition-colors',
+              activePath?.startsWith('/guides')
+                ? 'bg-brand-50 font-medium text-brand-700 dark:bg-brand-900/30 dark:text-brand-200'
+                : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800',
+            )}
+          >
+            <Icon
+              name="fileText"
+              className={cx(
+                'h-4 w-4 flex-shrink-0',
+                activePath?.startsWith('/guides') ? 'text-brand-600 dark:text-brand-300' : 'text-slate-400',
+              )}
+            />
+            <span>가이드</span>
+          </button>
+        )}
+
+        {!query && (
           <div className="mb-2">
             <p className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400 dark:text-slate-500">
               개인정보 보호
