@@ -57,14 +57,12 @@ const HOME = {
     // One guide, below everything that does something. Someone who came to
     // redact a file gets the buttons first; someone who is not sure whether
     // they should be redacting at all gets a way in.
-    {
-      t: 'cards',
-      title: GUIDES_TITLE,
-      items: [
-        { label: GUIDE_CARDS[0].label, href: GUIDE_CARDS[0].href, text: GUIDE_CARDS[0].text },
-        { label: '가이드 전체 보기', href: GUIDES_PATH, text: '파일과 문서를 다루는 상황별 안내' },
-      ],
-    },
+    // Cards are for guides that have something in them. The way to the hub is a
+    // link, not a card with the page's own description repeated inside it.
+    // slice(2) so adding a guide never means editing the home page.
+    { t: 'h2', text: GUIDES_TITLE },
+    { t: 'guideCards', items: GUIDE_CARDS.slice(0, 2) },
+    { t: 'link', label: '가이드 전체 보기 →', href: GUIDES_PATH },
   ],
 }
 
