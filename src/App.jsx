@@ -9,7 +9,6 @@ import Progress from './components/Progress.jsx'
 import BrandMark from './components/BrandMark.jsx'
 import ContentPage from './content/ContentPage.jsx'
 import { getPage } from './content/pages.js'
-import { GUIDES_TITLE } from './content/guides.js'
 import { useTheme } from './hooks/useTheme.js'
 import { useLocalStorage } from './hooks/useLocalStorage.js'
 import { useSeo } from './hooks/useSeo.js'
@@ -26,7 +25,7 @@ const EDITORS = {
 }
 
 // Path routing. Two kinds of route share one path space:
-//   • content pages  ("/", "/tools/pdf-redact", "/guides/…") — see src/content/pages.js
+//   • content pages  ("/", "/tools/pdf-redact", "/faq") — see src/content/pages.js
 //   • tool pages     ("/merge-pdfs") — one per entry in the operation registry
 // Content paths are checked first; the 24 original tool URLs are untouched.
 // Legacy hash links ("/#/merge-pdfs") are redirected to the path form on load.
@@ -404,7 +403,6 @@ export default function App() {
           <footer className="mx-auto flex max-w-3xl flex-wrap items-center gap-x-3 gap-y-1 px-4 pb-10 pt-4 text-xs text-slate-400 sm:px-6">
             <span>파일은 내 브라우저에서 직접 처리합니다.</span>
             {[
-              ['/guides', GUIDES_TITLE],
               ['/faq', '자주 묻는 질문'],
               ['/privacy', '개인정보처리방침'],
               ['/about', '소개·라이선스'],

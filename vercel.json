@@ -35,6 +35,19 @@
       "source": "/guides/photo-location-before-upload",
       "destination": "/tools/remove-photo-metadata",
       "permanent": true
+    },
+    { "source": "/guides", "destination": "/tools", "permanent": true },
+    { "source": "/guides/id-card-redaction", "destination": "/tools/image-redact", "permanent": true },
+    { "source": "/guides/bankbook-copy-redaction", "destination": "/tools/image-redact", "permanent": true },
+    {
+      "source": "/guides/contract-personal-info-redaction",
+      "destination": "/tools/pdf-redact",
+      "permanent": true
+    },
+    {
+      "source": "/guides/resident-registration-redaction",
+      "destination": "/tools/pdf-redact",
+      "permanent": true
     }
   ]
 }

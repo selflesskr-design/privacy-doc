@@ -1,5 +1,4 @@
-// Sentences and answers shared by more than one content module. Lives apart from
-// pages.js so guides.js can reuse them without the two importing each other.
+// Sentences and answers shared by more than one page in pages.js.
 //
 // Copy rules (see docs/copy-guide.md): plain Korean, one idea per sentence,
 // no claim that something is impossible to recover, and never state what a

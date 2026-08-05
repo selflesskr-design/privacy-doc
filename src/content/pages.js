@@ -1,6 +1,5 @@
 import { SITE_URL, BRAND } from '../config/site.js'
 import { CHECK_FIRST, FAQ } from './common.js'
-import { guideCards, guidePages, GUIDES_PATH, GUIDES_TITLE } from './guides.js'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Every page on the site, as data.
@@ -18,13 +17,7 @@ import { guideCards, guidePages, GUIDES_PATH, GUIDES_TITLE } from './guides.js'
 // Copy rules (see docs/copy-guide.md): plain Korean, one idea per sentence,
 // no claim that something is impossible to recover, and never state what a
 // user "must" hide — that is the receiving office's call, not ours.
-//
-// The guides are the exception: they are data of their own in
-// src/content/guides.js, because a new guide should mean one new entry there
-// and nothing else. This file only wires them into the route table.
 // ─────────────────────────────────────────────────────────────────────────────
-
-const GUIDE_CARDS = guideCards()
 
 const HOME = {
   path: '/',
@@ -172,6 +165,7 @@ const TOOL_PAGES = [
     runLabel: '파일 선택',
     problem: [
       '요즘은 서류를 사진 한 장으로 내는 경우가 많습니다. 신분증을 찍어 보내고, 통장 첫 장을 찍어 보냅니다.',
+      '회사에 사본을 내거나, 본인 확인으로 신분증 사진을 요구받거나, 메신저로 신분증을 보내는 상황이 흔합니다. 주민등록증과 운전면허증에는 주민등록번호와 주소가 함께 인쇄되어 있어, 제출 목적과 관계없는 정보까지 같이 나갑니다.',
       '사진에는 눈에 보이는 것 말고도 정보가 들어 있습니다. 어디서 찍었는지, 어떤 기기로 찍었는지가 파일 안에 함께 저장됩니다.',
     ],
     steps: [
@@ -185,19 +179,13 @@ const TOOL_PAGES = [
       CHECK_FIRST,
     ],
     faq: [FAQ.upload, FAQ.undo, FAQ.mobile],
-    // 판단이 남는 상황은 가이드가 답합니다. 도구를 보러 온 사람에게 그 자리에서
-    // 건네주는 편이, 아무도 지나가지 않는 가이드 메뉴보다 낫습니다.
     related: [
-      {
-        label: '신분증 사진 안전하게 제출하기',
-        href: '/guides/id-card-redaction',
-        text: '어디까지 가려야 할지 모르겠다면',
-      },
       {
         label: '사진 위치정보 확인·삭제',
         href: '/tools/remove-photo-metadata',
         text: '사진에 남은 촬영 위치가 걱정된다면',
       },
+      { label: 'PDF 개인정보 가리기', href: '/tools/pdf-redact', text: '사진이 아니라 PDF라면' },
     ],
   }),
   toolPage({
@@ -316,23 +304,6 @@ const TOOL_PAGES = [
   }),
 ]
 
-const GUIDES_HUB = {
-  path: GUIDES_PATH,
-  title: `${GUIDES_TITLE} | ${BRAND}`,
-  description:
-    '신분증, 통장 사본, 계약서. 서류를 내기 전에 무엇이 함께 담기는지 확인하고 어디까지 가릴지 판단하는 방법을 상황별로 다룹니다.',
-  h1: GUIDES_TITLE,
-  breadcrumb: [{ name: '홈', path: '/' }],
-  schema: 'CollectionPage',
-  sections: [
-    {
-      t: 'p',
-      text:
-        '도구를 알아도 남는 질문에 답합니다. 이 서류에는 무엇이 함께 담기는지, 어디까지 가려도 되는지.',
-    },
-    { t: 'guideCards', items: GUIDE_CARDS },
-  ],
-}
 
 
 const TRUST_PAGES = [
@@ -573,8 +544,6 @@ export const PAGES = [
   HOME,
   TOOLS_HUB,
   ...TOOL_PAGES,
-  GUIDES_HUB,
-  ...guidePages(),
   ...TRUST_PAGES,
   ...EDITOR_PAGES,
   NOT_FOUND,
