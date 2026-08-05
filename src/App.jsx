@@ -14,7 +14,7 @@ import { useLocalStorage } from './hooks/useLocalStorage.js'
 import { useSeo } from './hooks/useSeo.js'
 import { getOperation } from './registry/registry.js'
 import { emitFileDrop } from './lib/fileDropBus.js'
-import { BRAND } from './config/site.js'
+import { BRAND, TOOL_LANDING_PATHS } from './config/site.js'
 import { COMMON } from './content/strings.js'
 
 // Editor routes mount a real tool instead of prose. Code-split so the PDF
@@ -354,6 +354,22 @@ export default function App() {
                         )}
                       </Note>
                     </div>
+                  )}
+                  {/* 사이드바로 들어온 사람은 실행화면에 바로 떨어져 설명 페이지를
+                      볼 길이 없었습니다. 설명 페이지가 있는 도구에만 나옵니다. */}
+                  {TOOL_LANDING_PATHS[activeOp.id] && (
+                    <p className="mt-3 text-sm">
+                      <a
+                        href={TOOL_LANDING_PATHS[activeOp.id]}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          handleSelect(TOOL_LANDING_PATHS[activeOp.id])
+                        }}
+                        className="text-brand-600 hover:underline dark:text-brand-300"
+                      >
+                        이 도구에 대해 더 보기 →
+                      </a>
+                    </p>
                   )}
                 </div>
 
