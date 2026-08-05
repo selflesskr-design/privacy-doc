@@ -9,6 +9,7 @@ import Progress from './components/Progress.jsx'
 import BrandMark from './components/BrandMark.jsx'
 import ContentPage from './content/ContentPage.jsx'
 import { getPage } from './content/pages.js'
+import { GUIDES_TITLE } from './content/guides.js'
 import { useTheme } from './hooks/useTheme.js'
 import { useLocalStorage } from './hooks/useLocalStorage.js'
 import { useSeo } from './hooks/useSeo.js'
@@ -322,6 +323,21 @@ export default function App() {
                         return <Editor />
                       })()}
                     </Suspense>
+                    {/* 편집기 위는 여전히 비워 둡니다. 파일을 열러 온 사람 앞을
+                        막지 않으면서, 설명이 필요한 사람에게는 길이 생깁니다.
+                        도구 화면의 링크와 같은 문구입니다. */}
+                    <p className="mt-8 text-sm">
+                      <a
+                        href={`/tools/${contentPage.editor}`}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          handleSelect(`/tools/${contentPage.editor}`)
+                        }}
+                        className="text-brand-600 hover:underline dark:text-brand-300"
+                      >
+                        이 도구에 대해 더 보기 →
+                      </a>
+                    </p>
                   </div>
                 )}
               </>
@@ -387,7 +403,7 @@ export default function App() {
           <footer className="mx-auto flex max-w-3xl flex-wrap items-center gap-x-3 gap-y-1 px-4 pb-10 pt-4 text-xs text-slate-400 sm:px-6">
             <span>파일은 내 브라우저에서 직접 처리합니다.</span>
             {[
-              ['/guides', '파일·문서 실용 가이드'],
+              ['/guides', GUIDES_TITLE],
               ['/faq', '자주 묻는 질문'],
               ['/privacy', '개인정보처리방침'],
               ['/about', '소개·라이선스'],
