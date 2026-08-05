@@ -118,7 +118,7 @@ function toolAsPage(op, ops) {
         t: 'p',
         text: `${BRAND}는 파일을 내 브라우저에서 직접 처리합니다. 파일이 밖으로 나가지 않고, 가입 없이 인터넷 없이도 쓸 수 있는 오픈소스입니다.`,
       },
-      ...(canonicalPath ? [{ t: 'link', label: '이 도구에 대해 더 보기 →', href: canonicalPath }] : []),
+      ...(canonicalPath ? [{ t: 'link', label: '이 도구에 대해 더 알아보기 →', href: canonicalPath }] : []),
       {
         t: 'cards',
         title: '관련 페이지',

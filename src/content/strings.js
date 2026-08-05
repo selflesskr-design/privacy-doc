@@ -51,9 +51,7 @@ export const ERRORS = {
 /** PDF 개인정보 가리기 */
 export const PDF_REDACT = {
   title: 'PDF 개인정보 가리기',
-  beta: '베타',
-  betaNote:
-    '이 기능은 베타입니다. 저장한 파일을 열어 가린 위치가 맞는지 꼭 확인한 뒤 제출해 주세요.',
+  verifyNote: '저장한 파일을 열어 가린 위치가 맞는지 꼭 확인한 뒤 제출해 주세요.',
   dropLabel: '가릴 PDF를 끌어다 놓거나 눌러서 선택하세요',
   dropHint: '파일은 내 브라우저에서만 열립니다',
 
@@ -538,8 +536,7 @@ export const RESIZE_IMAGE = {
 /** 사진 개인정보 가리기. */
 export const IMAGE_REDACT = {
   title: '사진 개인정보 가리기',
-  beta: '베타',
-  betaNote: '저장한 사진을 열어 가린 위치가 맞는지 꼭 확인한 뒤 보내 주세요.',
+  verifyNote: '저장한 사진을 열어 가린 위치가 맞는지 꼭 확인한 뒤 보내 주세요.',
   dropLabel: '가릴 사진을 끌어다 놓거나 눌러서 선택하세요',
   dropHint: '사진은 내 브라우저에서만 열립니다',
 

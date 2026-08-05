@@ -335,7 +335,7 @@ export default function App() {
                         }}
                         className="text-brand-600 hover:underline dark:text-brand-300"
                       >
-                        이 도구에 대해 더 보기 →
+                        이 도구에 대해 더 알아보기 →
                       </a>
                     </p>
                   </div>
@@ -371,27 +371,28 @@ export default function App() {
                       </Note>
                     </div>
                   )}
-                  {/* 사이드바로 들어온 사람은 실행화면에 바로 떨어져 설명 페이지를
-                      볼 길이 없었습니다. 설명 페이지가 있는 도구에만 나옵니다. */}
-                  {TOOL_LANDING_PATHS[activeOp.id] && (
-                    <p className="mt-3 text-sm">
-                      <a
-                        href={TOOL_LANDING_PATHS[activeOp.id]}
-                        onClick={(e) => {
-                          e.preventDefault()
-                          handleSelect(TOOL_LANDING_PATHS[activeOp.id])
-                        }}
-                        className="text-brand-600 hover:underline dark:text-brand-300"
-                      >
-                        이 도구에 대해 더 보기 →
-                      </a>
-                    </p>
-                  )}
                 </div>
 
                 <Suspense fallback={<Progress message="도구를 불러오는 중…" />}>
                   {Component && <Component key={activeOp.id} />}
                 </Suspense>
+
+                {/* 파일을 놓는 자리가 먼저입니다. 설명이 필요한 사람은 아래에서
+                    찾습니다. 설명 페이지가 있는 도구에만 나옵니다. */}
+                {TOOL_LANDING_PATHS[activeOp.id] && (
+                  <p className="mt-8 text-sm">
+                    <a
+                      href={TOOL_LANDING_PATHS[activeOp.id]}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        handleSelect(TOOL_LANDING_PATHS[activeOp.id])
+                      }}
+                      className="text-brand-600 hover:underline dark:text-brand-300"
+                    >
+                      이 도구에 대해 더 알아보기 →
+                    </a>
+                  </p>
+                )}
               </>
             ) : null}
           </div>

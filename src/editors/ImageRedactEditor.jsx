@@ -206,12 +206,7 @@ export default function ImageRedactEditor() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="rounded-full bg-brand-100 px-2 py-0.5 text-xs font-semibold text-brand-700 dark:bg-brand-900/40 dark:text-brand-200">
-          {T.beta}
-        </span>
-        <span className="text-sm text-slate-600 dark:text-slate-300">{T.betaNote}</span>
-      </div>
+      <p className="text-sm text-slate-600 dark:text-slate-300">{T.verifyNote}</p>
 
       {!file && (
         <Dropzone onFiles={pick} accept="image/*" multiple={false} label={T.dropLabel} hint={T.dropHint} icon="image" />

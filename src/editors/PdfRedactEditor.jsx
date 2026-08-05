@@ -259,12 +259,7 @@ export default function PdfRedactEditor() {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center gap-2">
-        <span className="rounded-full bg-brand-100 px-2.5 py-0.5 text-xs font-semibold text-brand-800 dark:bg-brand-900/50 dark:text-brand-200">
-          {PDF_REDACT.beta}
-        </span>
-        <span className="text-xs text-slate-500 dark:text-slate-400">{PDF_REDACT.betaNote}</span>
-      </div>
+      <p className="text-xs text-slate-500 dark:text-slate-400">{PDF_REDACT.verifyNote}</p>
 
       {!file && (
         <>
