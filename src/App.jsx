@@ -7,6 +7,7 @@ import Note from './components/Note.jsx'
 import Icon from './components/Icon.jsx'
 import Progress from './components/Progress.jsx'
 import BrandMark from './components/BrandMark.jsx'
+import LearnMore from './components/LearnMore.jsx'
 import ContentPage from './content/ContentPage.jsx'
 import { getPage } from './content/pages.js'
 import { useTheme } from './hooks/useTheme.js'
@@ -323,20 +324,8 @@ export default function App() {
                       })()}
                     </Suspense>
                     {/* 편집기 위는 여전히 비워 둡니다. 파일을 열러 온 사람 앞을
-                        막지 않으면서, 설명이 필요한 사람에게는 길이 생깁니다.
-                        도구 화면의 링크와 같은 문구입니다. */}
-                    <p className="mt-8 text-sm">
-                      <a
-                        href={`/tools/${contentPage.editor}`}
-                        onClick={(e) => {
-                          e.preventDefault()
-                          handleSelect(`/tools/${contentPage.editor}`)
-                        }}
-                        className="text-brand-600 hover:underline dark:text-brand-300"
-                      >
-                        이 도구에 대해 더 알아보기 →
-                      </a>
-                    </p>
+                        막지 않으면서, 설명이 필요한 사람에게는 길이 생깁니다. */}
+                    <LearnMore href={`/tools/${contentPage.editor}`} onNavigate={handleSelect} />
                   </div>
                 )}
               </>
@@ -379,18 +368,7 @@ export default function App() {
                 {/* 파일을 놓는 자리가 먼저입니다. 설명이 필요한 사람은 아래에서
                     찾습니다. 설명 페이지가 있는 도구에만 나옵니다. */}
                 {TOOL_LANDING_PATHS[activeOp.id] && (
-                  <p className="mt-8 text-sm">
-                    <a
-                      href={TOOL_LANDING_PATHS[activeOp.id]}
-                      onClick={(e) => {
-                        e.preventDefault()
-                        handleSelect(TOOL_LANDING_PATHS[activeOp.id])
-                      }}
-                      className="text-brand-600 hover:underline dark:text-brand-300"
-                    >
-                      이 도구에 대해 더 알아보기 →
-                    </a>
-                  </p>
+                  <LearnMore href={TOOL_LANDING_PATHS[activeOp.id]} onNavigate={handleSelect} />
                 )}
               </>
             ) : null}
