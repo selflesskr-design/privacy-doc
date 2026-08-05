@@ -151,6 +151,11 @@ const TOOL_PAGES = [
       CHECK_FIRST,
     ],
     faq: [FAQ.upload, FAQ.undo, FAQ.textSelect, FAQ.mobile],
+    related: [
+      { label: '사진 개인정보 가리기', href: '/tools/image-redact', text: 'PDF가 아니라 사진이라면' },
+      // 가리기는 쪽을 그림으로 다시 그려 저장하므로 결과가 원본보다 커질 수 있습니다.
+      { label: 'PDF 용량 줄이기', href: '/tools/compress-pdf', text: '가린 PDF가 커졌다면' },
+    ],
   }),
   toolPage({
     path: '/tools/image-redact',
@@ -227,6 +232,10 @@ const TOOL_PAGES = [
       },
       FAQ.upload,
     ],
+    related: [
+      { label: '사진 개인정보 가리기', href: '/tools/image-redact', text: '사진에 보이는 정보도 가리려면' },
+      { label: 'PDF 개인정보 가리기', href: '/tools/pdf-redact', text: '사진이 아니라 PDF라면' },
+    ],
   }),
   toolPage({
     path: '/tools/merge-pdf',
@@ -261,8 +270,6 @@ const TOOL_PAGES = [
     related: [
       { label: 'PDF 개인정보 가리기', href: '/tools/pdf-redact', text: '합치기 전에 가려야 한다면' },
       { label: 'PDF 용량 줄이기', href: '/tools/compress-pdf', text: '합쳤더니 용량이 크다면' },
-      { label: '모든 도구', href: '/tools', text: 'PDF 나누기·회전·정리' },
-      { label: '자주 묻는 질문', href: '/faq', text: '다른 궁금한 점' },
     ],
   }),
   toolPage({
@@ -299,7 +306,6 @@ const TOOL_PAGES = [
     related: [
       { label: 'PDF 합치기', href: '/tools/merge-pdf', text: '여러 파일을 먼저 묶으려면' },
       { label: 'PDF 개인정보 가리기', href: '/tools/pdf-redact', text: '내기 전에 가리려면' },
-      { label: '모든 도구', href: '/tools', text: '다른 PDF 도구' },
     ],
   }),
 ]
