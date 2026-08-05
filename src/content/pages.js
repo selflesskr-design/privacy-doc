@@ -119,9 +119,11 @@ const toolPage = ({
     { t: 'h2', text: '이럴 때 씁니다' },
     ...problem.map((text) => ({ t: 'p', text })),
     { t: 'h2', text: '파일을 올리지 않고 처리합니다' },
+    // 무료·가입은 질문이 아니라 서비스 사실입니다. FAQ로 다섯 페이지에 복사하는
+    // 대신 여기 한 줄로 둡니다. 고칠 곳도 한 곳입니다.
     {
       t: 'p',
-      text: `이 서비스는 파일을 밖으로 보내지 않습니다. 브라우저가 직접 파일을 열고, 처리하고, 결과를 저장합니다.`,
+      text: `이 서비스는 파일을 밖으로 보내지 않습니다. 브라우저가 직접 파일을 열고, 처리하고, 결과를 저장합니다. 가입도 설치도 없이 무료로 씁니다.`,
     },
     { t: 'h2', text: '쓰는 방법' },
     { t: 'steps', items: steps },
@@ -161,7 +163,7 @@ const TOOL_PAGES = [
       '저장한 PDF에서는 글자 선택과 검색이 되지 않습니다.',
       CHECK_FIRST,
     ],
-    faq: [FAQ.upload, FAQ.undo, FAQ.textSelect, FAQ.mobile, FAQ.free],
+    faq: [FAQ.upload, FAQ.undo, FAQ.textSelect, FAQ.mobile],
   }),
   toolPage({
     path: '/tools/image-redact',
@@ -188,7 +190,7 @@ const TOOL_PAGES = [
       '앨범에 남아 있는 원본 사진도 함께 정리해 주세요.',
       CHECK_FIRST,
     ],
-    faq: [FAQ.upload, FAQ.undo, FAQ.mobile, FAQ.offline],
+    faq: [FAQ.upload, FAQ.undo, FAQ.mobile],
     // 판단이 남는 상황은 가이드가 답합니다. 도구를 보러 온 사람에게 그 자리에서
     // 건네주는 편이, 아무도 지나가지 않는 가이드 메뉴보다 낫습니다.
     related: [
@@ -267,7 +269,13 @@ const TOOL_PAGES = [
       '암호가 걸린 PDF는 아직 지원하지 않습니다. 암호를 먼저 풀어 주세요.',
       '개인정보가 담긴 서류라면 합치기 전에 가리는 편이 확인하기 쉽습니다.',
     ],
-    faq: [FAQ.upload, FAQ.free, FAQ.offline],
+    faq: [
+      {
+        q: '몇 개까지 합칠 수 있나요?',
+        a: '정해진 제한은 없습니다. 다만 기기에서 직접 처리하기 때문에 파일이 아주 많거나 크면 느려질 수 있습니다.',
+      },
+      FAQ.upload,
+    ],
     related: [
       { label: 'PDF 개인정보 가리기', href: '/tools/pdf-redact', text: '합치기 전에 가려야 한다면' },
       { label: 'PDF 용량 줄이기', href: '/tools/compress-pdf', text: '합쳤더니 용량이 크다면' },
@@ -299,7 +307,13 @@ const TOOL_PAGES = [
       '글자만 있는 PDF는 이미 작아서 거의 줄지 않습니다.',
       '문서 종류에 따라 줄어드는 정도가 크게 다릅니다.',
     ],
-    faq: [FAQ.upload, FAQ.free, FAQ.offline],
+    faq: [
+      {
+        q: '줄였는데 용량이 오히려 커졌습니다',
+        a: '글자 위주 문서에 "쪽을 사진으로 바꾸기"를 쓰면 커집니다. 글자를 그림으로 다시 그리기 때문입니다. 그런 문서는 "문서 정보만 지우기"를 고르세요. 결과가 원본보다 크면 원본을 그대로 쓰시면 됩니다.',
+      },
+      FAQ.upload,
+    ],
     related: [
       { label: 'PDF 합치기', href: '/tools/merge-pdf', text: '여러 파일을 먼저 묶으려면' },
       { label: 'PDF 개인정보 가리기', href: '/tools/pdf-redact', text: '내기 전에 가리려면' },
