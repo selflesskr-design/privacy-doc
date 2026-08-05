@@ -54,15 +54,9 @@ const HOME = {
     },
     { t: 'redactDemo' },
     { t: 'note', tone: 'warn', text: CHECK_FIRST },
-    // One guide, below everything that does something. Someone who came to
-    // redact a file gets the buttons first; someone who is not sure whether
-    // they should be redacting at all gets a way in.
-    // Cards are for guides that have something in them. The way to the hub is a
-    // link, not a card with the page's own description repeated inside it.
-    // slice(2) so adding a guide never means editing the home page.
-    { t: 'h2', text: GUIDES_TITLE },
-    { t: 'guideCards', items: GUIDE_CARDS.slice(0, 2) },
-    { t: 'link', label: '가이드 전체 보기 →', href: GUIDES_PATH },
+    // 홈에는 가이드 자리를 두지 않습니다. 설명이 필요한 사람은 그 도구 화면의
+    // `이 도구에 대해 더 보기`로 가고, 검색으로 오는 사람은 글에 바로 떨어집니다.
+    // 제목·카드·전체보기 셋이 모두 글 한 편을 가리키던 자리였습니다.
   ],
 }
 
@@ -326,7 +320,7 @@ const GUIDES_HUB = {
   path: GUIDES_PATH,
   title: `${GUIDES_TITLE} | ${BRAND}`,
   description:
-    'PDF, 사진과 각종 파일을 일상과 업무에서 더 안전하고 편리하게 다루는 방법을 확인하세요.',
+    '신분증, 통장 사본, 계약서. 서류를 내기 전에 무엇이 함께 담기는지 확인하고 어디까지 가릴지 판단하는 방법을 상황별로 다룹니다.',
   h1: GUIDES_TITLE,
   breadcrumb: [{ name: '홈', path: '/' }],
   schema: 'CollectionPage',
@@ -334,7 +328,7 @@ const GUIDES_HUB = {
     {
       t: 'p',
       text:
-        '일상과 업무에서 PDF, 사진과 각종 파일을 더 안전하고 편리하게 다루는 방법을 알아보세요.',
+        '도구를 알아도 남는 질문에 답합니다. 이 서류에는 무엇이 함께 담기는지, 어디까지 가려도 되는지.',
     },
     { t: 'guideCards', items: GUIDE_CARDS },
   ],

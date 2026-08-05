@@ -330,7 +330,9 @@ export const GUIDES = [
 ]
 
 export const GUIDES_PATH = '/guides'
-export const GUIDES_TITLE = '파일·문서 실용 가이드'
+// `실용`은 아무 뜻이 없고 `파일·문서`는 이 사이트 전부가 그렇습니다. 이 글들이
+// 실제로 답하는 것은 상황 판단입니다 — 어디까지 가려야 하나.
+export const GUIDES_TITLE = '상황별 가이드'
 
 const pathOf = (guide) => `${GUIDES_PATH}/${guide.slug}`
 
