@@ -30,6 +30,11 @@
     }
   ],
   "redirects": [
-    { "source": "/open-source-licenses", "destination": "/about", "permanent": true }
+    { "source": "/open-source-licenses", "destination": "/about", "permanent": true },
+    {
+      "source": "/guides/photo-location-before-upload",
+      "destination": "/tools/remove-photo-metadata",
+      "permanent": true
+    }
   ]
 }
